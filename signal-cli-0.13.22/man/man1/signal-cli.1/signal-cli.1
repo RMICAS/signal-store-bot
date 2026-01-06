@@ -1,0 +1,1460 @@
+'\" t
+.\"     Title: signal-cli
+.\"    Author: [see the "Authors" section]
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 11/14/2025
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "SIGNAL\-CLI" "1" "11/14/2025" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+signal-cli \- A commandline interface for the Signal messenger
+.SH "SYNOPSIS"
+.sp
+\fBsignal\-cli\fR [\-\-config CONFIG] [\-h | \-v | \-a ACCOUNT | \-\-dbus | \-\-dbus\-system] command [command\-options]
+.SH "DESCRIPTION"
+.sp
+signal\-cli is a commandline interface for libsignal\-service\-java\&. It supports registering, verifying, sending and receiving messages\&. For registering you need a phone number where you can receive SMS or incoming calls\&. signal\-cli was primarily developed to be used on servers to notify admins of important events\&. For this use\-case, it has a dbus and a JSON\-RPC interface, that can be used to send messages from other programs\&.
+.sp
+Originally the Signal protocol only allowed sending messages to other phone numbers\&. Now with the introduction of phone number privacy, the phone number of a recipient is not always known\&. Only the recipient\(cqs ServiceId, ACI/PNI (a special UUID) is known\&.
+.sp
+In all places where a RECIPIENT argument is expected in signal\-cli\(cqs interface, one of the following can be used:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+The phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+The ACI, just a UUID
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+The PNI, just a UUID, with "PNI:" prefix
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+The username, with "u:" prefix, e\&.g\&. "u:test\&.000"
+.RE
+.sp
+For some functionality the Signal protocol requires that all messages have been received from the server\&. The receive command should be regularly executed\&. In daemon mode messages are by default continuously received\&.
+.SH "OPTIONS"
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+Show help message and quit\&.
+.RE
+.PP
+\fB\-\-version\fR
+.RS 4
+Print the version and quit\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+Raise log level and include lib signal logs\&.
+.RE
+.PP
+\fB\-\-log\-file\fR LOG_FILE
+.RS 4
+Write log output to the given file\&. If
+\-\-verbose
+is also given, the detailed logs will only be written to the log file\&.
+.RE
+.PP
+\fB\-\-scrub\-log\fR
+.RS 4
+Scrub possibly sensitive information from the log, like phone numbers and UUIDs\&. Doesn\(cqt work reliably on dbus logs with very verbose logging (\-vvv)
+.RE
+.PP
+\fB\-\-config\fR CONFIG
+.RS 4
+Set the path, where to store the config\&. Make sure you have full read/write access to the given directory\&. (Default:
+$XDG_DATA_HOME/signal\-cli
+($HOME/\&.local/share/signal\-cli))
+.RE
+.PP
+\fB\-a\fR ACCOUNT, \fB\-\-account\fR ACCOUNT
+.RS 4
+Specify your phone number, that will be your identifier\&. The phone number must include the country calling code, i\&.e\&. the number must start with a "+" sign\&.
+.RE
+.sp
+This flag must not be given for the link command\&. It is optional for the daemon command\&. For all other commands it is only optional if there is exactly one local user in the config directory\&.
+.PP
+\fB\-\-service\-environment\fR ENVIRONMENT
+.RS 4
+Choose the server environment to use:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+live
+(default)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+staging
+.RE
+.RE
+.PP
+\fB\-\-dbus\fR
+.RS 4
+Make request via user dbus\&.
+.RE
+.PP
+\fB\-\-dbus\-system\fR
+.RS 4
+Make request via system dbus\&.
+.RE
+.PP
+\fB\-\-bus\-name\fR
+.RS 4
+Connect to another D\-Bus bus name than the default\&.
+.RE
+.PP
+\fB\-o\fR OUTPUT\-MODE, \fB\-\-output\fR OUTPUT\-MODE
+.RS 4
+Specify if you want commands to output in either "plain\-text" mode or in "json"\&. Defaults to "plain\-text"
+.RE
+.PP
+\fB\-\-trust\-new\-identities\fR TRUST\-MODE
+.RS 4
+Choose when to trust new identities:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+on\-first\-use
+(default): Trust the first seen identity key from new users, changed keys must be verified manually
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+always: Trust any new identity key without verification
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+never: Don\(cqt trust any unknown identity key, every key must be verified manually
+.RE
+.RE
+.PP
+\fB\-\-disable\-send\-log\fR
+.RS 4
+Disable message send log (for resending messages that recipient couldn\(cqt decrypt)\&.
+.RE
+.SH "COMMANDS"
+.SS "register"
+.sp
+Register a phone number with SMS or voice verification\&. Use the verify command to complete the verification\&.
+.sp
+If the account is just deactivated, the register command will just reactivate account, without requiring an SMS verification\&. By default the unregister command just deactivates the account, in which case it can be reactivated without sms verification if the local data is still available\&. If the account was deleted (with \-\-delete\-account) it cannot be reactivated\&.
+.PP
+\fB\-v\fR, \fB\-\-voice\fR
+.RS 4
+The verification should be done over voice, not SMS\&. Voice verification only works if an SMS verification has been attempted before\&.
+.RE
+.PP
+\fB\-\-captcha\fR CAPTCHA
+.RS 4
+The captcha token, required if registration failed with a captcha required error\&. To get the token, go to
+https://signalcaptchas\&.org/registration/generate\&.html
+For the staging environment, use:
+https://signalcaptchas\&.org/staging/registration/generate\&.html
+After solving the captcha, right\-click on the "Open Signal" link and copy the link\&.
+.RE
+.PP
+\fB\-\-reregister\fR
+.RS 4
+Register even if account is already registered\&.
+.RE
+.SS "verify"
+.sp
+Verify the number using the code received via SMS or voice\&.
+.PP
+VERIFICATIONCODE
+.RS 4
+The verification code\&.
+.RE
+.PP
+\fB\-p\fR PIN, \fB\-\-pin\fR PIN
+.RS 4
+The registration lock PIN, that was set by the user\&. Only required if a PIN was set\&.
+.RE
+.SS "unregister"
+.sp
+Disable push support for this device, i\&.e\&. this device won\(cqt receive any more messages\&. If this is the primary device, other users can\(cqt send messages to this number anymore\&. Use "updateAccount" to undo this\&. To remove a linked device, use "removeDevice" from the primary device\&.
+.PP
+\fB\-\-delete\-account\fR
+.RS 4
+Delete account completely from server\&. Cannot be undone without loss\&. You will have to be readded to each group\&.
+.RE
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBCaution\fR
+.ps -1
+.br
+.sp
+Only delete your account if you won\(cqt use this number again!
+.sp .5v
+.RE
+.SS "deleteLocalAccountData"
+.sp
+Delete all local data for this account\&. Data should only be deleted if the account is unregistered\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBCaution\fR
+.ps -1
+.br
+.sp
+This cannot be undone\&.
+.sp .5v
+.RE
+.PP
+\fB\-\-ignore\-registered\fR
+.RS 4
+Delete the account data even though the account is still registered on the Signal servers\&.
+.RE
+.SS "updateAccount"
+.sp
+Update the account attributes on the signal server\&. Can fix problems with receiving messages\&.
+.PP
+\fB\-n\fR NAME, \fB\-\-device\-name\fR NAME
+.RS 4
+Set a new device name for the primary or linked device
+.RE
+.PP
+\fB\-u\fR NAME \fB\-\-username\fR NAME
+.RS 4
+Specify a username that can then be used to contact this account\&. This can either be just the nickname (e\&.g\&. test) or the complete username with discriminator (e\&.g\&. test\&.000)\&. Returns the new username with discriminator and the username link\&.
+.RE
+.PP
+\fB\-\-delete\-username\fR
+.RS 4
+Delete the username associated with this account\&.
+.RE
+.PP
+\fB\-\-unrestricted\-unidentified\-sender\fR {true,false}
+.RS 4
+Enable if anyone should be able to send you unidentified sender messages\&.
+.RE
+.PP
+\fB\-\-discoverable\-by\-number\fR {true,false}
+.RS 4
+Enable/disable if the account should be discoverable by phone number
+.RE
+.PP
+\fB\-\-number\-sharing\fR {true,false}
+.RS 4
+Indicates if Signal should share its phone number when sending a message\&.
+.RE
+.SS "startChangeNumber"
+.sp
+Change an account to a new phone number with SMS or voice verification\&. Use the finishChangeNumber command to complete the verification\&.
+.PP
+RECIPIENT
+.RS 4
+The new phone number\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-voice\fR
+.RS 4
+The verification should be done over voice, not SMS\&. Voice verification only works if an SMS verification has been attempted before\&.
+.RE
+.PP
+\fB\-\-captcha\fR
+.RS 4
+The captcha token, required if registration failed with a captcha required error\&. To get the token, go to
+https://signalcaptchas\&.org/registration/generate\&.html
+For the staging environment, use:
+https://signalcaptchas\&.org/staging/registration/generate\&.html
+After solving the captcha, right\-click on the "Open Signal" link and copy the link\&.
+.RE
+.SS "finishChangeNumber"
+.sp
+Verify the number using the code received via SMS or voice\&.
+.PP
+RECIPIENT
+.RS 4
+The new phone number\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verification\-code\fR
+.RS 4
+The verification code\&.
+.RE
+.PP
+\fB\-p\fR PIN, \fB\-\-pin\fR PIN
+.RS 4
+The registration lock PIN, that was set by the user\&. Only required if a PIN was set\&.
+.RE
+.SS "updateConfiguration"
+.sp
+Update signal configs and sync them to linked devices\&. This command only works on the primary devices\&.
+.PP
+\fB\-\-read\-receipts\fR {true,false}
+.RS 4
+Indicates if Signal should send read receipts\&.
+.RE
+.PP
+\fB\-\-unidentified\-delivery\-indicators\fR {true,false}
+.RS 4
+Indicates if Signal should show unidentified delivery indicators\&.
+.RE
+.PP
+\fB\-\-typing\-indicators\fR {true,false}
+.RS 4
+Indicates if Signal should send/show typing indicators\&.
+.RE
+.PP
+\fB\-\-link\-previews\fR {true,false}
+.RS 4
+Indicates if Signal should generate link previews\&.
+.RE
+.SS "setPin"
+.sp
+Set a registration lock pin, to prevent others from registering your account\(cqs phone number\&.
+.PP
+REGISTRATION_LOCK_PIN
+.RS 4
+The registration lock PIN, that will be required for new registrations (resets after 7 days of inactivity)
+.RE
+.SS "removePin"
+.sp
+Remove the registration lock pin\&.
+.SS "link"
+.sp
+Link to an existing device, instead of registering a new number\&. This shows a "sgnl://linkdevice?uuid=\&..." URI\&. If you want to connect to another signal\-cli instance, you can just use this URI\&. If you want to link to an Android/iOS device, create a QR code with the URI (e\&.g\&. with qrencode) and scan that in the Signal app\&.
+.PP
+\fB\-n\fR NAME, \fB\-\-name\fR NAME
+.RS 4
+Optionally specify a name to describe this new device\&. By default "cli" will be used\&.
+.RE
+.SS "addDevice"
+.sp
+Link another device to this device\&. Only works, if this is the primary device\&.
+.PP
+\fB\-\-uri\fR URI
+.RS 4
+Specify the uri contained in the QR code shown by the new device\&. You will need the full URI such as "sgnl://linkdevice?uuid=\&...&pub_key=\&..." (formerly "tsdevice:/?uuid=\&...") Make sure to enclose it in quotation marks for shells\&.
+.RE
+.SS "listDevices"
+.sp
+Show a list of linked devices\&.
+.SS "removeDevice"
+.sp
+Remove a linked device\&. Only works, if this is the primary device\&.
+.PP
+\fB\-d\fR DEVICE_ID, \fB\-\-device\-id\fR DEVICE_ID
+.RS 4
+Specify the device you want to remove\&. Use listDevices to see the deviceIds\&.
+.RE
+.SS "getUserStatus"
+.sp
+Uses a list of phone numbers or usernames to determine the statuses of those users\&. Shows if they are registered on the Signal Servers or not\&. In json mode this is outputted as a list of objects\&.
+.PP
+[RECIPIENT [RECIPIENT \&...]]
+.RS 4
+One or more numbers to check\&.
+.RE
+.PP
+[\-\-username [USERNAME \&...]]
+.RS 4
+One or more usernames to check\&.
+.RE
+.SS "send"
+.sp
+Send a message to another user or group\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipients\&.
+.RE
+.PP
+\fB\-\-note\-to\-self\fR
+.RS 4
+Send the message to self\&.
+.RE
+.PP
+\fB\-\-notify\-self\fR
+.RS 4
+If self is part of recipients/groups send a normal message, not a sync message\&.
+.RE
+.PP
+\fB\-g\fR GROUP, \fB\-\-group\-id\fR GROUP
+.RS 4
+Specify the recipient group ID in base64 encoding\&.
+.RE
+.PP
+\fB\-u\fR USERNAME, \fB\-\-username\fR USERNAME
+.RS 4
+Specify the recipient username or username link\&.
+.RE
+.PP
+\fB\-m\fR MESSAGE, \fB\-\-message\fR MESSAGE
+.RS 4
+Specify the message\&.
+.RE
+.PP
+\fB\-\-message\-from\-stdin\fR
+.RS 4
+Read the message from standard input\&.
+.RE
+.PP
+\fB\-a\fR [ATTACHMENT [ATTACHMENT \&...]], \fB\-\-attachment\fR [ATTACHMENT [ATTACHMENT \&...]]
+.RS 4
+Add one or more files as attachment\&. Can be either a file path or a data URI\&. Data URI encoded attachments must follow the RFC 2397\&. Additionally a file name can be added: e\&.g\&.:
+data:<MIME\-TYPE>;filename=<FILENAME>;base64,<BASE64 ENCODED DATA>
+.RE
+.PP
+\fB\-\-view\-once\fR
+.RS 4
+Send the message as a view once message\&. A conformant client will only allow the receiver to view the message once\&. View Once is only supported for messages that include an image attachment\&.
+.RE
+.PP
+\fB\-\-sticker\fR STICKER
+.RS 4
+Send a sticker of a locally known sticker pack (syntax: stickerPackId:stickerId)\&. Shouldn\(cqt be used together with
+\-m
+as the official clients don\(cqt support this\&. e\&.g\&.:
+\-\-sticker 00abac3bc18d7f599bff2325dc306d43:2
+.RE
+.PP
+\fB\-\-mention\fR
+.RS 4
+Mention another group member (syntax: start:length:recipientNumber) In the apps the mention replaces part of the message text, which is specified by the start and length values\&. The units of start and length should be UTF\-16 code units, NOT Unicode code points\&. For more information, see
+https://github\&.com/AsamK/signal\-cli/wiki/FAQ#string\-indexing\-units
+e\&.g\&.:
+\-m "Hi X!" \-\-mention "3:1:+123456789"
+.RE
+.PP
+\fB\-\-text\-style\fR
+.RS 4
+Style parts of the message text (syntax: start:length:STYLE)\&. Like
+\-\-mention, the units are UTF\-16 code units\&. Where STYLE is one of: BOLD, ITALIC, SPOILER, STRIKETHROUGH, MONOSPACE
+.RE
+.sp
+e\&.g\&.: \-m "Something BIG!" \-\-text\-style "10:3:BOLD" or for a mixed text style \-m "Something BIG!" \-\-text\-style "0:9:ITALIC" "10:3:BOLD"
+.PP
+\fB\-\-quote\-timestamp\fR
+.RS 4
+Specify the timestamp of a previous message with the recipient or group to add a quote to the new message\&.
+.RE
+.PP
+\fB\-\-quote\-author\fR
+.RS 4
+Specify the author of the original message\&.
+.RE
+.PP
+\fB\-\-quote\-message\fR
+.RS 4
+Specify the message of the original message\&.
+.RE
+.PP
+\fB\-\-quote\-mention\fR
+.RS 4
+Specify the mentions of the original message (same format as
+\-\-mention)\&.
+.RE
+.PP
+\fB\-\-quote\-text\-style\fR
+.RS 4
+Style parts of the original message text (same format as
+\-\-text\-style)\&.
+.RE
+.PP
+\fB\-\-quote\-attachment\fR
+.RS 4
+Specify the attachments of the original message (syntax: contentType[:filename[:previewFile]]), e\&.g\&.
+\fIaudio/aac\fR
+or
+\fIimage/png:test\&.png:/tmp/preview\&.jpg\fR\&.
+.RE
+.PP
+\fB\-\-preview\-url\fR
+.RS 4
+Specify the url for the link preview\&. The same url must also appear in the message body, otherwise the preview won\(cqt be displayed by the apps\&.
+.RE
+.PP
+\fB\-\-preview\-title\fR
+.RS 4
+Specify the title for the link preview (mandatory)\&.
+.RE
+.PP
+\fB\-\-preview\-description\fR
+.RS 4
+Specify the description for the link preview (optional)\&.
+.RE
+.PP
+\fB\-\-preview\-image\fR
+.RS 4
+Specify the image file for the link preview (optional)\&.
+.RE
+.PP
+\fB\-\-story\-timestamp\fR
+.RS 4
+Specify the timestamp of a story to reply to\&.
+.RE
+.PP
+\fB\-\-story\-author\fR
+.RS 4
+Specify the author of the story\&.
+.RE
+.PP
+\fB\-e\fR, \fB\-\-end\-session\fR
+.RS 4
+Clear session state and send end session message\&.
+.RE
+.PP
+\fB\-\-edit\-timestamp\fR
+.RS 4
+Specify the timestamp of a previous message with the recipient or group to send an edited message\&.
+.RE
+.SS "sendMessageRequestResponse"
+.sp
+Send response to a message request to linked devices\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipients\&.
+.RE
+.PP
+\fB\-g\fR GROUP, \fB\-\-group\-id\fR GROUP
+.RS 4
+Specify the recipient group ID in base64 encoding\&.
+.RE
+.PP
+\fB\-u\fR USERNAME, \fB\-\-username\fR USERNAME
+.RS 4
+Specify the recipient username or username link\&.
+.RE
+.PP
+\fB\-\-type\fR TYPE
+.RS 4
+Type of message request response (accept, delete)
+.RE
+.SS "sendPaymentNotification"
+.sp
+Send a payment notification\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipient\&.
+.RE
+.PP
+\fB\-\-receipt\fR RECEIPT
+.RS 4
+The base64 encoded receipt blob\&.
+.RE
+.PP
+\fB\-\-note\fR NOTE
+.RS 4
+Specify a note for the payment notification\&.
+.RE
+.SS "sendReaction"
+.sp
+Send reaction to a previously received or sent message\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipients\&.
+.RE
+.PP
+\fB\-g\fR GROUP, \fB\-\-group\-id\fR GROUP
+.RS 4
+Specify the recipient group ID in base64 encoding\&.
+.RE
+.PP
+\fB\-u\fR USERNAME, \fB\-\-username\fR USERNAME
+.RS 4
+Specify the recipient username or username link\&.
+.RE
+.PP
+\fB\-e\fR EMOJI, \fB\-\-emoji\fR EMOJI
+.RS 4
+Specify the emoji, should be a single unicode grapheme cluster\&.
+.RE
+.PP
+\fB\-a\fR RECIPIENT, \fB\-\-target\-author\fR RECIPIENT
+.RS 4
+Specify the author of the message to which to react\&.
+.RE
+.PP
+\fB\-t\fR TIMESTAMP, \fB\-\-target\-timestamp\fR TIMESTAMP
+.RS 4
+Specify the timestamp of the message to which to react\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-remove\fR
+.RS 4
+Remove a reaction\&.
+.RE
+.PP
+\fB\-\-story\fR
+.RS 4
+React to a story instead of a normal message
+.RE
+.SS "sendReceipt"
+.sp
+Send a read or viewed receipt to a previously received message\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the sender\&.
+.RE
+.PP
+\fB\-t\fR TIMESTAMP, \fB\-\-target\-timestamp\fR TIMESTAMP
+.RS 4
+Specify the timestamp of the message to which to react\&.
+.RE
+.PP
+\fB\-\-type\fR TYPE
+.RS 4
+Specify the receipt type, either
+read
+(the default) or
+viewed\&.
+.RE
+.SS "sendTyping"
+.sp
+Send typing message to trigger a typing indicator for the recipient\&. Indicator will be shown for 15seconds unless a typing STOP message is sent first\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipients\&.
+.RE
+.PP
+\fB\-g\fR GROUP, \fB\-\-group\-id\fR GROUP
+.RS 4
+Specify the recipient group ID in base64 encoding\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-stop\fR
+.RS 4
+Send a typing STOP message\&.
+.RE
+.SS "remoteDelete"
+.sp
+Remotely delete a previously sent message\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipients\&.
+.RE
+.PP
+\fB\-g\fR GROUP, \fB\-\-group\-id\fR GROUP
+.RS 4
+Specify the recipient group ID in base64 encoding\&.
+.RE
+.PP
+\fB\-u\fR USERNAME, \fB\-\-username\fR USERNAME
+.RS 4
+Specify the recipient username or username link\&.
+.RE
+.PP
+\fB\-t\fR TIMESTAMP, \fB\-\-target\-timestamp\fR TIMESTAMP
+.RS 4
+Specify the timestamp of the message to delete\&.
+.RE
+.SS "receive"
+.sp
+Query the server for new messages\&. New messages are printed on standard output and attachments are downloaded to the config directory\&. In json mode this is outputted as one json object per line\&.
+.PP
+\fB\-t\fR TIMEOUT, \fB\-\-timeout\fR TIMEOUT
+.RS 4
+Number of seconds to wait for new messages (negative values disable timeout)\&. Default is 5 seconds\&.
+.RE
+.PP
+\fB\-\-max\-messages\fR
+.RS 4
+Maximum number of messages to receive, before returning\&.
+.RE
+.PP
+\fB\-\-ignore\-attachments\fR
+.RS 4
+Don\(cqt download attachments of received messages\&.
+.RE
+.PP
+\fB\-\-ignore\-stories\fR
+.RS 4
+Don\(cqt receive story messages from the server\&.
+.RE
+.PP
+\fB\-\-send\-read\-receipts\fR
+.RS 4
+Send read receipts for all incoming data messages (in addition to the default delivery receipts)
+.RE
+.SS "joinGroup"
+.sp
+Join a group via an invitation link\&.
+.PP
+\fB\-\-uri\fR
+.RS 4
+The invitation link URI (starts with
+https://signal\&.group/#)
+.RE
+.SS "updateGroup"
+.sp
+Create or update a group\&. If the user is a pending member, this command will accept the group invitation\&.
+.PP
+\fB\-g\fR GROUP, \fB\-\-group\-id\fR GROUP
+.RS 4
+Specify the recipient group ID in base64 encoding\&. If not specified, a new group with a new random ID is generated\&.
+.RE
+.PP
+\fB\-n\fR NAME, \fB\-\-name\fR NAME
+.RS 4
+Specify the new group name\&.
+.RE
+.PP
+\fB\-d\fR DESCRIPTION, \fB\-\-description\fR DESCRIPTION
+.RS 4
+Specify the new group description\&.
+.RE
+.PP
+\fB\-a\fR AVATAR, \fB\-\-avatar\fR AVATAR
+.RS 4
+Specify a new group avatar image file\&.
+.RE
+.PP
+\fB\-m\fR [MEMBER [MEMBER \&...]], \fB\-\-member\fR [MEMBER [MEMBER \&...]]
+.RS 4
+Specify one or more members to add to the group\&.
+.RE
+.PP
+\fB\-r\fR [MEMBER [MEMBER \&...]], \fB\-\-remove\-member\fR [MEMBER [MEMBER \&...]]
+.RS 4
+Specify one or more members to remove from the group
+.RE
+.PP
+\fB\-\-admin\fR [MEMBER [MEMBER \&...]]
+.RS 4
+Specify one or more members to make a group admin
+.RE
+.PP
+\fB\-\-remove\-admin\fR [MEMBER [MEMBER \&...]]
+.RS 4
+Specify one or more members to remove group admin privileges
+.RE
+.PP
+\fB\-\-ban\fR [MEMBER [MEMBER \&...]]
+.RS 4
+Specify one or more members to ban from joining the group\&. Banned members cannot join or request to join via a group link\&.
+.RE
+.PP
+\fB\-\-unban\fR [MEMBER [MEMBER \&...]]
+.RS 4
+Specify one or more members to remove from the ban list
+.RE
+.PP
+\fB\-\-reset\-link\fR
+.RS 4
+Reset group link and create new link password
+.RE
+.PP
+\fB\-\-link\fR LINK_STATE
+.RS 4
+Set group link state:
+enabled,
+enabled\-with\-approval,
+disabled
+.RE
+.PP
+\fB\-\-set\-permission\-add\-member\fR PERMISSION
+.RS 4
+Set permission to add new group members:
+every\-member,
+only\-admins
+.RE
+.PP
+\fB\-\-set\-permission\-edit\-details\fR PERMISSION
+.RS 4
+Set permission to edit group details:
+every\-member,
+only\-admins
+.RE
+.PP
+\fB\-\-set\-permission\-send\-messages\fR PERMISSION
+.RS 4
+Set permission to send messages in group:
+every\-member,
+only\-admins
+Groups where only admins can send messages are also called announcement groups
+.RE
+.PP
+\fB\-e\fR EXPIRATION_SECONDS, \fB\-\-expiration\fR EXPIRATION_SECONDS
+.RS 4
+Set expiration time of messages (seconds)\&. To disable expiration set expiration time to 0\&.
+.RE
+.SS "quitGroup"
+.sp
+Send a quit group message to all group members and remove self from member list\&. If the user is a pending member, this command will decline the group invitation\&.
+.PP
+\fB\-g\fR GROUP, \fB\-\-group\-id\fR GROUP
+.RS 4
+Specify the recipient group ID in base64 encoding\&.
+.RE
+.PP
+\fB\-\-delete\fR
+.RS 4
+Delete local group data completely after quitting group\&.
+.RE
+.SS "listGroups"
+.sp
+Show a list of known groups and related information\&. In json mode this is outputted as an list of objects and is always in detailed mode\&.
+.PP
+\fB\-d\fR, \fB\-\-detailed\fR
+.RS 4
+Include the list of members of each group and the group invite link\&.
+.RE
+.PP
+\fB\-g\fR, \fB\-\-group\-id\fR
+.RS 4
+Filter the group list by one or more group IDs\&.
+.RE
+.SS "listContacts"
+.sp
+Show a list of known contacts with names and profiles\&. When a specific recipient is given, its profile will be refreshed\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipients\&.
+.RE
+.PP
+\fB\-a\fR, \fB\-\-all\-recipients\fR
+.RS 4
+Include all known recipients, not only contacts\&.
+.RE
+.PP
+\fB\-\-blocked\fR
+.RS 4
+Specify if only blocked or unblocked contacts should be shown (default: all contacts)
+.RE
+.PP
+\fB\-\-name\fR
+.RS 4
+Find contacts with the given contact or profile name\&.
+.RE
+.PP
+\fB\-\-detailed\fR
+.RS 4
+List the contacts with more details\&. If output=json, then this is always set
+.RE
+.PP
+\fB\-\-internal\fR
+.RS 4
+Include internal information that\(cqs normally not user visible
+.RE
+.SS "listIdentities"
+.sp
+List all known identity keys and their trust status, fingerprint and safety number\&.
+.PP
+\fB\-n\fR RECIPIENT, \fB\-\-number\fR RECIPIENT
+.RS 4
+Only show identity keys for the given recipient\&.
+.RE
+.SS "trust"
+.sp
+Set the trust level of a given recipient\&. The first time a key for a recipient is seen, it is trusted by default (TOFU)\&. If the key changes, the new key must be trusted manually\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipient, for which to set the trust\&.
+.RE
+.PP
+\fB\-a\fR, \fB\-\-trust\-all\-known\-keys\fR
+.RS 4
+Trust all known keys of this user, only use this for testing\&.
+.RE
+.PP
+\fB\-v\fR VERIFIED_SAFETY_NUMBER, \fB\-\-verified\-safety\-number\fR VERIFIED_SAFETY_NUMBER
+.RS 4
+Specify the safety number of the key, only use this option if you have verified the safety number\&. Can be either the plain text numbers shown in the app or the bytes from the QR\-code, encoded as base64\&.
+.RE
+.SS "updateProfile"
+.sp
+Update the profile information shown to message recipients\&. The profile is stored encrypted on the Signal servers\&. The decryption key is sent with every outgoing messages to contacts and included in every group\&.
+.PP
+\fB\-\-given\-name\fR NAME, \fB\-\-name\fR NAME
+.RS 4
+New (given) name\&.
+.RE
+.PP
+\fB\-\-family\-name\fR FAMILY_NAME
+.RS 4
+New family name\&.
+.RE
+.PP
+\fB\-\-about\fR ABOUT_TEXT
+.RS 4
+New profile status text\&.
+.RE
+.PP
+\fB\-\-about\-emoji\fR EMOJI
+.RS 4
+New profile status emoji\&.
+.RE
+.PP
+\fB\-\-avatar\fR AVATAR_FILE
+.RS 4
+Path to the new avatar image file\&.
+.RE
+.PP
+\fB\-\-remove\-avatar\fR
+.RS 4
+Remove the avatar
+.RE
+.PP
+\fB\-\-mobile\-coin\-address\fR, \fB\-\-mobilecoin\-address\fR
+.RS 4
+New MobileCoin address (Base64 encoded public address)
+.RE
+.SS "updateContact"
+.sp
+Update the info associated to a recipient on our contact list\&. This change is only local but can be synchronized to other devices by using sendContacts (see below)\&. If the contact doesn\(cqt exist yet, it will be added\&.
+.PP
+RECIPIENT
+.RS 4
+Specify the recipient\&.
+.RE
+.PP
+\fB\-\-given\-name\fR GIVEN_NAME, \fB\-\-name\fR NAME
+.RS 4
+New system given name\&.
+.RE
+.PP
+\fB\-\-family\-name\fR FAMILY_NAME
+.RS 4
+New system family name\&.
+.RE
+.PP
+\fB\-\-nick\-given\-name\fR NICK_GIVEN_NAME
+.RS 4
+New nick given name\&.
+.RE
+.PP
+\fB\-\-nick\-family\-name\fR NICK_FAMILY_NAME
+.RS 4
+New nick family name\&.
+.RE
+.PP
+\fB\-\-note\fR NOTE
+.RS 4
+New note\&.
+.RE
+.PP
+\fB\-e\fR, \fB\-\-expiration\fR EXPIRATION_SECONDS
+.RS 4
+Set expiration time of messages (seconds)\&. To disable expiration set expiration time to 0\&.
+.RE
+.SS "removeContact"
+.sp
+Remove the info of a given contact
+.PP
+RECIPIENT
+.RS 4
+Specify the recipient\&.
+.RE
+.PP
+\fB\-\-hide\fR
+.RS 4
+Hide the contact in the contact list, but keep the data\&.
+.RE
+.PP
+\fB\-\-forget\fR
+.RS 4
+Delete all data associated with this contact, including identity keys and sessions\&.
+.RE
+.SS "block"
+.sp
+Block the given contacts or groups (no messages will be received)\&. This change is only local but can be synchronized to other devices by using sendContacts (see below)\&.
+.PP
+[RECIPIENT [RECIPIENT \&...]]
+.RS 4
+Specify the contacts that should be blocked\&.
+.RE
+.PP
+\fB\-g\fR [GROUP [GROUP \&...]], \fB\-\-group\-id\fR [GROUP [GROUP \&...]]
+.RS 4
+Specify the group IDs that should be blocked in base64 encoding\&.
+.RE
+.SS "unblock"
+.sp
+Unblock the given contacts or groups (messages will be received again)\&. This change is only local but can be synchronized to other devices by using sendContacts (see below)\&.
+.PP
+[RECIPIENT [RECIPIENT \&...]]
+.RS 4
+Specify the contacts that should be unblocked\&.
+.RE
+.PP
+\fB\-g\fR [GROUP [GROUP \&...]], \fB\-\-group\-id\fR [GROUP [GROUP \&...]]
+.RS 4
+Specify the group IDs that should be unblocked in base64 encoding\&.
+.RE
+.SS "sendContacts"
+.sp
+Send a synchronization message with the local contacts list to all linked devices\&. This command should only be used if this is the primary device\&.
+.SS "sendSyncRequest"
+.sp
+Send a synchronization request message to the primary device (for group, contacts, \&...)\&. The primary device will respond with synchronization messages with full contact and group lists\&.
+.SS "uploadStickerPack"
+.sp
+Upload a new sticker pack, consisting of a manifest file and the sticker images\&. Images must conform to the following specification: (see https://support\&.signal\&.org/hc/en\-us/articles/360031836512\-Stickers#sticker_reqs )
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Static stickers in PNG or WebP format
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Animated stickers in APNG format,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Maximum file size for a sticker file is 300KiB
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Image resolution of 512 x 512 px
+.RE
+.sp
+The required manifest\&.json has the following format:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+{
+  "title": "<STICKER_PACK_TITLE>",
+  "author": "<STICKER_PACK_AUTHOR>",
+  "cover": { // Optional cover, by default the first sticker is used as cover
+    "file": "<name of image file, mandatory>",
+    "contentType": "<optional>",
+    "emoji": "<optional>"
+  },
+  "stickers": [
+    {
+      "file": "<name of image file, mandatory>",
+      "contentType": "<optional>",
+      "emoji": "<optional>"
+    }
+    \&.\&.\&.
+  ]
+}
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+PATH
+.RS 4
+The path of the manifest\&.json or a zip file containing the sticker pack you wish to upload\&.
+.RE
+.SS "listStickerPacks"
+.sp
+Show a list of known sticker packs\&.
+.SS "addStickerPack"
+.sp
+Install a sticker pack for this account\&.
+.PP
+\fB\-\-uri\fR [URI]
+.RS 4
+Specify the uri of the sticker pack\&. e\&.g\&.
+https://signal\&.art/addstickers/#pack_id=XXX&pack_key=XXX
+.RE
+.SS "getAttachment"
+.sp
+Gets the raw data for a specified attachment\&. This is done using the ID of the attachment the recipient or group ID\&. The attachment data is returned as a Base64 String\&.
+.PP
+\fB\-\-id\fR [ID]
+.RS 4
+The ID of the attachment as given in the attachment list of the message\&.
+.RE
+.PP
+\fB\-\-recipient\fR [RECIPIENT]
+.RS 4
+Specify the recipient which sent the attachment\&. Referred to generally as recipient\&.
+.RE
+.PP
+\fB\-g\fR [GROUP], \fB\-\-group\-id\fR [GROUP]
+.RS 4
+Alternatively, specify the group IDs for which to get the attachment\&.
+.RE
+.SS "getAvatar"
+.sp
+Gets the raw data for a specified contact, contact\(cqs profile or group avatar\&. The attachment data is returned as a Base64 String\&.
+.PP
+\fB\-\-contact\fR [RECIPIENT]
+.RS 4
+Specify the recipient\&.
+.RE
+.PP
+\fB\-\-profile\fR [RECIPIENT]
+.RS 4
+Specify the recipient\&.
+.RE
+.PP
+\fB\-g\fR [GROUP], \fB\-\-group\-id\fR [GROUP]
+.RS 4
+Alternatively, specify the group ID for which to get the avatar\&.
+.RE
+.SS "getSticker"
+.sp
+Gets the raw data for a specified sticker\&. The attachment data is returned as a Base64 String\&.
+.PP
+\fB\-\-pack\-id\fR [PACK_ID]
+.RS 4
+Specify the id of a sticker pack (hex encoded)\&.
+.RE
+.PP
+\fB\-\-sticker\-id\fR [STICKER_ID]
+.RS 4
+Specify the index of a sticker in the sticker pack\&.
+.RE
+.SS "daemon"
+.sp
+signal\-cli can run in daemon mode and provides JSON\-RPC or an experimental dbus interface\&. If no \-a account is given, all local accounts will be loaded\&. Multiple interfaces can be used at the same time, e\&.g\&. daemon \-\-socket \-\-dbus
+.PP
+\fB\-\-socket [SOCKET]\fR
+.RS 4
+Export a JSON\-RPC interface on a UNIX socket (default $XDG_RUNTIME_DIR/signal\-cli/socket)\&.
+
+See
+\fBsignal\-cli\-jsonrpc\fR(5) for info on the JSON\-RPC interface\&.
+.RE
+.PP
+\fB\-\-tcp [HOST:PORT]\fR
+.RS 4
+Export a JSON\-RPC interface on a TCP socket (default localhost:7583)\&.
+
+See
+\fBsignal\-cli\-jsonrpc\fR(5) for info on the JSON\-RPC interface\&.
+.RE
+.PP
+\fB\-\-http [HOST:PORT]\fR
+.RS 4
+Expose a JSON\-RPC interface as http endpoint (default localhost:8080)\&. The JSON\-RPC endpoint is
+/api/v1/rpc\&.
+
+See
+\fBsignal\-cli\-jsonrpc\fR(5) for info on the JSON\-RPC interface\&.
+.RE
+.PP
+\fB\-\-dbus\fR
+.RS 4
+Export DBus interface on user bus\&.
+
+See
+\fBsignal\-cli\-dbus\fR(5) for info on the dbus interface\&.
+.RE
+.PP
+\fB\-\-dbus\-system\fR
+.RS 4
+Export DBus interface on system bus\&.
+
+See
+\fBsignal\-cli\-dbus\fR(5) for info on the dbus interface\&.
+.RE
+.PP
+\fB\-\-bus\-name\fR
+.RS 4
+Claim another D\-Bus bus name than the default\&.
+.RE
+.PP
+\fB\-\-ignore\-attachments\fR
+.RS 4
+Don\(cqt download attachments of received messages\&.
+.RE
+.PP
+\fB\-\-ignore\-stories\fR
+.RS 4
+Don\(cqt receive story messages from the server\&.
+.RE
+.PP
+\fB\-\-send\-read\-receipts\fR
+.RS 4
+Send read receipts for all incoming data messages (in addition to the default delivery receipts)
+.RE
+.PP
+\fB\-\-no\-receive\-stdout\fR
+.RS 4
+Don\(cqt print received messages to stdout\&.
+.RE
+.PP
+\fB\-\-receive\-mode\fR
+.RS 4
+Specify when to start receiving messages (on\-start, on\-connection, manual)
+.RE
+.SS "jsonRpc"
+.sp
+Run in signal\-cli in JSON\-RPC mode\&. Reads JSON\-RPC requests on stdin and responds on stdout\&. See \fBsignal\-cli\-jsonrpc\fR(5) for info on the JSON\-RPC interface\&.
+.PP
+\fB\-\-ignore\-attachments\fR
+.RS 4
+Don\(cqt download attachments of received messages\&.
+.RE
+.PP
+\fB\-\-ignore\-stories\fR
+.RS 4
+Don\(cqt receive story messages from the server\&.
+.RE
+.PP
+\fB\-\-send\-read\-receipts\fR
+.RS 4
+Send read receipts for all incoming data messages (in addition to the default delivery receipts)
+.RE
+.PP
+\fB\-\-receive\-mode\fR
+.RS 4
+Specify when to start receiving messages (on\-start, manual)
+.RE
+.SS "submitRateLimitChallenge"
+.sp
+When running into rate limits, sometimes the limit can be lifted, by solving a CAPTCHA\&. To get the captcha token, go to https://signalcaptchas\&.org/challenge/generate\&.html For the staging environment, use: https://signalcaptchas\&.org/staging/registration/generate\&.html
+.PP
+\fB\-\-challenge\fR CHALLENGE_TOKEN
+.RS 4
+The challenge token from the failed send attempt\&.
+.RE
+.PP
+\fB\-\-captcha\fR CAPTCHA
+.RS 4
+The captcha result, starting with signalcaptcha://
+.RE
+.SH "EXAMPLES"
+.PP
+Register a number (with SMS verification)
+.RS 4
+signal\-cli \-a ACCOUNT register
+.RE
+.PP
+Verify the number using the code received via SMS or voice
+.RS 4
+signal\-cli \-a ACCOUNT verify CODE
+.RE
+.PP
+Send a message to one or more recipients
+.RS 4
+signal\-cli \-a ACCOUNT send \-m "This is a message" [RECIPIENT [RECIPIENT \&...]] [\-a [ATTACHMENT [ATTACHMENT \&...]]]
+.RE
+.PP
+Pipe the message content from another process
+.RS 4
+uname \-a | signal\-cli \-a ACCOUNT send \-\-message\-from\-stdin [RECIPIENT [RECIPIENT \&...]]
+.RE
+.PP
+Create a group
+.RS 4
+signal\-cli \-a ACCOUNT updateGroup \-n "Group name" \-m [MEMBER [MEMBER \&...]]
+.RE
+.PP
+Add member to a group
+.RS 4
+signal\-cli \-a ACCOUNT updateGroup \-g GROUP_ID \-m "NEW_MEMBER"
+.RE
+.PP
+Accept a group invitation
+.RS 4
+signal\-cli \-a ACCOUNT updateGroup \-g GROUP_ID
+.RE
+.PP
+Leave a group
+.RS 4
+signal\-cli \-a ACCOUNT quitGroup \-g GROUP_ID
+.RE
+.PP
+Send a message to a group
+.RS 4
+signal\-cli \-a ACCOUNT send \-m "This is a message" \-g GROUP_ID
+.RE
+.PP
+Trust new key, after having verified it
+.RS 4
+signal\-cli \-a ACCOUNT trust \-v SAFETY_NUMBER RECIPIENT
+.RE
+.PP
+Trust new key, without having verified it\&. Only use this if you don\(cqt care about security
+.RS 4
+signal\-cli \-a ACCOUNT trust \-a RECIPIENT
+.RE
+.SH "EXIT CODES"
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB1\fR: Error is probably caused and fixable by the user
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB2\fR: Some unexpected error
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB3\fR: Server or IO error
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB4\fR: Sending failed due to untrusted key
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fB5\fR: Server rate limiting error
+.RE
+.SH "FILES"
+.sp
+The password and cryptographic keys are created when registering and stored in the current users home directory, the directory can be changed with \fB\-\-config\fR:
+.sp
+$XDG_DATA_HOME/signal\-cli/ ($HOME/\&.local/share/signal\-cli/)
+.SH "AUTHORS"
+.sp
+Maintained by AsamK <asamk@gmx\&.de>, who is assisted by other open source contributors\&. For more information about signal\-cli development, see https://github\&.com/AsamK/signal\-cli\&.

@@ -1,0 +1,2567 @@
+'\" t
+.\"     Title: signal-cli-dbus
+.\"    Author: [see the "Authors" section]
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 11/14/2025
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "SIGNAL\-CLI\-DBUS" "5" "11/14/2025" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+signal-cli-dbus \- A commandline and dbus interface for the Signal messenger
+.SH "SYNOPSIS"
+.sp
+\fBsignal\-cli\fR [\-\-verbose] [\-\-config CONFIG] [\-a ACCOUNT] [\-o {plain\-text,json}] daemon [\-\-dbus] [\-\-dbus\-system]
+.sp
+\fBdbus\-send\fR [\-\-system | \-\-session] [\-\-print\-reply] \-\-type=method_call \-\-dest="org\&.asamk\&.Signal" /org/asamk/Signal[/_<phonenumber>] org\&.asamk\&.Signal\&.<method> [string:<string argument>] [array:<type>:<array argument>]
+.sp
+Note: when daemon was started without explicit \-a ACCOUNT, the dbus\-send command requires adding the phone number in /org/asamk/Signal/_<phonenumber>\&.
+.SH "DESCRIPTION"
+.sp
+See signal\-cli (1) for details on the application\&.
+.sp
+This documentation handles the supported methods when running signal\-cli as a DBus daemon\&.
+.sp
+The method are described as follows:
+.sp
+method(arg1<type>, arg2<type>, \&...) → return<type>
+.sp
+Where <type> is according to DBus specification:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<a> : Array of \&... (comma\-separated list) (array:)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+(\&...) : Struct (cannot be sent via
+dbus\-send)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<b> : Boolean (false|true) (boolean:)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<i> : Signed 32\-bit (int) integer (int32:)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<o> : DBusPath object (objpath:)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<s> : String (string:)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<x> : Signed 64\-bit (long) integer (int64:)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<y> : Unsigned 8\-bit (byte) integer (byte:)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+<> : no return value
+.RE
+.sp
+The final parenthetical value (such as "boolean:") is the type indicator used by dbus\-send\&.
+.sp
+Exceptions are the names of the Java Exceptions returned in the body field\&. They typically contain an additional message with details\&. All Exceptions begin with "org\&.asamk\&.Signal\&.Error\&." which is omitted here for better readability\&.
+.sp
+Phone numbers always have the format +<countrycode><regional number>
+.SH "METHODS"
+.SS "SignalControl interface"
+.sp
+These methods are available if the daemon is started in multi\-account mode (without an explicit \-a ACCOUNT)\&. The exported /org/asamk/Signal object provides a SignalControl interface, with methods to manage accounts\&. Individual accounts are exported as separate objects and provide a Signal interface, that\(cqs described below\&. e\&.g\&. /org/asamk/Signal/\e_441234567890 where the + dialing code is replaced by an underscore (_)\&.
+.PP
+link() → deviceLinkUri<s>, link(newDeviceName<s>) → deviceLinkUri<s>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+newDeviceName : Name to give new device (defaults to "cli" if no name is given)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+deviceLinkUri : URI of newly linked device
+.RE
+.RE
+.sp
+Returns a URI of the form "sgnl://linkdevice?uuid=\&..."\&. This can be piped to a QR encoder to create a display that can be captured by a Signal smartphone client\&.
+.sp
+For example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-type=method_call \-\-print\-reply /org/asamk/Signal org\&.asamk\&.Signal\&.link string:"My secondary client" | tr \*(Aq\en\*(Aq \*(Aq\e0\*(Aq | sed \*(Aqs/\&.*string //g\*(Aq | sed \*(Aqs/\e"//g\*(Aq | qrencode \-s10 \-tANSI256
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+listAccounts() → accountList<as>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+accountList : Array of all attached accounts in DBus object path form
+.RE
+.RE
+.sp
+Exceptions: None
+.PP
+register(number<s>, voiceVerification<b>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+voiceVerification : true = use voice verification; false = use SMS verification
+.RE
+.RE
+.sp
+Exceptions: Failure, InvalidNumber, RequiresCaptcha
+.PP
+registerWithCaptcha(number<s>, voiceVerification<b>, captcha<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+voiceVerification : true = use voice verification; false = use SMS verification
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+captcha : Captcha string
+.RE
+.RE
+.sp
+Exceptions: Failure, InvalidNumber, RequiresCaptcha
+.PP
+verify(number<s>, verificationCode<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+verificationCode : Code received from Signal after successful registration request
+.RE
+.RE
+.sp
+Command fails if PIN was set after previous registration; use verifyWithPin instead\&.
+.sp
+Exceptions: Failure, InvalidNumber
+.PP
+verifyWithPin(number<s>, verificationCode<s>, pin<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+verificationCode : Code received from Signal after successful registration request
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+pin : PIN you set with setPin command after verifying previous registration
+.RE
+.RE
+.sp
+Exceptions: Failure, InvalidNumber
+.PP
+version() → version<s>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+version : Version string of signal\-cli
+.RE
+.RE
+.sp
+Exceptions: None
+.SS "Signal interface"
+.sp
+The following methods listen to the account\(cqs object path, which is constructed as follows:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+for single\-account mode: "/org/asamk/Signal/"
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+for multi\-account mode: "/org/asamk/Signal/" + DBusNumber
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+DBusNumber: account\(cqs phone number, with underscore (_) replacing plus (+)
+.PP
+getContactName(number<s>) → name<s>
+.RS 4
+.RE
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+name : Contact\(cqs name in local storage (from the primary device for a linked account, or the one set with setContactName); if not set, contact\(cqs profile name is used
+.RE
+.RE
+.sp
+Exceptions: None
+.PP
+getContactNumber(name<s>) → numbers<as>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+numbers : Array of phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+name : Contact or profile name ("firstname lastname")
+.RE
+.RE
+.sp
+Searches contacts and known profiles for a given name and returns the list of all known numbers\&. May result in e\&.g\&. two entries if a contact and profile name is set\&.
+.sp
+Exceptions: None
+.PP
+getSelfNumber() → number<s>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Your phone number
+.RE
+.RE
+.sp
+Exceptions: None
+.PP
+isContactBlocked(number<s>) → blocked<b>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+blocked : true=blocked, false=not blocked
+.RE
+.RE
+.sp
+For unknown numbers false is returned but no exception is raised\&.
+.sp
+Exceptions: InvalidPhoneNumber
+.PP
+isRegistered() → result<b>, isRegistered(number<s>) → result<b>, isRegistered(numbers<as>) → results<ab>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+numbers : String array of phone numbers
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+result : true=number is registered, false=number is not registered
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+results : Boolean array of results
+.RE
+.RE
+.sp
+For unknown numbers, false is returned, but no exception is raised\&. If no number is given, returns true (indicating that you are registered)\&.
+.sp
+Exceptions: InvalidNumber
+.PP
+listNumbers() → numbers<as>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+numbers : String array of all known numbers
+.RE
+.RE
+.sp
+This is a concatenated list of all defined contacts as well of profiles known (e\&.g\&. peer group members or sender of received messages)
+.sp
+Exceptions: None
+.PP
+removePin() → <>
+.RS 4
+Removes registration PIN protection\&.
+.RE
+.sp
+Exceptions: Failure
+.PP
+sendEndSessionMessage(recipients<as>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : Array of phone numbers
+.RE
+.RE
+.sp
+Exceptions: Failure, InvalidNumber, UntrustedIdentity
+.PP
+sendMessage(message<s>, attachments<as>, recipient<s>) → timestamp<x>, sendMessage(message<s>, attachments<as>, recipients<as>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+message : Text to send (can be UTF8)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+attachments : String array of filenames to send as attachments (passed as filename, so need to be readable by the user signal\-cli is running under)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipient : Phone number of a single recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : String array of phone numbers
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding Signal reply
+.RE
+.RE
+.sp
+Depending on the type of the recipient field this sends a message to one or multiple recipients\&.
+.sp
+Exceptions: AttachmentInvalid, Failure, InvalidNumber, UntrustedIdentity
+.PP
+sendMessageReaction(emoji<s>, remove<b>, targetAuthor<s>, targetSentTimestamp<x>, recipient<s>) → timestamp<x>, sendMessageReaction(emoji<s>, remove<b>, targetAuthor<s>, targetSentTimestamp<x>, recipients<as>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+emoji : Unicode grapheme cluster of the emoji
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+remove : Boolean, whether a previously sent reaction (emoji) should be removed
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetAuthor : String with the phone number of the author of the message to which to react
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetSentTimestamp : Long representing timestamp of the message to which to react
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipient : String with the phone number of a single recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : Array of strings with phone numbers, should there be more recipients
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding Signal reply
+.RE
+.RE
+.sp
+Depending on the type of the recipient(s) field this sends a reaction to one or multiple recipients\&.
+.sp
+Exceptions: Failure, InvalidNumber
+.PP
+sendPaymentNotification(receipt<ay>, note<s>, recipient<s>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+receipt : Byte array with the payment receipt blob
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+note : String with a note for the payment
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipient : String with the phone number of a single recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding Signal reply
+.RE
+.RE
+.sp
+Exceptions: Failure
+.PP
+sendNoteToSelfMessage(message<s>, attachments<as>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+message : Text to send (can be UTF8)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+attachments : String array of filenames to send as attachments (passed as filename, so need to be readable by the user signal\-cli is running under)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding Signal reply
+.RE
+.RE
+.sp
+Exceptions: Failure, AttachmentInvalid
+.PP
+sendReadReceipt(recipient<s>, targetSentTimestamps<ax>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipient : Phone number of a single recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetSentTimestamps : Array of Longs to identify the corresponding Signal messages
+.RE
+.RE
+.sp
+Exceptions: Failure, UntrustedIdentity
+.PP
+sendViewedReceipt(recipient<s>, targetSentTimestamp<ax>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipient : Phone number of a single recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetSentTimestamp : Array of Longs to identify the corresponding signal messages
+.RE
+.RE
+.sp
+Exceptions: Failure, UntrustedIdentity
+.PP
+sendRemoteDeleteMessage(targetSentTimestamp<x>, recipient<s>) → timestamp<x>, sendRemoteDeleteMessage(targetSentTimestamp<x>, recipients<as>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetSentTimestamp : Long representing timestamp of the message to delete
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipient : String with the phone number of a single recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : Array of strings with phone numbers, should there be more recipients
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding signal reply
+.RE
+.RE
+.sp
+Depending on the type of the recipient(s) field this deletes a message with one or multiple recipients\&.
+.sp
+Exceptions: Failure, InvalidNumber
+.PP
+sendTyping(recipient<s>, stop<b>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipient : Phone number of a single recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+stop : True, if typing state should be stopped
+.RE
+.RE
+.sp
+Exceptions: Failure, UntrustedIdentity
+.PP
+setContactBlocked(number<s>, block<b>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number affected by method
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+block : false=remove block, true=blocked
+.RE
+.RE
+.sp
+Messages from blocked numbers will no longer be forwarded via DBus\&.
+.sp
+Exceptions: InvalidNumber
+.PP
+setContactName(number<s>,name<>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+name : Name to be set in contacts (in local storage with signal\-cli)
+.RE
+.RE
+.sp
+Exceptions: InvalidNumber, Failure
+.PP
+deleteContact(number<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.RE
+.sp
+Exceptions: Failure
+.PP
+deleteRecipient(number<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number
+.RE
+.RE
+.sp
+Exceptions: Failure
+.PP
+setExpirationTimer(number<s>, expiration<i>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number of recipient
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+expiration : int32 for the number of seconds before messages to this recipient disappear\&. Set to 0 to disable expiration\&.
+.RE
+.RE
+.sp
+Exceptions: Failure, InvalidNumber
+.PP
+setPin(pin<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+pin : PIN you set after registration (resets after 7 days of inactivity)
+.RE
+.RE
+.sp
+Sets a registration lock PIN, to prevent others from registering your number\&.
+.sp
+Exceptions: Failure
+.PP
+submitRateLimitChallenge(challenge<s>, captcha<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+challenge : The challenge token taken from the proof required error\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+captcha : The captcha token from the solved captcha on the Signal website\&. Can be used to lift some rate\-limits by solving a captcha\&.
+.RE
+.RE
+.sp
+Exception: IOErrorException
+.PP
+updateProfile(name<s>, about<s>, aboutEmoji <s>, avatar<s>, remove<b>) → <>, updateProfile(givenName<s>, familyName<s>, about<s>, aboutEmoji <s>, avatar<s>, remove<b>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+name : Name for your own profile (empty if unchanged)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+givenName : Given name for your own profile (empty if unchanged)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+familyName : Family name for your own profile (empty if unchanged)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+about : About message for profile (empty if unchanged)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+aboutEmoji : Emoji for profile (empty if unchanged)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+avatar : Filename of avatar picture for profile (empty if unchanged)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+remove : Set to true if the existing avatar picture should be removed
+.RE
+.RE
+.sp
+Exceptions: Failure
+.PP
+uploadStickerPack(stickerPackPath<s>) → url<s>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+stickerPackPath : Path to the manifest\&.json file or a zip file in the same directory
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+url : URL of sticker pack after successful upload
+.RE
+.RE
+.sp
+Exceptions: Failure
+.PP
+version() → version<s>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+version : Version string of signal\-cli
+.RE
+.RE
+.sp
+Exceptions: None
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBGroup related methods\fR
+.RS 4
+.PP
+createGroup(groupName<s>, members<as>, avatar<s>) → groupId<ay>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupName : String representing the display name of the group
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+members : String array of new members to be invited to group
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+avatar : Filename of avatar picture to be set for group (empty if none)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier
+.RE
+.RE
+.sp
+Exceptions: AttachmentInvalid, Failure, InvalidNumber;
+.PP
+getGroup(groupId<ay>) → objectPath<o>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+objectPath : DBusPath for the group
+.RE
+.RE
+.PP
+getGroupMembers(groupId<ay>) → members<as>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+members : String array with the phone numbers of all active members of a group
+.RE
+.RE
+.sp
+Exceptions: None, if the group name is not found an empty array is returned
+.PP
+joinGroup(inviteURI<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+inviteURI : String starting with
+https://signal\&.group/#
+.RE
+.RE
+.sp
+Behavior of this method depends on the requirePermission parameter of the enableLink method\&. If permission is required, joinGroup adds you to the requesting members list\&. Permission may be granted based on the group\(cqs PermissionAddMember property (ONLY_ADMINS or EVERY_MEMBER)\&. If permission is not required, joinGroup admits you immediately to the group\&.
+.sp
+Exceptions: Failure
+.PP
+listGroups() → groups<a(oays)>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groups : Array of Structs(objectPath, groupId, groupName)
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+objectPath : DBusPath
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupName : String representing the display name of the group
+.RE
+.RE
+.RE
+.PP
+sendGroupMessage(message<s>, attachments<as>, groupId<ay>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+message : Text to send (can be UTF8)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+attachments : String array of filenames to send as attachments (passed as filename, so need to be readable by the user signal\-cli is running under)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding Signal reply
+.RE
+.RE
+.sp
+Exceptions: GroupNotFound, Failure, AttachmentInvalid, InvalidGroupId
+.PP
+sendGroupTyping(groupId<ay>, stop<b>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+stop : True, if typing state should be stopped
+.RE
+.RE
+.sp
+Exceptions: Failure, GroupNotFound, UntrustedIdentity
+.PP
+sendGroupMessageReaction(emoji<s>, remove<b>, targetAuthor<s>, targetSentTimestamp<x>, groupId<ay>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+emoji : Unicode grapheme cluster of the emoji
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+remove : Boolean, whether a previously sent reaction (emoji) should be removed
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetAuthor : String with the phone number of the author of the message to which to react
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetSentTimestamp : Long representing timestamp of the message to which to react
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding signal reply
+.RE
+.RE
+.sp
+Exceptions: Failure, InvalidNumber, GroupNotFound, InvalidGroupId
+.PP
+sendGroupRemoteDeleteMessage(targetSentTimestamp<x>, groupId<ay>) → timestamp<x>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+targetSentTimestamp : Long representing timestamp of the message to delete
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array with base64 encoded group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Long, can be used to identify the corresponding signal reply
+.RE
+.RE
+.sp
+Exceptions: Failure, GroupNotFound, InvalidGroupId
+.RE
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBDevice related methods\fR
+.RS 4
+.PP
+addDevice(deviceUri<s>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+deviceUri : URI in the form of "sgnl://linkdevice?uuid=\&..." (formerly "tsdevice:/?uuid=\&...") Normally displayed by a Signal desktop app, smartphone app, or another signal\-cli instance using the
+link
+control method\&.
+.RE
+.RE
+.PP
+getDevice(deviceId<x>) → devicePath<o>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+deviceId : Long representing a deviceId
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+devicePath : DBusPath object for the device
+.RE
+.RE
+.sp
+Exceptions: DeviceNotFound
+.PP
+listDevices() → devices<a(oxs)>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+devices : Array of structs (objectPath, id, name)
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+objectPath : DBusPath representing the device\(cqs object path
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+id : Long representing the deviceId
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+name : String representing the device\(cqs name
+.RE
+.RE
+.RE
+.sp
+Exceptions: InvalidUri
+.PP
+sendContacts() → <>
+.RS 4
+Sends a synchronization message with the local contacts list to all linked devices\&. This command should only be used if this is the primary device\&.
+.RE
+.sp
+Exceptions: Failure
+.PP
+sendSyncRequest() → <>
+.RS 4
+Sends a synchronization request to the primary device (for group, contacts, \&...)\&. Only works if sent from a secondary device\&.
+.RE
+.sp
+Exceptions: Failure
+.RE
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBIdentity related methods\fR
+.RS 4
+.PP
+listIdentities() → identities<a(oss)>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+identities : Array of structs (objectPath, id, name)
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+objectPath : DBusPath representing the identity object path
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+uuid : Internal uuid of the identity
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+number : Phone number of the identity
+.RE
+.RE
+.RE
+.sp
+Lists all know identities
+.PP
+getIdentity(Number<s>) → identityPath<o>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Number : Phone number
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+identityPath : DBusPath object for the identity
+.RE
+.RE
+.sp
+Gets the identity Dbus path for a given phone number
+.sp
+Exceptions: Failure
+.RE
+.SS "Signal\&.Group interface"
+.sp
+The following methods listen to the group\(cqs object path, which can be obtained from the listGroups() method and is constructed as follows:
+.sp
+<ACCOUNT_PATH> + "/Groups/" + DBusGroupId
+.sp
+DBusGroupId : groupId in base64 format, with underscore (_) replacing plus (+), equals (=), or slash (/)
+.sp
+Groups have the following (case\-sensitive) properties:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Id<ay> (read\-only) : Byte array representing the internal group identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Name<s> : Display name of the group
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Description<s> : Description of the group
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Avatar<s> (write\-only) : Filename of the avatar
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+IsBlocked<b> : true=member will not receive group messages; false=not blocked
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+IsMember<b> (read\-only) : always true (object path exists only for group members)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+IsAdmin<b> (read\-only) : true=member has admin privileges; false=not admin
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+MessageExpirationTimer<i> : int32 representing message expiration time for group
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Members<as> (read\-only) : String array of group members\*(Aq phone numbers
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PendingMembers<as> (read\-only) : String array of pending members\*(Aq phone numbers
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+RequestingMembers<as> (read\-only) : String array of requesting members\*(Aq phone numbers
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Admins<as> (read\-only) : String array of admins\*(Aq phone numbers
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PermissionAddMember<s> : String representing who has permission to add members
+\fBONLY_ADMINS, EVERY_MEMBER\fR
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PermissionEditDetails<s> : String representing who may edit group details
+\fBONLY_ADMINS, EVERY_MEMBER\fR
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+PermissionSendMessage<s> : String representing who post messages to group
+\fBONLY_ADMINS, EVERY_MEMBER\fR
+(note that ONLY_ADMINS is equivalent to IsAnnouncementGroup)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+GroupInviteLink<s> (read\-only) : String of the invitation link (starts with
+https://signal\&.group/#)
+.RE
+.sp
+To get a property, use (replacing \-\-session with \-\-system if needed): dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.Get string:org\&.asamk\&.Signal\&.Group string:$PROPERTY_NAME
+.sp
+To set a property, use: dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.Set string:org\&.asamk\&.Signal\&.Group string:$PROPERTY_NAME variant:$PROPERTY_TYPE:$PROPERTY_VALUE
+.sp
+To get all properties, use: dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.GetAll string:org\&.asamk\&.Signal\&.Group
+.PP
+addAdmins(recipients<as>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : String array of phone numbers
+.RE
+.RE
+.sp
+Grant admin privileges to recipients\&.
+.sp
+Exceptions: Failure
+.PP
+addMembers(recipients<as>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : String array of phone numbers
+.RE
+.RE
+.sp
+Add recipients to group if they are pending members; otherwise add recipients to list of requesting members\&. This command is also used to accept group invitations by adding yourself to a group\&.
+.sp
+Exceptions: Failure
+.PP
+disableLink() → <>
+.RS 4
+Disables the group\(cqs invitation link\&.
+.RE
+.sp
+Exceptions: Failure
+.PP
+enableLink(requiresApproval<b>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+requiresApproval : true=add numbers using the link to the requesting members list
+.RE
+.RE
+.sp
+Enables the group\(cqs invitation link\&.
+.sp
+Exceptions: Failure
+.PP
+quitGroup() → <>
+.RS 4
+Exceptions: Failure, LastGroupAdmin
+.RE
+.PP
+removeAdmins(recipients<as>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : String array of phone numbers
+.RE
+.RE
+.sp
+Remove admin privileges from recipients\&.
+.sp
+Exceptions: Failure
+.PP
+removeMembers(recipients<as>) → <>
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+recipients : String array of phone numbers
+.RE
+.RE
+.sp
+Remove recipients from group\&.
+.sp
+Exceptions: Failure
+.PP
+resetLink() → <>
+.RS 4
+Resets the group\(cqs invitation link to a new random URL starting with
+https://signal\&.group/#
+.RE
+.sp
+Exceptions: Failure
+.SS "Signal\&.Device interface"
+.sp
+The following methods listen to the device\(cqs object path, which is constructed as follows:
+.sp
+<ACCOUNT_PATH> + "/Devices/" + deviceId
+.sp
+deviceId : Number representing the device identifier (obtained from listDevices() method)
+.sp
+Devices have the following (case\-sensitive) properties:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Id<x> (read\-only) : Long representing the device identifier
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Created<x> (read\-only) : Long representing the number of milliseconds since the Unix epoch
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+LastSeen<x> (read\-only) : Long representing the number of milliseconds since the Unix epoch
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Name<s> : String representing the display name of the device
+.RE
+.sp
+To get a property, use (replacing \-\-session with \-\-system if needed): dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.Get string:org\&.asamk\&.Signal\&.Device string:$PROPERTY_NAME
+.sp
+To set a property, use: dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.Set string:org\&.asamk\&.Signal\&.Device string:$PROPERTY_NAME variant:$PROPERTY_TYPE:$PROPERTY_VALUE
+.sp
+To get all properties, use: dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.GetAll string:org\&.asamk\&.Signal\&.Device
+.PP
+removeDevice() → <>
+.RS 4
+Exceptions: Failure
+.RE
+.SS "Signal\&.Identity interface"
+.sp
+The following methods listen to the Identities object path, which is constructed as follows:
+.sp
+<ACCOUNT_PATH> + "/Identities/" + identity
+.sp
+identity : Either the phone number of a contact with underscore (_) replacing plus (+) , or if not known its uuid
+.sp
+Identities have the following (case\-sensitive) properties:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Number<s> (read\-only) : Phone number of the contact
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Uuid<x> (read\-only) : Internal uuid representing the contact
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Fingerprint<x> (read\-only) : Byte array representing the fingerprint
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+SafetyNumber<s> (read\-only) : String representation of the safety number used to verify trust
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+TrustLevel<s> (read\-only) : Current trust level (UNSTRUSTED, TRUSTED_UNVERIFIED, TRUSTED_VERIFIED)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+AddedDate<x> (read\-only) : Long representing the number of milliseconds since the Unix epoch
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+ScannableSafetyNumber<x> (read\-only) : Byte array representation of the safety number
+.RE
+.sp
+To get a property, use (replacing \-\-session with \-\-system if needed): dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.Get string:org\&.asamk\&.Signal\&.Identity string:$PROPERTY_NAME
+.sp
+To get all properties, use: dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.GetAll string:org\&.asamk\&.Signal\&.Identity
+.PP
+trust() → <>
+.RS 4
+Establish trust with the given identity\&. TrustLevel will become TRUSTED_UNVERFIED
+.RE
+.sp
+Exceptions: Failure
+.PP
+trustVerified(SafetyNumber<s>) → <>
+.RS 4
+Establish trust with the given identity using their safety number\&. TrustLevel will become TRUSTED_VERIFIED
+.RE
+.sp
+Exceptions: Failure
+.SS "Signal\&.Configuration interface"
+.sp
+The configuration\(cqs object path, which exists only for primary devices, is constructed as follows: <ACCOUNT_PATH> + "/Configuration"
+.sp
+Configurations have the following (case\-sensitive) properties:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+ReadReceipts<b> : should send read receipts (true/false)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+UnidentifiedDeliveryIndicators<b> : should show unidentified delivery indicators (true/false)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+TypingIndicators<b> : should send/show typing indicators (true/false)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+LinkPreviews<b> : should generate link previews (true/false)
+.RE
+.sp
+To get a property, use (replacing \-\-session with \-\-system if needed): dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.Get string:org\&.asamk\&.Signal\&.Configuration string:$PROPERTY_NAME
+.sp
+To set a property, use: dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.Set string:org\&.asamk\&.Signal\&.Configuration string:$PROPERTY_NAME variant:$PROPERTY_TYPE:$PROPERTY_VALUE
+.sp
+To get all properties, use: dbus\-send \-\-session \-\-dest=org\&.asamk\&.Signal \-\-print\-reply $OBJECT_PATH org\&.freedesktop\&.DBus\&.Properties\&.GetAll string:org\&.asamk\&.Signal\&.Configuration
+.SH "SIGNALS"
+.PP
+SyncMessageReceived (timestamp<x>, sender<s>, destination<s>, groupId<ay>, message<s>, attachments<as>)
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Integer value that can be used to associate this e\&.g\&. with a sendMessage()
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+sender : Phone number of the sender
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+destination : DBus code for destination
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier (empty when private message)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+message : Message text
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+attachments : String array of filenames in the signal\-cli storage (~/\&.local/share/signal\-cli/attachments/)
+.RE
+.RE
+.sp
+The sync message is received when the user sends a message from a linked device\&.
+.PP
+ReceiptReceived (timestamp<x>, sender<s>)
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Integer value that can be used to associate this e\&.g\&. with a sendMessage()
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+sender : Phone number of the sender
+.RE
+.RE
+.sp
+This signal is sent by each recipient (e\&.g\&. each group member) after the message was successfully delivered to the device
+.PP
+MessageReceived(timestamp<x>, sender<s>, groupId<ay>, message<s>, attachments<as>)
+.RS 4
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+timestamp : Integer value that is used by the system to send a ReceiptReceived reply
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+sender : Phone number of the sender
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+groupId : Byte array representing the internal group identifier (empty when private message)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+message : Message text
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+attachments : String array of filenames in the signal\-cli storage (~/\&.local/share/signal\-cli/attachments/)
+.RE
+.RE
+.sp
+This signal is received whenever we get a private message or a message is posted in a group we are an active member
+.SH "EXAMPLES"
+.PP
+Send a text message (without attachment) to a contact
+.RS 4
+dbus\-send \-\-print\-reply \-\-type=method_call \-\-dest="org\&.asamk\&.Signal" /org/asamk/Signal org\&.asamk\&.Signal\&.sendMessage string:"Message text goes here" array:string: string:+123456789
+.RE
+.PP
+Send a group message
+.RS 4
+dbus\-send \-\-session \-\-print\-reply \-\-type=method_call \-\-dest=org\&.asamk\&.Signal /org/asamk/Signal org\&.asamk\&.Signal\&.sendGroupMessage string:\*(AqThe message goes here\*(Aq array:string:\*(Aq/path/to/attachment1\*(Aq,\fI/path/to/attachment2\fR
+array:byte:139,22,72,247,116,32,170,104,205,164,207,21,248,77,185
+.RE
+.PP
+Print the group name corresponding to a groupId; the daemon runs on system bus, and was started without an explicit \-a ACCOUNT
+.RS 4
+dbus\-send \-\-system \-\-print\-reply \-\-type=method_call \-\-dest=\fIorg\&.asamk\&.Signal\fR
+/org/asamk/Signal/_1234567890 org\&.asamk\&.Signal\&.getGroupName array:byte:139,22,72,247,116,32,170,104,205,164,207,21,248,77,185
+.RE
+.SH "AUTHORS"
+.sp
+Maintained by AsamK <asamk@gmx\&.de>, who is assisted by other open source contributors\&. For more information about signal\-cli development, see https://github\&.com/AsamK/signal\-cli\&.

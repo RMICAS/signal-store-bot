@@ -40,15 +40,22 @@ class SignalStoreBot:
     
     def is_business_hours(self) -> bool:
         """
-        Check if current time is within business hours (3:00 PM - 1:00 AM)
+        Check if current time is within business hours
         
         Returns:
             bool: True if within business hours, False otherwise
         """
         try:
+            from config.settings import ALWAYS_OPEN, BUSINESS_HOURS
+            
+            # If always open, return True immediately
+            if ALWAYS_OPEN:
+                return True
+            
+            # Otherwise check against configured hours
             now = datetime.now().time()
-            start_time = time(15, 0)  # 3:00 PM
-            end_time = time(1, 0)     # 1:00 AM
+            start_time = BUSINESS_HOURS['start']
+            end_time = BUSINESS_HOURS['end']
             
             # Handle the overnight case (end time is next day)
             if start_time > end_time:
@@ -64,44 +71,65 @@ class SignalStoreBot:
     
     def get_business_hours_display(self) -> str:
         """Get formatted business hours for display"""
-        return "🕒 Business Hours: 3:00 PM - 1:00 AM (Daily)"
+        try:
+            from config.settings import ALWAYS_OPEN
+            if ALWAYS_OPEN:
+                return "🕒 Business Hours: Always Open (24/7)"
+        except ImportError:
+            pass
+        
+        from config.settings import BUSINESS_HOURS
+        start = BUSINESS_HOURS['start']
+        end = BUSINESS_HOURS['end']
+        start_str = start.strftime("%I:%M %p")
+        end_str = end.strftime("%I:%M %p")
+        return f"🕒 Business Hours: {start_str} - {end_str} (Daily)"
     
     def process_signal_message(self, phone_number: str, message: str) -> str:
         """
         Process incoming Signal message and return response
-        
-        Args:
-            phone_number: Sender's phone number
-            message: Incoming message text
-            
-        Returns:
-            str: Response message
         """
         try:
-            # Clean and validate phone number
-            phone_number = self._clean_phone_number(phone_number)
-            if not phone_number:
-                return "❌ Invalid phone number format"
+            # Store original for logging
+            original_phone = phone_number
+            
+            # 1. Check if it's a UUID
+            import re
+            is_uuid = re.match(r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$', phone_number, re.IGNORECASE)
+            
+            if is_uuid:
+                cleaned_phone = phone_number # Keep UUID as is
+            else:
+                # 2. Otherwise clean it like a phone number
+                cleaned_phone = self._clean_phone_number(phone_number)
+            
+            if not cleaned_phone:
+                self.logger.warning(f"⚠️  Could not clean phone number: {original_phone}")
+                # Try to use original if it looks like a standard international number
+                if phone_number and phone_number.strip().startswith('+'):
+                    cleaned_phone = phone_number.strip()
+                else:
+                    return "❌ Invalid phone number format"
             
             # Check if store is open
             if not self.is_business_hours():
                 return self._get_offline_response()
             
             # Process the message
-            response = self.message_processor.process_message(phone_number, message)
+            response = self.message_processor.process_message(cleaned_phone, message)
             return response
             
         except Exception as e:
-            self.logger.error(f"Error processing message: {e}")
-            return "❌ An error occurred while processing your message. Please try again."
-    
+            self.logger.error(f"Error processing message: {e}", exc_info=True)
+            return "❌ An error occurred while processing your message."
+
     def _clean_phone_number(self, phone_number: str) -> Optional[str]:
         """Clean and validate phone number format"""
-        # Remove any non-digit characters except +
+        # If it contains letters (and isn't a UUID handled above), it's likely invalid
+        # But we only want to strip characters from actual phone numbers
         cleaned = ''.join(c for c in phone_number if c.isdigit() or c == '+')
         
-        # Basic validation - should start with + and have reasonable length
-        if cleaned.startswith('+') and len(cleaned) > 7 and len(cleaned) < 16:
+        if cleaned.startswith('+') and 7 < len(cleaned) < 16:
             return cleaned
         return None
     

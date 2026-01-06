@@ -1,0 +1,11 @@
+# Signal Store Bot - Python Dependencies
+# Note: signal-cli must be installed separately (see scripts/install_signal_cli.sh or install_signal_cli.ps1)
+
+# No additional Python packages required - uses standard library only
+# signal-cli is a system dependency that must be installed separately
+
+
+
+
+
+

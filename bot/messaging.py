@@ -196,7 +196,27 @@ class MessageProcessor:
     def _handle_hours(self, phone_number: str = None, message: str = None, 
                      user_role: str = 'customer') -> str:
         """Show business hours"""
-        return "🕒 *Business Hours*\n3:00 PM - 1:00 AM (Daily)\n\nWe're closed from 1:00 AM to 3:00 PM."
+        try:
+            from config.settings import ALWAYS_OPEN, BUSINESS_HOURS
+            
+            if ALWAYS_OPEN:
+                return "🕒 *Business Hours*\nAlways Open (24/7)\n\nWe're here to help you anytime!"
+            
+            # Get hours from settings
+            start = BUSINESS_HOURS['start']
+            end = BUSINESS_HOURS['end']
+            start_str = start.strftime("%I:%M %p")
+            end_str = end.strftime("%I:%M %p")
+            
+            # Handle overnight hours
+            if end < start:
+                return f"🕒 *Business Hours*\n{start_str} - {end_str} (Next Day)\n\nWe're closed from {end_str} to {start_str}."
+            else:
+                return f"🕒 *Business Hours*\n{start_str} - {end_str} (Daily)"
+                
+        except ImportError:
+            # Fallback if settings not available
+            return "🕒 *Business Hours*\nAlways Open (24/7)"
     
     def _handle_contact(self, phone_number: str = None, message: str = None, 
                        user_role: str = 'customer') -> str:

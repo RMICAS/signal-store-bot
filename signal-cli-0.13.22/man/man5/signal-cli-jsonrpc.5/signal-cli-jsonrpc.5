@@ -1,0 +1,343 @@
+'\" t
+.\"     Title: signal-cli-jsonrpc
+.\"    Author: [see the "Authors" section]
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 11/14/2025
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "SIGNAL\-CLI\-JSONRPC" "5" "11/14/2025" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+signal-cli-jsonrpc \- A commandline and dbus interface for the Signal messenger
+.SH "SYNOPSIS"
+.sp
+\fBsignal\-cli\fR [\-\-verbose] [\-\-config CONFIG] [\-a ACCOUNT] daemon [\-\-socket[=SOCKET_PATH]] [\-\-tcp[=HOST:PORT]] [\-\-http[=HOST:PORT]]
+.sp
+\fBsignal\-cli\fR [\-\-verbose] [\-\-config CONFIG] [\-a ACCOUNT] jsonRpc
+.SH "DESCRIPTION"
+.sp
+See signal\-cli (1) for details on the application\&.
+.sp
+signal\-cli provides a JSON\-RPC based API with the jsonRpc and daemon commands\&.
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+jsonRpc
+command accepts input on STDIN and responds on STDOUT\&. This is intended to make it easier to embed signal\-cli in other applications\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+`signal\-cli \-a _ACCOUNT_ jsonRpc` or for multi\-account mode `signal\-cli jsonRpc`
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+daemon
+command provides a UNIX, TCP socket or HTTP endpoint and can handle requests from multiple clients\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+`signal\-cli \-a _ACCOUNT_ daemon \-\-socket` or for multi\-account mode `signal\-cli daemon \-\-socket`
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+With \-\-http signal\-cli exposes three endpoints;
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+POST /api/v1/rpc : Expects a single or batch JSON\-RPC request
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+GET /api/v1/events : Returns a Server\-Sent Events (SSE) stream of incoming messages
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+GET /api/v1/check : Responds with 200 OK if daemon is running
+.RE
+.SH "BASIC USAGE"
+.sp
+In JSON\-RPC mode, signal\-cli will read requests from stdin\&. Every request must be a JSON object in a single line\&. Requests must have a unique "id" value to be able to match the response to the corresponding request\&.
+.sp
+Example:
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"listGroups","id":"my special mark"}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":[{"id":"Pmpi+EfPWmsxiomLe9Nx2XF9HOE483p6iKiFj65iMwI=","name":"My Group","description":"It\*(Aqs special because it is mine\&.","isMember":true,"isBlocked":false,"members":["+33123456789","+440123456789"],"pendingMembers":[],"requestingMembers":[],"admins":["+33123456789","+440123456789"],"groupInviteLink":"https://signal\&.group/#CjQKIAtcbUw482i7bqvmJCwdgvg0FMif52N5v9lGg_bE4U3zEhCjHKSaPzWImMpnCbU8A1r0"}],"id":"my special mark"}
+.sp
+From the command line:
+.sp
+echo \*(Aq{"jsonrpc":"2\&.0","method":"listGroups","id":"my special mark"}\*(Aq | signal\-cli \-u +33123456789 jsonRpc
+.sp
+Like in dbus daemon mode, messages are automatically received in jsonRpc mode (\-\-receive\-mode=on\-start)\&. Incoming messages are sent as JSON\-RPC notifications\&.
+.sp
+Example:
+.sp
+{"jsonrpc":"2\&.0","method":"receive","params":{"envelope":{"source":"+33123456789","sourceNumber":"+33123456789","sourceUuid":"uuid","sourceName":"name","sourceDevice":1,"timestamp":1631458508784,"dataMessage":{"timestamp":1631458508784,"message":"foobar","expiresInSeconds":0,"viewOnce":false,"mentions":[],"attachments":[],"contacts":[]}}}}
+.sp
+In order to not miss messages, automatic receiving of messages can be disabled with the \-\-receive\-mode=manual parameter\&.
+.sp
+REQUEST: {"jsonrpc":"2\&.0","id":"id","method":"subscribeReceive"}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":0,"id":"id"}
+.sp
+Messages are then sent similar to the automatic mode, but wrapped in a subscription response object:
+.sp
+{"jsonrpc":"2\&.0","method":"receive","params":{"subscription":0,"result":{"envelope":{"source":"+33123456789","sourceNumber":"+33123456789","sourceUuid":"uuid","sourceName":"name","sourceDevice":2,"timestamp":1693064367769,"syncMessage":{"sentMessage":{"destination":"+33123456789","destinationNumber":"+33123456789","destinationUuid":"uuid","timestamp":1693064367769,"message":"j","expiresInSeconds":0,"viewOnce":false}}},"account":"+33123456789"}}}
+.SS "Multi\-account mode"
+.sp
+When the daemon/jsonRpc command is started without an account parameter (\-a), signal\-cli will provide all local accounts and additional commands to register (register) and link (startLink, finishLink) new accounts\&.
+.sp
+In multi\-account mode, requests for a single account require an additional account param\&.
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"listGroups","id":"my special mark","params":{"account":"+33123456789"}}
+.SH "COMMANDS"
+.sp
+The commands available for the JSON\-RPC mode are the same as the cli commands (except register, verify and link)\&. The method field is the command name and the parameters can be sent as the params object\&.
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Parameter names are provided in camelCase format instead of the hyphen format on the cli\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+e\&.g\&.: `\-\-group\-id=ID` on the cli becomes `"groupId":"ID"`
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Parameters that can take multiple values on the command line can be provided as single json value or as json array
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+e\&.g\&. `\-\-attachment ATTACH1 ATTACH2` becomes `"attachments":["ATTACH1", "ATTACH2"]`
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+`\-\-attachment ATTACH` becomes `"attachment":"ATTACH"`
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SS "Additional JSON\-RPC commands"
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBsubscribeReceive\fR
+.RS 4
+.sp
+For receiving message with \-\-receive\-mode=manual parameter\&.
+.sp
+Tells the daemon to start receiving messages, returns the subscription id as a single integer value in the result\&.
+.RE
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBunsubscribeReceive\fR
+.RS 4
+.sp
+Stop a previous subscription for receiving messages\&.
+.sp
+Params:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+subscription: the subscription id returned by
+subscribeReceive
+.RE
+.RE
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBstartLink\fR
+.RS 4
+.sp
+Starts the provisioning for a new linked account\&. Responds with a URI that can be used with the addDevice signal\-cli command or encoded as a QR\-code and scanned with a mobile phone\&. The URI is only valid for a short amount of time\&.
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"startLink","id":"5"}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":{"deviceLinkUri":"sgnl://linkdevice?uuid=X&pub_key=X"},"id":"5"}
+.RE
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBfinishLink\fR
+.RS 4
+.sp
+Finish provisioning of a new linked account\&. Can be called immediately after startLink, it will wait for a response from the primary device\&.
+.sp
+Params:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+deviceLinkUri: the URI returned by
+startLink
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+deviceName: (optional) the name for the new linked device
+.RE
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"finishLink","id":"6","params":{"deviceLinkUri":"sgnl://linkdevice?uuid=X&pub_key=X","deviceName":"new\-name"}}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":{"deviceLinkUri":"sgnl://linkdevice?uuid=X&pub_key=X"},"id":"6"}
+.RE
+.SH "EXAMPLES"
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"listGroups","id":"5"}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":[\&.\&.\&.],"id":"5"}
+.sp
+\-\-\-
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"send","params":{"recipient":["+YYY"],"message":"MESSAGE"},"id":4}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":{"timestamp":999},"id":4}
+.sp
+\-\-\-
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"send","params":{"groupId":"GROUP_ID_BASE64","message":"MESSAGE"},"id":4}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":{"timestamp":999},"id":4}
+.sp
+\-\-\-
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"updateGroup","params":{"groupId":"GROUP_ID=","name":"new group name","members":["+ZZZ"],"link":"enabledWithApproval","setPermissionEditDetails":"only\-admins"},"id":"someId"}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":{"timestamp":9999},"id":"someId"}
+.sp
+\-\-\-
+.sp
+REQUEST: {"jsonrpc":"2\&.0","method":"sendSyncRequest","id":9}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","result":{},"id":9}
+.sp
+\-\-\-
+.sp
+REQUEST: {"jsonrpc":"2\&.0"}
+.sp
+RESPONSE: {"jsonrpc":"2\&.0","error":{"code":\-32600,"message":"method field must be set","data":null},"id":null}
+.SH "AUTHORS"
+.sp
+Maintained by AsamK <asamk@gmx\&.de>, who is assisted by other open source contributors\&. For more information about signal\-cli development, see https://github\&.com/AsamK/signal\-cli\&.

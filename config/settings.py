@@ -2,17 +2,25 @@
 Configuration settings for Signal Store Bot
 """
 
-# Signal Configuration
-BOT_PHONE_NUMBER = "+375XXXXXXXXX"  # Your bot's Signal number
-ADMIN_PHONE = "+375291234567"       # Your admin number
-URGENT_CONTACT = "+375291234567"    # Contact for urgent orders
-
-# Business Hours (3:00 PM - 1:00 AM)
 from datetime import time
+import platform
+
+# Signal Configuration
+BOT_PHONE_NUMBER = "+351922282749"  # Your bot's Signal number
+ADMIN_PHONE = "+351922282749"       # Your admin number
+URGENT_CONTACT = "+351922282749"    # Contact for urgent orders
+
+# Business Hours - Set to always open (24/7)
+# To set specific hours, change ALWAYS_OPEN to False and set start/end times
+ALWAYS_OPEN = True
 BUSINESS_HOURS = {
-    "start": time(15, 0),  # 3:00 PM
-    "end": time(1, 0)      # 1:00 AM (next day)
+    "start": time(0, 0),   # 12:00 AM (midnight)
+    "end": time(23, 59)   # 11:59 PM (end of day)
 }
+
+# Signal-cli behavior tweaks
+# Set to True to force JSON mode, False to force plain-text, or None to auto-detect.
+ENABLE_SIGNAL_JSON_RECEIVE = None
 
 # Database Configuration
 DATABASE_PATH = "data/store.db"
