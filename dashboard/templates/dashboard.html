@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Store Bot - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+        
+        .tab.active {
+            color: #2c3e50;
+            border-bottom-color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card h2 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #34495e;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .message {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            border-left: 3px solid #2c3e50;
+        }
+        
+        .message.inbound {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+        
+        .message.outbound {
+            background: #f1f8e9;
+            border-left-color: #8bc34a;
+        }
+        
+        .message-admin {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .chat-input button {
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .conversation-list {
+            list-style: none;
+        }
+        
+        .conversation-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .conversation-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .conversation-item.active {
+            background: #e3f2fd;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛍️ Signal Store Bot - Admin Dashboard</h1>
+    </div>
+    
+    <div class="container">
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <h3>Orders Today</h3>
+                <div class="value" id="orders-today">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pending Orders</h3>
+                <div class="value" id="pending-orders">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Conversations</h3>
+                <div class="value" id="active-conversations">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Today's Revenue</h3>
+                <div class="value" id="today-revenue">$0.00</div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('orders')">Orders</button>
+            <button class="tab" onclick="showTab('conversations')">Conversations</button>
+            <button class="tab" onclick="showTab('messages')">Messages</button>
+        </div>
+        
+        <div id="orders-tab" class="tab-content active">
+            <div class="card">
+                <h2>All Orders</h2>
+                <div id="orders-list" class="loading">Loading orders...</div>
+            </div>
+        </div>
+        
+        <div id="conversations-tab" class="tab-content">
+            <div class="card">
+                <h2>Conversations</h2>
+                <div id="conversations-list" class="loading">Loading conversations...</div>
+            </div>
+        </div>
+        
+        <div id="messages-tab" class="tab-content">
+            <div class="card">
+                <h2>Recent Messages</h2>
+                <div id="messages-list" class="loading">Loading messages...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Load data for tab
+            if (tabName === 'orders') loadOrders();
+            else if (tabName === 'conversations') loadConversations();
+            else if (tabName === 'messages') loadMessages();
+        }
+        
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API_BASE}/stats`);
+                const stats = await res.json();
+                
+                document.getElementById('orders-today').textContent = stats.total_orders_today;
+                document.getElementById('pending-orders').textContent = stats.pending_orders;
+                document.getElementById('active-conversations').textContent = stats.active_conversations;
+                document.getElementById('today-revenue').textContent = `$${stats.today_revenue.toFixed(2)}`;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        async function loadOrders() {
+            try {
+                const res = await fetch(`${API_BASE}/orders`);
+                const orders = await res.json();
+                
+                const html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${orders.map(order => `
+                                <tr>
+                                    <td>#${order.id}</td>
+                                    <td>${order.customer_name}<br><small>${order.customer_phone}</small></td>
+                                    <td>
+                                        ${order.items ? order.items.map(item => 
+                                            `${item.product_name} x${item.quantity}`
+                                        ).join('<br>') : `${order.product_name} x${order.quantity}`}
+                                    </td>
+                                    <td>$${parseFloat(order.total_price).toFixed(2)}</td>
+                                    <td>
+                                        <span class="status-badge status-${order.status}">${order.status}</span>
+                                    </td>
+                                    <td>${new Date(order.created_at).toLocaleString()}</td>
+                                    <td>
+                                        ${order.status === 'pending' ? `
+                                            <button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'confirmed')">Confirm</button>
+                                            <button class="btn btn-danger" onclick="updateOrderStatus(${order.id}, 'cancelled')">Cancel</button>
+                                        ` : ''}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                
+                document.getElementById('orders-list').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('orders-list').innerHTML = '<p>Error loading orders</p>';
+            }
+        }
+        
+        async function loadConversations() {
+            try {
+                const res = await fetch(`${API_BASE}/conversations`);
+                const conversations = await res.json();
+                
+                const html = `
+                    <ul class="conversation-list">
+                        ${conversations.map(conv => `
+                            <li class="conversation-item" onclick="loadConversation(${conv.id}, '${conv.customer_phone}')">
+                                <strong>${conv.customer_phone}</strong>
+                                ${conv.customer_name ? `<br>${conv.customer_name}` : ''}
+                                <br><small>Last: ${new Date(conv.last_message_at).toLocaleString()}</small>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div id="conversation-detail" style="display:none; margin-top: 2rem;">
+                        <h3>Chat with <span id="chat-phone"></span></h3>
+                        <div id="chat-messages" style="max-height: 400px; overflow-y: auto; margin: 1rem 0;"></div>
+                        <div class="chat-input">
+                            <input type="text" id="chat-message-input" placeholder="Type message...">
+                            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('conversations-list').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading conversations:', error);
+                document.getElementById('conversations-list').innerHTML = '<p>Error loading conversations</p>';
+            }
+        }
+        
+        async function loadMessages() {
+            try {
+                const res = await fetch(`${API_BASE}/messages?limit=50`);
+                const messages = await res.json();
+                
+                const html = messages.map(msg => `
+                    <div class="message ${msg.direction} ${msg.is_admin ? 'message-admin' : ''}">
+                        <strong>${msg.direction === 'inbound' ? '←' : '→'} ${msg.sender_phone}</strong>
+                        ${msg.is_admin ? ' <span style="color: #ff9800;">[ADMIN]</span>' : ''}
+                        <br>${msg.message_text}
+                        <br><small>${new Date(msg.created_at).toLocaleString()}</small>
+                    </div>
+                `).join('');
+                
+                document.getElementById('messages-list').innerHTML = html || '<p>No messages</p>';
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                document.getElementById('messages-list').innerHTML = '<p>Error loading messages</p>';
+            }
+        }
+        
+        async function updateOrderStatus(orderId, status) {
+            try {
+                const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({status})
+                });
+                
+                if (res.ok) {
+                    loadOrders();
+                    loadStats();
+                }
+            } catch (error) {
+                console.error('Error updating order:', error);
+                alert('Failed to update order status');
+            }
+        }
+        
+        let currentConversationId = null;
+        let currentCustomerPhone = null;
+        
+        async function loadConversation(convId, phone) {
+            currentConversationId = convId;
+            currentCustomerPhone = phone;
+            
+            document.getElementById('chat-phone').textContent = phone;
+            document.getElementById('conversation-detail').style.display = 'block';
+            
+            try {
+                const res = await fetch(`${API_BASE}/conversations/${convId}/messages`);
+                const messages = await res.json();
+                
+                const html = messages.reverse().map(msg => `
+                    <div class="message ${msg.direction} ${msg.is_admin ? 'message-admin' : ''}">
+                        <strong>${msg.direction === 'inbound' ? '←' : '→'} ${msg.sender_phone}</strong>
+                        ${msg.is_admin ? ' <span style="color: #ff9800;">[ADMIN]</span>' : ''}
+                        <br>${msg.message_text}
+                        <br><small>${new Date(msg.created_at).toLocaleString()}</small>
+                    </div>
+                `).join('');
+                
+                const container = document.getElementById('chat-messages');
+                container.innerHTML = html || '<p>No messages</p>';
+                container.scrollTop = container.scrollHeight;
+            } catch (error) {
+                console.error('Error loading conversation:', error);
+            }
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chat-message-input');
+            const message = input.value.trim();
+            
+            if (!message || !currentCustomerPhone) return;
+            
+            try {
+                const res = await fetch(`${API_BASE}/send`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        recipient: currentCustomerPhone,
+                        message: message
+                    })
+                });
+                
+                if (res.ok) {
+                    input.value = '';
+                    loadConversation(currentConversationId, currentCustomerPhone);
+                    loadMessages();
+                } else {
+                    alert('Failed to send message');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Failed to send message');
+            }
+        }
+        
+        // Allow Enter key to send message
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('chat-message-input');
+            if (input) {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+            
+            // Load initial data
+            loadStats();
+            loadOrders();
+            
+            // Refresh stats every 30 seconds
+            setInterval(loadStats, 30000);
+        });
+    </script>
+</body>
+</html>
+

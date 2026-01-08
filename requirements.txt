@@ -1,8 +1,12 @@
 # Signal Store Bot - Python Dependencies
 # Note: signal-cli must be installed separately (see scripts/install_signal_cli.sh or install_signal_cli.ps1)
 
-# No additional Python packages required - uses standard library only
+# Core dependencies (standard library only for bot)
 # signal-cli is a system dependency that must be installed separately
+
+# Dashboard dependencies
+Flask>=2.3.0
+flask-cors>=4.0.0
 
 
 

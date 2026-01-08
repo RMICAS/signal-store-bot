@@ -231,3 +231,177 @@ class Database:
         except Exception as e:
             self.logger.error(f"Error marking message processed: {e}")
             return False
+    
+    # Multi-product order methods
+    def create_order_with_items(self, order_data: Dict[str, Any], items: List[Dict[str, Any]]) -> Optional[int]:
+        """Create order with multiple items"""
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                # Insert order
+                cursor.execute('''
+                    INSERT INTO orders 
+                    (customer_phone, customer_name, product_id, product_name, 
+                     quantity, total_price, delivery_address, status, total_items)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    order_data['customer_phone'],
+                    order_data['customer_name'],
+                    order_data.get('product_id', items[0]['product_id']),
+                    order_data.get('product_name', f"{len(items)} items"),
+                    order_data.get('quantity', sum(item['quantity'] for item in items)),
+                    order_data['total_price'],
+                    order_data['delivery_address'],
+                    order_data.get('status', 'pending'),
+                    len(items)
+                ))
+                order_id = cursor.lastrowid
+                
+                # Insert order items
+                for item in items:
+                    cursor.execute('''
+                        INSERT INTO order_items 
+                        (order_id, product_id, product_name, quantity, unit_price, subtotal)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (
+                        order_id,
+                        item['product_id'],
+                        item['product_name'],
+                        item['quantity'],
+                        item['unit_price'],
+                        item['subtotal']
+                    ))
+                
+                conn.commit()
+                return order_id
+        except Exception as e:
+            self.logger.error(f"Error creating order with items: {e}")
+            return None
+    
+    def get_order_items(self, order_id: int) -> List[Dict[str, Any]]:
+        """Get all items for an order"""
+        return self.fetch_all(
+            "SELECT * FROM order_items WHERE order_id = ? ORDER BY id",
+            (order_id,)
+        )
+    
+    def get_all_orders(self, status: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get all orders, optionally filtered by status"""
+        if status:
+            return self.fetch_all(
+                "SELECT * FROM orders WHERE status = ? ORDER BY created_at DESC",
+                (status,)
+            )
+        return self.fetch_all(
+            "SELECT * FROM orders ORDER BY created_at DESC"
+        )
+    
+    # Message logging methods
+    def log_message(self, sender_phone: str, recipient_phone: str, message_text: str,
+                   direction: str, is_admin: bool = False, order_id: Optional[int] = None,
+                   conversation_id: Optional[int] = None) -> Optional[int]:
+        """Log a message to the database"""
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute('''
+                    INSERT INTO messages 
+                    (conversation_id, sender_phone, recipient_phone, message_text, 
+                     direction, is_admin, order_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                ''', (
+                    conversation_id,
+                    sender_phone,
+                    recipient_phone,
+                    message_text,
+                    direction,
+                    is_admin,
+                    order_id
+                ))
+                message_id = cursor.lastrowid
+                
+                # Update conversation last_message_at
+                if conversation_id:
+                    cursor.execute('''
+                        UPDATE conversations 
+                        SET last_message_at = CURRENT_TIMESTAMP 
+                        WHERE id = ?
+                    ''', (conversation_id,))
+                
+                conn.commit()
+                return message_id
+        except Exception as e:
+            self.logger.error(f"Error logging message: {e}")
+            return None
+    
+    def get_messages(self, limit: int = 100, conversation_id: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Get messages, optionally filtered by conversation"""
+        if conversation_id:
+            return self.fetch_all(
+                "SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at DESC LIMIT ?",
+                (conversation_id, limit)
+            )
+        return self.fetch_all(
+            "SELECT * FROM messages ORDER BY created_at DESC LIMIT ?",
+            (limit,)
+        )
+    
+    # Conversation methods
+    def get_or_create_conversation(self, customer_phone: str, customer_name: Optional[str] = None,
+                                   admin_phone: Optional[str] = None) -> Optional[int]:
+        """Get existing conversation or create new one"""
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                # Try to find existing active conversation
+                existing = cursor.execute(
+                    "SELECT id FROM conversations WHERE customer_phone = ? AND status = 'active'",
+                    (customer_phone,)
+                ).fetchone()
+                
+                if existing:
+                    return existing['id']
+                
+                # Create new conversation
+                cursor.execute('''
+                    INSERT INTO conversations (customer_phone, customer_name, admin_phone)
+                    VALUES (?, ?, ?)
+                ''', (customer_phone, customer_name, admin_phone))
+                conversation_id = cursor.lastrowid
+                conn.commit()
+                return conversation_id
+        except Exception as e:
+            self.logger.error(f"Error getting/creating conversation: {e}")
+            return None
+    
+    def get_conversations(self, status: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get all conversations, optionally filtered by status"""
+        if status:
+            return self.fetch_all(
+                "SELECT * FROM conversations WHERE status = ? ORDER BY last_message_at DESC",
+                (status,)
+            )
+        return self.fetch_all(
+            "SELECT * FROM conversations ORDER BY last_message_at DESC"
+        )
+    
+    def get_conversation_by_phone(self, customer_phone: str) -> Optional[Dict[str, Any]]:
+        """Get conversation by customer phone"""
+        return self.fetch_one(
+            "SELECT * FROM conversations WHERE customer_phone = ? AND status = 'active' ORDER BY last_message_at DESC LIMIT 1",
+            (customer_phone,)
+        )
+    
+    def update_conversation_status(self, conversation_id: int, status: str) -> bool:
+        """Update conversation status"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    "UPDATE conversations SET status = ? WHERE id = ?",
+                    (status, conversation_id)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error updating conversation status: {e}")
+            return False

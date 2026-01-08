@@ -164,3 +164,92 @@ class OrderManager:
         except Exception as e:
             self.logger.error(f"Error getting order: {e}")
             return None
+    
+    def create_multi_product_order(self, customer_phone: str, customer_name: str,
+                                   delivery_address: str, items: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Create order with multiple products
+        items: [{'product_id': 1, 'quantity': 2}, {'product_id': 3, 'quantity': 1}]
+        """
+        try:
+            if not items:
+                return {'success': False, 'message': 'No items in order'}
+            
+            total_price = 0
+            order_items = []
+            
+            # Validate all products and calculate totals
+            for item in items:
+                product = self.db.get_product_by_id(item['product_id'])
+                if not product:
+                    return {'success': False, 'message': f"Product {item['product_id']} not found"}
+                
+                if product['stock'] < item['quantity']:
+                    return {'success': False, 
+                           'message': f"Insufficient stock for {product['name']}. Only {product['stock']} available"}
+                
+                subtotal = product['price'] * item['quantity']
+                total_price += subtotal
+                
+                order_items.append({
+                    'product_id': item['product_id'],
+                    'product_name': product['name'],
+                    'quantity': item['quantity'],
+                    'unit_price': product['price'],
+                    'subtotal': subtotal
+                })
+            
+            # Create order record
+            order_data = {
+                'customer_phone': customer_phone,
+                'customer_name': customer_name,
+                'product_id': order_items[0]['product_id'],  # First product for backward compat
+                'product_name': f"{len(order_items)} items",  # Summary
+                'quantity': sum(item['quantity'] for item in order_items),
+                'total_price': total_price,
+                'delivery_address': delivery_address,
+                'status': 'pending',
+                'total_items': len(order_items)
+            }
+            
+            order_id = self.db.create_order_with_items(order_data, order_items)
+            
+            if not order_id:
+                return {'success': False, 'message': 'Failed to create order'}
+            
+            # Update stock for all products
+            for item in order_items:
+                product = self.db.get_product_by_id(item['product_id'])
+                new_stock = product['stock'] - item['quantity']
+                self.db.execute_query(
+                    "UPDATE products SET stock = ? WHERE id = ?",
+                    (new_stock, item['product_id'])
+                )
+            
+            # Get the created order with items
+            order = self.db.fetch_one("SELECT * FROM orders WHERE id = ?", (order_id,))
+            order['items'] = self.db.get_order_items(order_id)
+            
+            return {
+                'success': True,
+                'order': order,
+                'message': 'Order created successfully'
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error creating multi-product order: {e}")
+            return {'success': False, 'message': f'An error occurred: {str(e)}'}
+    
+    def get_order_with_items(self, order_id: int) -> Optional[Dict[str, Any]]:
+        """Get order with all its items"""
+        try:
+            order = self.db.fetch_one(
+                "SELECT * FROM orders WHERE id = ?",
+                (order_id,)
+            )
+            if order:
+                order['items'] = self.db.get_order_items(order_id)
+            return order
+        except Exception as e:
+            self.logger.error(f"Error getting order with items: {e}")
+            return None

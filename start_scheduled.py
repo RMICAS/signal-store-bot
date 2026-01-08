@@ -94,12 +94,64 @@ class ScheduledBot:
             # Store original phone number before processing
             original_phone = phone
             
+            # Get or create conversation and log inbound message
+            from config.settings import BOT_PHONE_NUMBER
+            conv_id = self.bot.db.get_or_create_conversation(phone)
+            self.bot.db.log_message(
+                sender_phone=phone,
+                recipient_phone=BOT_PHONE_NUMBER,
+                message_text=message,
+                direction='inbound',
+                is_admin=False,
+                conversation_id=conv_id
+            )
+            
+            # Check if this is an admin reply command
+            user = self.bot.db.get_user_by_phone(phone)
+            user_role = user['role'] if user else 'customer'
+            
             # Process message through bot (this will clean the phone number internally)
             response = self.bot.process_signal_message(phone, message)
             
             if not response:
                 logging.warning(f"⚠️  No response generated for message from {phone}")
                 return
+            
+            # Check if response contains admin reply instruction
+            # Format: "ADMIN_REPLY:[phone]:[message]"
+            if response.startswith("ADMIN_REPLY:"):
+                parts = response.split(":", 2)
+                if len(parts) == 3:
+                    target_phone = parts[1]
+                    admin_message = parts[2]
+                    
+                    # Send admin message
+                    if self.signal_bridge:
+                        send_to_phone = target_phone.strip()
+                        cleaned = self.bot._clean_phone_number(send_to_phone)
+                        if cleaned:
+                            send_to_phone = cleaned
+                        else:
+                            send_to_phone = send_to_phone.strip()
+                            if not send_to_phone.startswith('+'):
+                                send_to_phone = '+' + send_to_phone.lstrip('+')
+                        
+                        success = self.signal_bridge.send_message(send_to_phone, admin_message)
+                        if success:
+                            # Log admin reply
+                            target_conv_id = self.bot.db.get_or_create_conversation(send_to_phone, admin_phone=phone)
+                            self.bot.db.log_message(
+                                sender_phone=BOT_PHONE_NUMBER,
+                                recipient_phone=send_to_phone,
+                                message_text=admin_message,
+                                direction='outbound',
+                                is_admin=True,
+                                conversation_id=target_conv_id
+                            )
+                            logging.info(f"📤 Admin reply sent to {send_to_phone}")
+                        else:
+                            logging.error(f"❌ Failed to send admin reply to {send_to_phone}")
+                    return
             
             # Send response back
             if self.signal_bridge:
@@ -120,6 +172,15 @@ class ScheduledBot:
                 
                 success = self.signal_bridge.send_message(send_to_phone, response)
                 if success:
+                    # Log outbound response
+                    self.bot.db.log_message(
+                        sender_phone=BOT_PHONE_NUMBER,
+                        recipient_phone=send_to_phone,
+                        message_text=response,
+                        direction='outbound',
+                        is_admin=False,
+                        conversation_id=conv_id
+                    )
                     logging.info(f"📤 Successfully sent response to {send_to_phone} (original: {original_phone})")
                 else:
                     logging.error(f"❌ Failed to send response to {send_to_phone} (original: {original_phone})")
