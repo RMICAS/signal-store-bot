@@ -21,4 +21,3 @@ if __name__ == '__main__':
     print(f"📊 Dashboard available at: http://localhost:{PORT}")
     print("🛑 Press Ctrl+C to stop")
     app.run(debug=True, host='0.0.0.0', port=PORT)
-

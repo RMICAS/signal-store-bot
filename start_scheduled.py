@@ -9,6 +9,7 @@ import sys
 import time
 import logging
 from pathlib import Path
+from datetime import datetime
 
 # Add the bot directory to Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'bot'))
@@ -38,8 +39,10 @@ class ScheduledBot:
                 # Test connection (but don't fail if test fails - signal-cli might still work)
                 if self.signal_bridge.test_connection():
                     logging.info(f"✅ Signal bridge initialized for {BOT_PHONE_NUMBER}")
+                    self.bot.db.upsert_system_status("signal_bridge", "connected")
                 else:
                     logging.warning("⚠️  Signal connection test failed - but continuing anyway (signal-cli might still work)")
+                    self.bot.db.upsert_system_status("signal_bridge", "degraded")
                 
                 # Return True if signal_bridge was created successfully
                 return True
@@ -51,9 +54,11 @@ class ScheduledBot:
                 
         except ImportError as e:
             logging.warning(f"⚠️  Signal bridge not available: {e}")
+            self.bot.db.upsert_system_status("signal_bridge", "unavailable")
             return False
         except Exception as e:
             logging.error(f"❌ Unexpected error setting up Signal: {e}")
+            self.bot.db.upsert_system_status("signal_bridge", "error")
             return False
     
     def process_offline_messages(self):
@@ -62,6 +67,13 @@ class ScheduledBot:
             offline_messages = self.bot.db.get_offline_messages()
             if offline_messages:
                 logging.info(f"📨 Processing {len(offline_messages)} offline messages")
+                self.bot.db.log_event(
+                    event_type="automation",
+                    entity_type="offline_messages",
+                    entity_id=str(len(offline_messages)),
+                    message="Processing offline message queue",
+                    metadata={"count": len(offline_messages)}
+                )
                 
                 for msg in offline_messages:
                     response = self.bot.process_signal_message(
@@ -77,8 +89,23 @@ class ScheduledBot:
                         )
                         if success:
                             logging.info(f"📤 Sent response to offline message from {msg['customer_phone']}")
+                            self.bot.db.log_event(
+                                event_type="automation",
+                                entity_type="message",
+                                entity_id=str(msg['id']),
+                                message="Auto-reply sent to offline message",
+                                metadata={"phone": msg['customer_phone']}
+                            )
                         else:
                             logging.error(f"❌ Failed to send response to {msg['customer_phone']}")
+                            self.bot.db.log_event(
+                                event_type="send_error",
+                                entity_type="message",
+                                entity_id=str(msg['id']),
+                                severity="error",
+                                message="Failed to send auto-reply for offline message",
+                                metadata={"phone": msg['customer_phone']}
+                            )
                     
                     # Mark as processed
                     self.bot.db.mark_message_processed(msg['id'])
@@ -93,6 +120,10 @@ class ScheduledBot:
             
             # Store original phone number before processing
             original_phone = phone
+            last_order = self.bot.db.fetch_one(
+                "SELECT id FROM orders WHERE customer_phone = ? ORDER BY created_at DESC LIMIT 1",
+                (phone,)
+            )
             
             # Get or create conversation and log inbound message
             from config.settings import BOT_PHONE_NUMBER
@@ -103,7 +134,15 @@ class ScheduledBot:
                 message_text=message,
                 direction='inbound',
                 is_admin=False,
-                conversation_id=conv_id
+                conversation_id=conv_id,
+                delivery_status="received"
+            )
+            self.bot.db.log_event(
+                event_type="message_received",
+                entity_type="conversation",
+                entity_id=str(conv_id),
+                message="Inbound message received",
+                metadata={"phone": phone}
             )
             
             # Check if this is an admin reply command
@@ -112,6 +151,10 @@ class ScheduledBot:
             
             # Process message through bot (this will clean the phone number internally)
             response = self.bot.process_signal_message(phone, message)
+            latest_order = self.bot.db.fetch_one(
+                "SELECT id, status FROM orders WHERE customer_phone = ? ORDER BY created_at DESC LIMIT 1",
+                (phone,)
+            )
             
             if not response:
                 logging.warning(f"⚠️  No response generated for message from {phone}")
@@ -146,11 +189,27 @@ class ScheduledBot:
                                 message_text=admin_message,
                                 direction='outbound',
                                 is_admin=True,
-                                conversation_id=target_conv_id
+                                conversation_id=target_conv_id,
+                                delivery_status="sent"
                             )
                             logging.info(f"📤 Admin reply sent to {send_to_phone}")
+                            self.bot.db.log_event(
+                                event_type="admin_reply_sent",
+                                entity_type="conversation",
+                                entity_id=str(target_conv_id),
+                                message="Admin reply sent",
+                                metadata={"phone": send_to_phone}
+                            )
                         else:
                             logging.error(f"❌ Failed to send admin reply to {send_to_phone}")
+                            self.bot.db.log_event(
+                                event_type="send_error",
+                                entity_type="conversation",
+                                entity_id=str(target_conv_id),
+                                severity="error",
+                                message="Failed to send admin reply",
+                                metadata={"phone": send_to_phone}
+                            )
                     return
             
             # Send response back
@@ -179,12 +238,42 @@ class ScheduledBot:
                         message_text=response,
                         direction='outbound',
                         is_admin=False,
-                        conversation_id=conv_id
+                        conversation_id=conv_id,
+                        delivery_status="sent"
                     )
                     logging.info(f"📤 Successfully sent response to {send_to_phone} (original: {original_phone})")
+                    self.bot.db.log_event(
+                        event_type="automation",
+                        entity_type="conversation",
+                        entity_id=str(conv_id),
+                        message="Auto-reply sent",
+                        metadata={"phone": send_to_phone}
+                    )
+                    if latest_order and (not last_order or latest_order.get('id') != last_order.get('id')):
+                        if latest_order.get('status') == 'pending' and "Order Placed Successfully" not in response:
+                            order_message = f"✅ We received your order #{latest_order.get('id')}. We'll confirm shortly."
+                            follow_up_sent = self.signal_bridge.send_message(send_to_phone, order_message)
+                            if follow_up_sent:
+                                self.bot.db.log_message(
+                                    sender_phone=BOT_PHONE_NUMBER,
+                                    recipient_phone=send_to_phone,
+                                    message_text=order_message,
+                                    direction='outbound',
+                                    is_admin=False,
+                                    conversation_id=conv_id,
+                                    delivery_status="sent"
+                                )
                 else:
                     logging.error(f"❌ Failed to send response to {send_to_phone} (original: {original_phone})")
                     logging.error(f"   Response was: {response[:100]}...")
+                    self.bot.db.log_event(
+                        event_type="send_error",
+                        entity_type="conversation",
+                        entity_id=str(conv_id),
+                        severity="error",
+                        message="Failed to send auto-reply",
+                        metadata={"phone": send_to_phone}
+                    )
             else:
                 logging.warning(f"⚠️  No signal_bridge available - cannot send response to {phone}")
                 
@@ -210,6 +299,7 @@ class ScheduledBot:
         
         # Set up Signal integration
         signal_available = self.setup_signal_integration()
+        self.bot.db.upsert_system_status("bot_status", "running")
         
         if signal_available and self.signal_bridge:
             logging.info("🏪 Store is OPEN and always accepting messages")
@@ -227,6 +317,7 @@ class ScheduledBot:
         
         try:
             while self.is_running:
+                self.bot.db.upsert_system_status("last_heartbeat", datetime.utcnow().isoformat())
                 time.sleep(60)
         except KeyboardInterrupt:
             logging.info("🛑 Bot stopped by user")
@@ -236,6 +327,7 @@ class ScheduledBot:
         finally:
             if self.signal_bridge:
                 self.signal_bridge.stop_listening()
+            self.bot.db.upsert_system_status("bot_status", "stopped")
             logging.info("🧹 Shutdown complete")
 
 def main():

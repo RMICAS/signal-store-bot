@@ -58,6 +58,16 @@ class MessageProcessor:
             # Get user role
             user = self.db.get_user_by_phone(phone_number)
             user_role = user['role'] if user else 'customer'
+
+            if user and user.get('status') == 'blocked':
+                self.db.log_event(
+                    event_type="blocked_message",
+                    entity_type="user",
+                    entity_id=phone_number,
+                    severity="warning",
+                    message="Blocked user attempted to message"
+                )
+                return "❌ Your account is blocked."
             
             # Handle empty message
             if not message:

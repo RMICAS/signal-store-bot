@@ -5,247 +5,647 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signal Store Bot - Admin Dashboard</title>
     <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0b0f14;
+            --surface: #121823;
+            --surface-2: #0f1520;
+            --border: #1f2937;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --accent: #3a76f0;
+            --accent-2: #2b63d4;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 16px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="light"] {
+            color-scheme: light;
+            --bg: #f5f7fb;
+            --surface: #ffffff;
+            --surface-2: #eef2f7;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --muted: #64748b;
+            --accent: #2563eb;
+            --accent-2: #1d4ed8;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
         }
-        
+
         .header {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(15, 21, 32, 0.9);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
         }
-        
-        .header h1 {
-            font-size: 1.5rem;
+
+        [data-theme="light"] .header {
+            background: rgba(255, 255, 255, 0.92);
         }
-        
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .signal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+            background: var(--accent);
+            box-shadow: 0 0 10px rgba(58, 118, 240, 0.6);
+        }
+
+        .brand .title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .brand .subtitle {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 0.15rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .ghost-btn {
+            padding: 0.5rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease, border 0.2s ease;
+        }
+
+        .ghost-btn:hover {
+            background: rgba(58, 118, 240, 0.12);
+            border-color: rgba(58, 118, 240, 0.3);
+        }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2rem 2.5rem 3rem;
         }
-        
+
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1rem;
             margin-bottom: 2rem;
         }
-        
+
         .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--surface);
+            padding: 1.25rem 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
-        
+
         .stat-card h3 {
-            font-size: 0.875rem;
-            color: #666;
-            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
-        
+
         .stat-card .value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #2c3e50;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--text);
         }
-        
+
         .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #ddd;
+            display: inline-flex;
+            gap: 0.35rem;
+            padding: 0.35rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            margin-bottom: 1.5rem;
         }
-        
+
         .tab {
-            padding: 1rem 1.5rem;
+            padding: 0.65rem 1.4rem;
             cursor: pointer;
             border: none;
-            background: none;
-            font-size: 1rem;
-            color: #666;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px;
+            background: transparent;
+            font-size: 0.95rem;
+            color: var(--muted);
+            border-radius: 999px;
+            transition: background 0.2s ease, color 0.2s ease;
         }
-        
+
         .tab.active {
-            color: #2c3e50;
-            border-bottom-color: #2c3e50;
-            font-weight: bold;
+            color: var(--text);
+            background: rgba(58, 118, 240, 0.2);
         }
-        
+
         .tab-content {
             display: none;
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
+
         .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--surface);
+            border-radius: 18px;
+            border: 1px solid var(--border);
             padding: 1.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
         }
-        
+
         .card h2 {
             margin-bottom: 1rem;
-            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        
+
         th, td {
-            padding: 0.75rem;
+            padding: 0.85rem 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
         }
-        
+
         th {
-            background: #f8f9fa;
+            background: rgba(18, 24, 35, 0.8);
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
-        
+
+        tr:hover td {
+            background: rgba(58, 118, 240, 0.06);
+        }
+
         .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.875rem;
-            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: capitalize;
         }
-        
+
         .status-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
         }
-        
+
         .status-confirmed {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: rgba(58, 118, 240, 0.18);
+            color: #8bb1ff;
         }
-        
+
+        .status-assigned {
+            background: rgba(58, 118, 240, 0.18);
+            color: #8bb1ff;
+        }
+
+        .status-out_for_delivery {
+            background: rgba(34, 197, 94, 0.16);
+            color: var(--success);
+        }
+
+        .status-arrived {
+            background: rgba(245, 158, 11, 0.16);
+            color: var(--warning);
+        }
+
         .status-delivered {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(34, 197, 94, 0.16);
+            color: var(--success);
         }
-        
+
         .status-cancelled {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(239, 68, 68, 0.16);
+            color: var(--danger);
         }
-        
+
         .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
+            padding: 0.45rem 0.9rem;
+            border: 1px solid transparent;
+            border-radius: 999px;
             cursor: pointer;
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: transform 0.15s ease, background 0.2s ease, border 0.2s ease;
         }
-        
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:active,
+        .ghost-btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn.clicked,
+        .ghost-btn.clicked {
+            box-shadow: 0 0 0 3px rgba(58, 118, 240, 0.25);
+        }
+
         .btn-primary {
-            background: #2c3e50;
+            background: var(--accent);
             color: white;
         }
-        
+
+        .btn:hover,
+        .ghost-btn:hover {
+            transform: translateY(-1px);
+        }
+
         .btn-primary:hover {
-            background: #34495e;
+            background: var(--accent-2);
+            box-shadow: 0 10px 18px rgba(58, 118, 240, 0.25);
         }
-        
+
+        .btn-primary:hover {
+            background: var(--accent-2);
+        }
+
         .btn-success {
-            background: #28a745;
-            color: white;
+            background: rgba(34, 197, 94, 0.16);
+            color: var(--success);
+            border-color: rgba(34, 197, 94, 0.4);
         }
-        
+
+        .btn-success:hover {
+            background: rgba(34, 197, 94, 0.22);
+        }
+
         .btn-danger {
-            background: #dc3545;
-            color: white;
+            background: rgba(239, 68, 68, 0.16);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.4);
         }
-        
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.22);
+        }
+
         .message {
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
-            border-left: 3px solid #2c3e50;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.6rem;
+            border-radius: 14px;
+            background: rgba(58, 118, 240, 0.08);
+            border: 1px solid rgba(58, 118, 240, 0.15);
+            line-height: 1.4;
+            max-width: 78%;
         }
-        
+
         .message.inbound {
-            background: #e3f2fd;
-            border-left-color: #2196f3;
+            background: rgba(58, 118, 240, 0.12);
+            border-color: rgba(58, 118, 240, 0.25);
+            align-self: flex-start;
         }
-        
+
         .message.outbound {
-            background: #f1f8e9;
-            border-left-color: #8bc34a;
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.3);
+            align-self: flex-end;
+            text-align: right;
         }
-        
+
         .message-admin {
-            background: #fff3e0;
-            border-left-color: #ff9800;
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
         }
-        
+
+        .message-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .message.outbound .message-meta {
+            justify-content: flex-end;
+        }
+
         .chat-input {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.6rem;
             margin-top: 1rem;
         }
-        
+
         .chat-input input {
             flex: 1;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.95rem;
+            background: var(--surface-2);
+            color: var(--text);
         }
-        
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: rgba(58, 118, 240, 0.6);
+            box-shadow: 0 0 0 2px rgba(58, 118, 240, 0.15);
+        }
+
         .chat-input button {
             padding: 0.75rem 1.5rem;
         }
-        
+
+        .sending {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
         .conversation-list {
             list-style: none;
         }
-        
+
+        .conversation-layout {
+            display: grid;
+            grid-template-columns: minmax(240px, 320px) 1fr;
+            gap: 1rem;
+        }
+
+        .conversation-panel {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem;
+        }
+
+        .conversation-panel h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .conversation-detail {
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .chat-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
         .conversation-item {
             padding: 1rem;
-            border-bottom: 1px solid #eee;
+            border-radius: 12px;
+            border: 1px solid transparent;
             cursor: pointer;
+            margin-bottom: 0.5rem;
+            transition: background 0.2s ease, border 0.2s ease;
         }
-        
+
         .conversation-item:hover {
-            background: #f8f9fa;
+            background: rgba(58, 118, 240, 0.08);
+            border-color: rgba(58, 118, 240, 0.2);
         }
-        
+
         .conversation-item.active {
-            background: #e3f2fd;
+            background: rgba(58, 118, 240, 0.18);
+            border-color: rgba(58, 118, 240, 0.4);
         }
-        
+
         .loading {
             text-align: center;
             padding: 2rem;
-            color: #666;
+            color: var(--muted);
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .inline {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .input,
+        select.input {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.55rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .badge {
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(58, 118, 240, 0.18);
+            color: var(--text);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .kpi-card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1rem;
+            background: var(--surface-2);
+        }
+
+        .list {
+            list-style: none;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .list-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem;
+            background: var(--surface-2);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            border: 1px solid var(--border);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .conversation-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .header {
+                padding: 1rem 1.25rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                margin-bottom: 1rem;
+                padding: 0.5rem 0.75rem;
+                background: var(--surface-2);
+            }
+
+            td {
+                border: none;
+                padding: 0.5rem 0;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🛍️ Signal Store Bot - Admin Dashboard</h1>
+        <div class="header-content">
+            <div class="brand">
+                <span class="signal-dot" aria-hidden="true"></span>
+                <div>
+                    <div class="title">Signal Store</div>
+                    <div class="subtitle">Admin Dashboard</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="ghost-btn" id="theme-toggle" type="button">Light mode</button>
+            </div>
+        </div>
     </div>
     
     <div class="container">
@@ -269,60 +669,199 @@
         </div>
         
         <div class="tabs">
-            <button class="tab active" onclick="showTab('orders')">Orders</button>
-            <button class="tab" onclick="showTab('conversations')">Conversations</button>
-            <button class="tab" onclick="showTab('messages')">Messages</button>
+            <button class="tab active" onclick="showTab('inbox')">Inbox</button>
+            <button class="tab" onclick="showTab('orders')">Orders</button>
+            <button class="tab" onclick="showTab('customers')">Customers</button>
+            <button class="tab" onclick="showTab('analytics')">Analytics</button>
+            <button class="tab" onclick="showTab('store')">Store</button>
+            <button class="tab" onclick="showTab('drivers')">Drivers</button>
+            <button class="tab" onclick="showTab('system')">System</button>
+            <button class="tab" onclick="showTab('audit')">Audit</button>
         </div>
         
-        <div id="orders-tab" class="tab-content active">
+        <div id="inbox-tab" class="tab-content active">
             <div class="card">
-                <h2>All Orders</h2>
+                <div class="panel-header">
+                    <h2>Live Inbox</h2>
+                    <div class="inline">
+                        <input class="input" id="inbox-search" placeholder="Search phone or name">
+                        <select class="input" id="inbox-status-filter">
+                            <option value="">All status</option>
+                            <option value="open">Open</option>
+                            <option value="pending">Pending</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="inbox-list" class="loading">Loading inbox...</div>
+            </div>
+        </div>
+        
+        <div id="orders-tab" class="tab-content">
+            <div class="card">
+                <div class="panel-header">
+                    <h2>Orders</h2>
+                    <div class="inline">
+                        <input class="input" id="orders-search" placeholder="Search orders">
+                        <select class="input" id="orders-status">
+                            <option value="">All status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="assigned">Assigned</option>
+                            <option value="out_for_delivery">Out for delivery</option>
+                            <option value="arrived">Arrived</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <select class="input" id="orders-payment">
+                            <option value="">All payments</option>
+                            <option value="unpaid">Unpaid</option>
+                            <option value="paid">Paid</option>
+                            <option value="partial">Partial</option>
+                            <option value="refunded">Refunded</option>
+                        </select>
+                        <button class="ghost-btn" onclick="exportOrders(false)">Export CSV</button>
+                        <button class="ghost-btn" onclick="exportOrders(true)">Export (Anon)</button>
+                    </div>
+                </div>
+                <div class="inline" style="margin-bottom: 1rem;">
+                    <button class="btn btn-success" onclick="bulkUpdateOrders('confirmed')">Confirm Selected</button>
+                    <button class="btn btn-danger" onclick="bulkUpdateOrders('cancelled')">Cancel Selected</button>
+                </div>
                 <div id="orders-list" class="loading">Loading orders...</div>
             </div>
         </div>
         
-        <div id="conversations-tab" class="tab-content">
+        <div id="customers-tab" class="tab-content">
             <div class="card">
-                <h2>Conversations</h2>
-                <div id="conversations-list" class="loading">Loading conversations...</div>
+                <div class="panel-header">
+                    <h2>Customers</h2>
+                    <div class="inline">
+                        <input class="input" id="customers-search" placeholder="Search customers">
+                        <select class="input" id="customers-status">
+                            <option value="">All</option>
+                            <option value="active">Active</option>
+                            <option value="blocked">Blocked</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="customers-list" class="loading">Loading customers...</div>
+                <div id="customer-profile" style="margin-top: 1.5rem;"></div>
             </div>
         </div>
         
-        <div id="messages-tab" class="tab-content">
+        <div id="analytics-tab" class="tab-content">
             <div class="card">
-                <h2>Recent Messages</h2>
-                <div id="messages-list" class="loading">Loading messages...</div>
+                <h2>Business Insights</h2>
+                <div id="analytics-summary" class="loading">Loading analytics...</div>
+            </div>
+        </div>
+
+        <div id="store-tab" class="tab-content">
+            <div class="card">
+                <div class="panel-header">
+                    <h2>Store Management</h2>
+                    <button class="ghost-btn" onclick="loadProducts()">Refresh</button>
+                </div>
+                <div class="form-grid">
+                    <input class="input" id="product-name" placeholder="Product name">
+                    <input class="input" id="product-description" placeholder="Description">
+                    <input class="input" id="product-price" placeholder="Price" type="number" step="0.01">
+                    <input class="input" id="product-stock" placeholder="Stock" type="number" step="1">
+                </div>
+                <div class="product-actions" style="margin-bottom: 1rem;">
+                    <button class="btn btn-primary" onclick="createProduct()">Add Product</button>
+                </div>
+                <div id="products-list" class="loading">Loading products...</div>
+            </div>
+        </div>
+
+        <div id="drivers-tab" class="tab-content">
+            <div class="card">
+                <div class="panel-header">
+                    <h2>Drivers</h2>
+                    <button class="ghost-btn" onclick="renderDrivers()">Refresh</button>
+                </div>
+                <div class="form-grid">
+                    <input class="input" id="driver-name" placeholder="Driver name">
+                    <input class="input" id="driver-phone" placeholder="Driver phone">
+                </div>
+                <div class="product-actions" style="margin-bottom: 1rem;">
+                    <button class="btn btn-primary" onclick="createDriver()">Add Driver</button>
+                </div>
+                <div class="conversation-layout">
+                    <div class="conversation-panel">
+                        <h3>Driver List</h3>
+                        <div id="drivers-list" class="loading">Loading drivers...</div>
+                    </div>
+                    <div class="conversation-panel">
+                        <h3>Driver Profile</h3>
+                        <div id="driver-profile" class="loading">Select a driver to view details</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="system-tab" class="tab-content">
+            <div class="card">
+                <h2>Bot Health</h2>
+                <div id="system-health" class="loading">Loading system status...</div>
+            </div>
+            <div class="card">
+                <h2>Automation Events</h2>
+                <div id="automation-events" class="loading">Loading events...</div>
+            </div>
+        </div>
+        
+        <div id="audit-tab" class="tab-content">
+            <div class="card">
+                <div class="panel-header">
+                    <h2>Audit Log</h2>
+                    <div class="inline">
+                        <input class="input" id="audit-filter" placeholder="Filter by type">
+                    </div>
+                </div>
+                <div id="audit-log" class="loading">Loading audit log...</div>
             </div>
         </div>
     </div>
     
     <script>
-        const API_BASE = 'http://localhost:5000/api';
-        
+        const API_BASE = '/api';
+        let currentConversationId = null;
+        let currentCustomerPhone = null;
+        let quickReplies = [];
+        const customerNameByPhone = {};
+        let drivers = [];
+        const driverByPhone = {};
+
         function showTab(tabName) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
             document.querySelectorAll('.tab').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
-            // Show selected tab
+
             document.getElementById(tabName + '-tab').classList.add('active');
             event.target.classList.add('active');
-            
-            // Load data for tab
-            if (tabName === 'orders') loadOrders();
-            else if (tabName === 'conversations') loadConversations();
-            else if (tabName === 'messages') loadMessages();
+
+            if (tabName === 'inbox') loadInbox();
+            else if (tabName === 'orders') loadOrders();
+            else if (tabName === 'customers') loadCustomers();
+            else if (tabName === 'analytics') loadAnalytics();
+            else if (tabName === 'store') {
+                loadProducts();
+            }
+            else if (tabName === 'drivers') renderDrivers();
+            else if (tabName === 'system') loadSystem();
+            else if (tabName === 'audit') loadAudit();
         }
-        
+
         async function loadStats() {
             try {
                 const res = await fetch(`${API_BASE}/stats`);
                 const stats = await res.json();
-                
                 document.getElementById('orders-today').textContent = stats.total_orders_today;
                 document.getElementById('pending-orders').textContent = stats.pending_orders;
                 document.getElementById('active-conversations').textContent = stats.active_conversations;
@@ -331,153 +870,208 @@
                 console.error('Error loading stats:', error);
             }
         }
-        
-        async function loadOrders() {
+
+        function formatSla(seconds) {
+            if (seconds === null || seconds === undefined) return '—';
+            const mins = Math.floor(seconds / 60);
+            if (mins < 60) return `${mins}m`;
+            const hours = Math.floor(mins / 60);
+            return `${hours}h ${mins % 60}m`;
+        }
+
+        async function loadQuickReplies() {
             try {
-                const res = await fetch(`${API_BASE}/orders`);
-                const orders = await res.json();
-                
-                const html = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Customer</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${orders.map(order => `
-                                <tr>
-                                    <td>#${order.id}</td>
-                                    <td>${order.customer_name}<br><small>${order.customer_phone}</small></td>
-                                    <td>
-                                        ${order.items ? order.items.map(item => 
-                                            `${item.product_name} x${item.quantity}`
-                                        ).join('<br>') : `${order.product_name} x${order.quantity}`}
-                                    </td>
-                                    <td>$${parseFloat(order.total_price).toFixed(2)}</td>
-                                    <td>
-                                        <span class="status-badge status-${order.status}">${order.status}</span>
-                                    </td>
-                                    <td>${new Date(order.created_at).toLocaleString()}</td>
-                                    <td>
-                                        ${order.status === 'pending' ? `
-                                            <button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'confirmed')">Confirm</button>
-                                            <button class="btn btn-danger" onclick="updateOrderStatus(${order.id}, 'cancelled')">Cancel</button>
-                                        ` : ''}
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-                
-                document.getElementById('orders-list').innerHTML = html;
+                const res = await fetch(`${API_BASE}/quick_replies`);
+                quickReplies = await res.json();
             } catch (error) {
-                console.error('Error loading orders:', error);
-                document.getElementById('orders-list').innerHTML = '<p>Error loading orders</p>';
+                quickReplies = [];
             }
         }
-        
-        async function loadConversations() {
+
+        function isPhoneNumber(value) {
+            return typeof value === 'string' && (/^\+?\d{6,}$/.test(value));
+        }
+
+        function formatIdentifier(value) {
+            if (!value) return '';
+            if (isPhoneNumber(value)) {
+                return value;
+            }
+            if (value.length > 18) {
+                return `${value.slice(0, 6)}…${value.slice(-4)}`;
+            }
+            return value;
+        }
+
+        function displayCustomerName(conv) {
+            const name = resolveCustomerName(conv.customer_phone, conv.customer_name);
+            return name || (conv.customer_phone || '');
+        }
+
+        function cacheCustomerName(phone, name) {
+            if (!phone || !name) return;
+            const trimmed = String(name).trim();
+            if (!trimmed) return;
+            customerNameByPhone[phone] = trimmed;
+        }
+
+        function resolveCustomerName(phone, fallbackName) {
+            if (fallbackName && String(fallbackName).trim()) {
+                return String(fallbackName).trim();
+            }
+            return customerNameByPhone[phone] || '';
+        }
+
+        function displayNameWithIdentifier(phone, fallbackName) {
+            const name = resolveCustomerName(phone, fallbackName);
+            if (name) {
+                return `${name} · ${formatIdentifier(phone || '')}`;
+            }
+            return phone || '';
+        }
+
+        function refreshCurrentChatName() {
+            if (!currentCustomerPhone) return;
+            const displayName = resolveCustomerName(currentCustomerPhone) || formatIdentifier(currentCustomerPhone);
+            const title = document.getElementById('chat-phone');
+            if (title) {
+                title.textContent = displayName;
+            }
+        }
+
+        async function loadInbox() {
             try {
-                const res = await fetch(`${API_BASE}/conversations`);
-                const conversations = await res.json();
-                
+                await loadQuickReplies();
+                const res = await fetch(`${API_BASE}/inbox`);
+                let conversations = await res.json();
+                conversations.forEach(conv => {
+                    cacheCustomerName(conv.customer_phone, conv.customer_name);
+                });
+                refreshCurrentChatName();
+
+                const search = document.getElementById('inbox-search').value.toLowerCase();
+                const status = document.getElementById('inbox-status-filter').value;
+                if (search) {
+                    conversations = conversations.filter(conv =>
+                        (conv.customer_phone || '').toLowerCase().includes(search) ||
+                        (conv.customer_name || '').toLowerCase().includes(search)
+                    );
+                }
+                if (status) {
+                    conversations = conversations.filter(conv => (conv.status || '').toLowerCase() === status);
+                }
+
                 const html = `
-                    <ul class="conversation-list">
-                        ${conversations.map(conv => `
-                            <li class="conversation-item" onclick="loadConversation(${conv.id}, '${conv.customer_phone}')">
-                                <strong>${conv.customer_phone}</strong>
-                                ${conv.customer_name ? `<br>${conv.customer_name}` : ''}
-                                <br><small>Last: ${new Date(conv.last_message_at).toLocaleString()}</small>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <div id="conversation-detail" style="display:none; margin-top: 2rem;">
-                        <h3>Chat with <span id="chat-phone"></span></h3>
-                        <div id="chat-messages" style="max-height: 400px; overflow-y: auto; margin: 1rem 0;"></div>
-                        <div class="chat-input">
-                            <input type="text" id="chat-message-input" placeholder="Type message...">
-                            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                    <div class="conversation-layout">
+                        <div class="conversation-panel">
+                            <h3>Conversations</h3>
+                            <ul class="conversation-list">
+                                ${conversations.map(conv => `
+                                    <li class="conversation-item" onclick="loadConversation(${conv.id}, '${conv.customer_phone}', '${(conv.customer_name || '').replace(/'/g, "\\'")}', this)">
+                                        <div><strong>${displayCustomerName(conv)}</strong> ${conv.customer_name ? `<span class="muted">· ${formatIdentifier(conv.customer_phone || '')}</span>` : ''}</div>
+                                        <div class="muted">${(conv.last_message_text || '').slice(0, 50) || 'No messages yet'}</div>
+                                        <div class="inline" style="margin-top: 0.35rem;">
+                                            <span class="pill">${conv.status || 'open'}</span>
+                                            <span class="pill">SLA ${formatSla(conv.sla_seconds)}</span>
+                                            ${conv.unread_count ? `<span class="badge">${conv.unread_count} unread</span>` : ''}
+                                        </div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                        <div id="conversation-detail" class="conversation-panel conversation-detail" style="display:none;">
+                            <div class="chat-header">
+                                <div>
+                                    <div class="chat-title">Chat with <span id="chat-phone"></span></div>
+                                    <div class="muted" id="chat-subtitle">Select a conversation to begin.</div>
+                                </div>
+                                <div class="inline">
+                                    <select class="input" id="conversation-status" onchange="updateConversationStatus()">
+                                        <option value="open">Open</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="resolved">Resolved</option>
+                                    </select>
+                                    <input class="input" id="conversation-assignee" placeholder="Assign to">
+                                    <button class="ghost-btn" onclick="saveConversationAssignee()">Save</button>
+                                </div>
+                            </div>
+                            <div id="chat-messages" class="chat-messages"></div>
+                            <div class="inline" style="margin-top: 0.75rem;">
+                                <div class="muted">Quick replies:</div>
+                                <div id="quick-replies" class="inline"></div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="chat-message-input" placeholder="Type message...">
+                                <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                            </div>
                         </div>
                     </div>
                 `;
-                
-                document.getElementById('conversations-list').innerHTML = html;
+
+                document.getElementById('inbox-list').innerHTML = html;
+                attachQuickReplyHandlers();
             } catch (error) {
-                console.error('Error loading conversations:', error);
-                document.getElementById('conversations-list').innerHTML = '<p>Error loading conversations</p>';
+                console.error('Error loading inbox:', error);
+                document.getElementById('inbox-list').innerHTML = '<p>Error loading inbox</p>';
             }
         }
-        
-        async function loadMessages() {
-            try {
-                const res = await fetch(`${API_BASE}/messages?limit=50`);
-                const messages = await res.json();
-                
-                const html = messages.map(msg => `
-                    <div class="message ${msg.direction} ${msg.is_admin ? 'message-admin' : ''}">
-                        <strong>${msg.direction === 'inbound' ? '←' : '→'} ${msg.sender_phone}</strong>
-                        ${msg.is_admin ? ' <span style="color: #ff9800;">[ADMIN]</span>' : ''}
-                        <br>${msg.message_text}
-                        <br><small>${new Date(msg.created_at).toLocaleString()}</small>
-                    </div>
-                `).join('');
-                
-                document.getElementById('messages-list').innerHTML = html || '<p>No messages</p>';
-            } catch (error) {
-                console.error('Error loading messages:', error);
-                document.getElementById('messages-list').innerHTML = '<p>Error loading messages</p>';
+
+        function attachQuickReplyHandlers() {
+            const container = document.getElementById('quick-replies');
+            if (!container) return;
+            if (!quickReplies.length) {
+                container.innerHTML = '<span class="muted">No templates</span>';
+                return;
             }
+            container.innerHTML = quickReplies.map(reply => `
+                <button class="ghost-btn" onclick="applyQuickReply('${reply.template.replace(/'/g, "\\'")}')">${reply.title}</button>
+            `).join('');
         }
-        
-        async function updateOrderStatus(orderId, status) {
-            try {
-                const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({status})
-                });
-                
-                if (res.ok) {
-                    loadOrders();
-                    loadStats();
-                }
-            } catch (error) {
-                console.error('Error updating order:', error);
-                alert('Failed to update order status');
-            }
+
+        function applyQuickReply(template) {
+            const input = document.getElementById('chat-message-input');
+            if (!input) return;
+            const filled = template
+                .replace('{name}', document.getElementById('chat-phone').textContent || '')
+                .replace('{order_id}', '')
+                .replace('{status}', '');
+            input.value = filled;
+            input.focus();
         }
-        
-        let currentConversationId = null;
-        let currentCustomerPhone = null;
-        
-        async function loadConversation(convId, phone) {
+
+        async function loadConversation(convId, phone, name, element) {
             currentConversationId = convId;
             currentCustomerPhone = phone;
-            
-            document.getElementById('chat-phone').textContent = phone;
+
+            cacheCustomerName(phone, name);
+            const displayName = resolveCustomerName(phone, name) || formatIdentifier(phone);
+            document.getElementById('chat-phone').textContent = displayName;
+            document.getElementById('chat-subtitle').textContent = `Conversation #${convId} · ${formatIdentifier(phone)}`;
             document.getElementById('conversation-detail').style.display = 'block';
-            
+
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            if (element) element.classList.add('active');
+
             try {
+                await fetch(`${API_BASE}/conversations/${convId}/read`, {method: 'POST'});
                 const res = await fetch(`${API_BASE}/conversations/${convId}/messages`);
                 const messages = await res.json();
-                
-                const html = messages.reverse().map(msg => `
-                    <div class="message ${msg.direction} ${msg.is_admin ? 'message-admin' : ''}">
-                        <strong>${msg.direction === 'inbound' ? '←' : '→'} ${msg.sender_phone}</strong>
-                        ${msg.is_admin ? ' <span style="color: #ff9800;">[ADMIN]</span>' : ''}
-                        <br>${msg.message_text}
-                        <br><small>${new Date(msg.created_at).toLocaleString()}</small>
-                    </div>
-                `).join('');
-                
+                const html = messages.reverse().map(msg => {
+                    const contactPhone = msg.direction === 'inbound' ? msg.sender_phone : msg.recipient_phone;
+                    const senderName = displayNameWithIdentifier(contactPhone);
+                    return `
+                        <div class="message ${msg.direction} ${msg.is_admin ? 'message-admin' : ''}">
+                            <div class="message-meta">
+                                <span>${msg.direction === 'inbound' ? '←' : '→'} ${senderName}</span>
+                                ${msg.delivery_status ? `<span>· ${msg.delivery_status}</span>` : ''}
+                                <span>· ${new Date(msg.created_at).toLocaleString()}</span>
+                            </div>
+                            <div>${msg.message_text}</div>
+                        </div>
+                    `;
+                }).join('');
                 const container = document.getElementById('chat-messages');
                 container.innerHTML = html || '<p>No messages</p>';
                 container.scrollTop = container.scrollHeight;
@@ -485,23 +1079,36 @@
                 console.error('Error loading conversation:', error);
             }
         }
-        
+
+        async function updateConversationStatus() {
+            if (!currentConversationId) return;
+            const status = document.getElementById('conversation-status').value;
+            const assigned = document.getElementById('conversation-assignee').value;
+            await fetch(`${API_BASE}/conversations/${currentConversationId}/status`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({status, assigned_to: assigned})
+            });
+            loadInbox();
+        }
+
+        async function saveConversationAssignee() {
+            return updateConversationStatus();
+        }
+
         async function sendMessage() {
             const input = document.getElementById('chat-message-input');
+            const button = document.querySelector('.chat-input .btn');
             const message = input.value.trim();
-            
             if (!message || !currentCustomerPhone) return;
-            
             try {
+                input.classList.add('sending');
+                if (button) button.classList.add('sending');
                 const res = await fetch(`${API_BASE}/send`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        recipient: currentCustomerPhone,
-                        message: message
-                    })
+                    body: JSON.stringify({recipient: currentCustomerPhone, message})
                 });
-                
                 if (res.ok) {
                     input.value = '';
                     loadConversation(currentConversationId, currentCustomerPhone);
@@ -511,12 +1118,700 @@
                 }
             } catch (error) {
                 console.error('Error sending message:', error);
-                alert('Failed to send message');
+            } finally {
+                input.classList.remove('sending');
+                if (button) button.classList.remove('sending');
             }
         }
-        
-        // Allow Enter key to send message
+
+        async function loadOrders() {
+            try {
+                await loadDrivers();
+                const q = document.getElementById('orders-search').value;
+                const status = document.getElementById('orders-status').value;
+                const paymentStatus = document.getElementById('orders-payment').value;
+                const params = new URLSearchParams();
+                if (q) params.append('q', q);
+                if (status) params.append('status', status);
+                if (paymentStatus) params.append('payment_status', paymentStatus);
+                const res = await fetch(`${API_BASE}/orders?${params.toString()}`);
+                const orders = await res.json();
+                orders.forEach(order => {
+                    cacheCustomerName(order.customer_phone, order.customer_name);
+                });
+                refreshCurrentChatName();
+                const html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="orders-select-all" onclick="toggleAllOrders(this)"></th>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                                <th>Driver</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${orders.map(order => `
+                                <tr>
+                                    <td><input type="checkbox" class="order-select" value="${order.id}"></td>
+                                    <td>#${order.id}</td>
+                                    <td>${displayNameWithIdentifier(order.customer_phone, order.customer_name)}</td>
+                                    <td>
+                                        ${order.items ? order.items.map(item =>
+                                            `${item.product_name} x${item.quantity}`
+                                        ).join('<br>') : `${order.product_name} x${order.quantity}`}
+                                    </td>
+                                    <td>$${parseFloat(order.total_price).toFixed(2)}</td>
+                                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                                    <td>
+                                        <select class="input" onchange="updatePaymentStatus(${order.id}, this.value)">
+                                            <option value="unpaid" ${order.payment_status === 'unpaid' ? 'selected' : ''}>Unpaid</option>
+                                            <option value="paid" ${order.payment_status === 'paid' ? 'selected' : ''}>Paid</option>
+                                            <option value="partial" ${order.payment_status === 'partial' ? 'selected' : ''}>Partial</option>
+                                            <option value="refunded" ${order.payment_status === 'refunded' ? 'selected' : ''}>Refunded</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="input" id="driver-select-${order.id}">
+                                            <option value="">Unassigned</option>
+                                            ${drivers.map(driver => `
+                                                <option value="${driver.phone_number}" ${order.assigned_to === driver.phone_number ? 'selected' : ''}>
+                                                    ${displayNameWithIdentifier(driver.phone_number, driver.display_name)}
+                                                </option>
+                                            `).join('')}
+                                        </select>
+                                    </td>
+                                    <td>${new Date(order.created_at).toLocaleString()}</td>
+                                    <td>
+                                        <div class="product-actions">
+                                            ${order.status === 'pending' ? `<button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'confirmed')">Confirm</button>` : ''}
+                                            <button class="btn btn-primary" onclick="assignDriverFromSelect(${order.id})">Assign Driver</button>
+                                            <button class="ghost-btn" onclick="updatePaymentStatus(${order.id}, 'paid')">Mark Paid</button>
+                                            <button class="ghost-btn" onclick="updatePaymentStatus(${order.id}, 'unpaid')">Mark Unpaid</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('orders-list').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('orders-list').innerHTML = '<p>Error loading orders</p>';
+            }
+        }
+
+        function toggleAllOrders(source) {
+            document.querySelectorAll('.order-select').forEach(cb => {
+                cb.checked = source.checked;
+            });
+        }
+
+        async function bulkUpdateOrders(status) {
+            const ids = Array.from(document.querySelectorAll('.order-select:checked')).map(cb => parseInt(cb.value, 10));
+            if (!ids.length) return;
+            await fetch(`${API_BASE}/orders/bulk_status`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ids, status})
+            });
+            loadOrders();
+            loadStats();
+        }
+
+        async function updateOrderStatus(orderId, status) {
+            await fetch(`${API_BASE}/orders/${orderId}/status`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({status})
+            });
+            loadOrders();
+            loadStats();
+        }
+
+        function exportOrders(anonymize) {
+            window.open(`${API_BASE}/export/orders?anonymize=${anonymize}`);
+        }
+
+        async function updatePaymentStatus(orderId, status) {
+            await fetch(`${API_BASE}/orders/${orderId}/payment`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({payment_status: status})
+            });
+        }
+
+        async function loadCustomers() {
+            try {
+                const q = document.getElementById('customers-search').value;
+                const status = document.getElementById('customers-status').value;
+                const params = new URLSearchParams();
+                if (q) params.append('q', q);
+                if (status) params.append('status', status);
+                const res = await fetch(`${API_BASE}/customers?${params.toString()}`);
+                const customers = await res.json();
+                customers.forEach(customer => {
+                    cacheCustomerName(customer.phone_number, customer.display_name);
+                });
+                refreshCurrentChatName();
+                const html = `
+                    <ul class="list">
+                        ${customers.map(customer => `
+                            <li class="list-item" onclick="loadCustomerProfile('${customer.phone_number}')">
+                                    <strong>${displayNameWithIdentifier(customer.phone_number, customer.display_name)}</strong>
+                                <div class="inline" style="margin-top: 0.4rem;">
+                                    <span class="pill">${customer.status}</span>
+                                    <span class="pill">${customer.orders_count} orders</span>
+                                    <span class="pill">$${(customer.lifetime_value || 0).toFixed(2)}</span>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                document.getElementById('customers-list').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading customers:', error);
+                document.getElementById('customers-list').innerHTML = '<p>Error loading customers</p>';
+            }
+        }
+
+        async function loadCustomerProfile(phone) {
+            try {
+                const res = await fetch(`${API_BASE}/customers/${encodeURIComponent(phone)}`);
+                const profile = await res.json();
+                const user = profile.user || {};
+                const tags = user.tags || '';
+                const html = `
+                    <div class="card">
+                        <h3>Customer Profile</h3>
+                        <div class="inline" style="margin-top: 0.5rem;">
+                            <span class="pill">${phone}</span>
+                            <span class="pill">${user.status || 'active'}</span>
+                        </div>
+                        <div class="muted" style="margin-top: 0.5rem;">Last contact: ${profile.last_contact || '—'}</div>
+                        <div class="inline" style="margin-top: 0.75rem;">
+                            <input class="input" id="customer-tags" placeholder="Tags (comma separated)" value="${tags}">
+                            <button class="ghost-btn" onclick="saveCustomerTags('${phone}')">Save Tags</button>
+                            <button class="ghost-btn" onclick="toggleBlock('${phone}', '${user.status === 'blocked' ? 'active' : 'blocked'}')">
+                                ${user.status === 'blocked' ? 'Unblock' : 'Block'}
+                            </button>
+                        </div>
+                        <div class="kpi-grid" style="margin-top: 1rem;">
+                            <div class="kpi-card">
+                                <div class="muted">Lifetime Value</div>
+                                <div class="value">$${(profile.lifetime_value || 0).toFixed(2)}</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="muted">Orders</div>
+                                <div class="value">${(profile.orders || []).length}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('customer-profile').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        async function saveCustomerTags(phone) {
+            const tags = document.getElementById('customer-tags').value;
+            await fetch(`${API_BASE}/customers/${encodeURIComponent(phone)}/tags`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({tags})
+            });
+        }
+
+        async function toggleBlock(phone, status) {
+            await fetch(`${API_BASE}/customers/${encodeURIComponent(phone)}/status`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({status})
+            });
+            loadCustomers();
+        }
+
+        async function loadMessages() {
+            try {
+                const q = document.getElementById('messages-search').value;
+                const direction = document.getElementById('messages-direction').value;
+                const params = new URLSearchParams();
+                if (q) params.append('q', q);
+                if (direction) params.append('direction', direction);
+                const res = await fetch(`${API_BASE}/messages?limit=100&${params.toString()}`);
+                const messages = await res.json();
+                const html = messages.map(msg => `
+                    <div class="message ${msg.direction} ${msg.is_admin ? 'message-admin' : ''}">
+                        <div class="message-meta">
+                            <span>${msg.direction === 'inbound' ? '←' : '→'} ${displayNameWithIdentifier(msg.direction === 'inbound' ? msg.sender_phone : msg.recipient_phone)}</span>
+                            ${msg.delivery_status ? `<span>· ${msg.delivery_status}</span>` : ''}
+                            <span>· ${new Date(msg.created_at).toLocaleString()}</span>
+                        </div>
+                        <div>${msg.message_text}</div>
+                    </div>
+                `).join('');
+                document.getElementById('messages-list').innerHTML = html || '<p>No messages</p>';
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                document.getElementById('messages-list').innerHTML = '<p>Error loading messages</p>';
+            }
+        }
+
+        function exportMessages(anonymize) {
+            window.open(`${API_BASE}/export/messages?anonymize=${anonymize}`);
+        }
+
+        async function loadAnalytics() {
+            try {
+                const res = await fetch(`${API_BASE}/analytics`);
+                const data = await res.json();
+                const html = `
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="muted">Pending</div>
+                            <div class="value">${data.funnel.pending}</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="muted">Confirmed</div>
+                            <div class="value">${data.funnel.confirmed}</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="muted">Delivered</div>
+                            <div class="value">${data.funnel.delivered}</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="muted">Avg Order (7d)</div>
+                            <div class="value">$${data.revenue.average_order_value.toFixed(2)}</div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top: 1rem;">
+                        <h3>Top Products</h3>
+                        <ul class="list">
+                            ${data.top_products.map(item => `
+                                <li class="list-item">
+                                    <strong>${item.product_name}</strong>
+                                    <span class="muted"> · ${item.sales_count} sold</span>
+                                    <div class="muted">$${(item.revenue || 0).toFixed(2)}</div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    <div class="card" style="margin-top: 1rem;">
+                        <h3>Low Stock</h3>
+                        <ul class="list">
+                            ${data.low_stock.map(item => `
+                                <li class="list-item">${item.name} <span class="muted">· ${item.stock} left</span></li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+                document.getElementById('analytics-summary').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                document.getElementById('analytics-summary').innerHTML = '<p>Error loading analytics</p>';
+            }
+        }
+
+        async function loadDrivers() {
+            try {
+                const res = await fetch(`${API_BASE}/drivers`);
+                drivers = await res.json();
+                drivers.forEach(driver => {
+                    cacheCustomerName(driver.phone_number, driver.display_name);
+                    driverByPhone[driver.phone_number] = driver;
+                });
+            } catch (error) {
+                drivers = [];
+            }
+        }
+
+        async function renderDrivers() {
+            await loadDrivers();
+            const html = `
+                <ul class="list">
+                    ${drivers.map(driver => `
+                        <li class="list-item" onclick="loadDriverProfile('${driver.phone_number}')">
+                            <strong>${displayNameWithIdentifier(driver.phone_number, driver.display_name)}</strong>
+                            <div class="inline" style="margin-top: 0.4rem;">
+                                <span class="pill">${driver.status}</span>
+                                <button class="ghost-btn" onclick="event.stopPropagation(); updateDriverStatus('${driver.phone_number}', '${driver.status === 'active' ? 'inactive' : 'active'}')">
+                                    ${driver.status === 'active' ? 'Deactivate' : 'Activate'}
+                                </button>
+                                <button class="ghost-btn" onclick="event.stopPropagation(); editDriver('${driver.phone_number}', '${(driver.display_name || '').replace(/'/g, "\\'")}')">Edit</button>
+                                <button class="ghost-btn" onclick="event.stopPropagation(); deleteDriver('${driver.phone_number}')">Remove</button>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            document.getElementById('drivers-list').innerHTML = html;
+        }
+
+        async function loadDriverProfile(phone) {
+            try {
+                const res = await fetch(`${API_BASE}/drivers/${encodeURIComponent(phone)}/profile`);
+                const profile = await res.json();
+                const driver = profile.driver || {};
+                const orders = profile.orders || [];
+                const html = `
+                    <div class="card">
+                        <div class="inline">
+                            <span class="pill">${displayNameWithIdentifier(driver.phone_number, driver.display_name)}</span>
+                            <span class="pill">${driver.status || 'active'}</span>
+                        </div>
+                        <div class="muted" style="margin-top: 0.5rem;">Phone: ${driver.phone_number || phone}</div>
+                        <div class="muted">Role: ${driver.role || 'driver'}</div>
+                    </div>
+                    <div class="card" style="margin-top: 1rem;">
+                        <h4>Assigned Orders</h4>
+                        ${orders.length ? `
+                            <ul class="list">
+                                ${orders.map(order => `
+                                    <li class="list-item">
+                                        <strong>Order #${order.id}</strong>
+                                        <div class="muted">${order.customer_name} · ${order.delivery_address}</div>
+                                        <div class="inline" style="margin-top: 0.5rem;">
+                                            <span class="pill">${order.status}</span>
+                                            ${order.status === 'assigned' ? `<button class="ghost-btn" onclick="startTrip('${phone}', ${order.id})">Start Trip</button>` : ''}
+                                            ${order.status === 'out_for_delivery' ? `<button class="ghost-btn" onclick="arriveTrip('${phone}', ${order.id})">Arrived</button>` : ''}
+                                            ${order.status === 'arrived' ? `<button class="ghost-btn" onclick="completeTrip('${phone}', ${order.id})">Complete</button>` : ''}
+                                        </div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        ` : `<p class="muted">No active orders assigned.</p>`}
+                    </div>
+                `;
+                document.getElementById('driver-profile').innerHTML = html;
+            } catch (error) {
+                document.getElementById('driver-profile').innerHTML = '<p>Error loading driver profile</p>';
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const res = await fetch(`${API_BASE}/products`);
+                const products = await res.json();
+                const html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${products.map(product => `
+                                <tr>
+                                    <td>#${product.id}</td>
+                                    <td>${product.name}</td>
+                                    <td>${product.description || '-'}</td>
+                                    <td>$${parseFloat(product.price).toFixed(2)}</td>
+                                    <td>${product.stock}</td>
+                                    <td>${product.is_active ? 'Active' : 'Inactive'}</td>
+                                    <td>
+                                        <div class="product-actions">
+                                            <button class="ghost-btn" onclick="editProduct(${product.id}, '${product.name.replace(/'/g, "\\'")}', '${(product.description || '').replace(/'/g, "\\'")}', ${product.price}, ${product.stock})">Edit</button>
+                                            <button class="ghost-btn" onclick="adjustStock(${product.id}, 'set')">Set Stock</button>
+                                            <button class="ghost-btn" onclick="adjustStock(${product.id}, 'restock')">Restock</button>
+                                            <button class="ghost-btn" onclick="toggleProduct(${product.id}, ${product.is_active ? 'false' : 'true'})">${product.is_active ? 'Deactivate' : 'Activate'}</button>
+                                            <button class="ghost-btn" onclick="deleteProduct(${product.id})">Remove</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('products-list').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('products-list').innerHTML = '<p>Error loading products</p>';
+            }
+        }
+
+        async function createProduct() {
+            const name = document.getElementById('product-name').value.trim();
+            const description = document.getElementById('product-description').value.trim();
+            const price = parseFloat(document.getElementById('product-price').value);
+            const stock = parseInt(document.getElementById('product-stock').value || '0', 10);
+            if (!name || Number.isNaN(price)) return;
+            await fetch(`${API_BASE}/products`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name, description, price, stock})
+            });
+            document.getElementById('product-name').value = '';
+            document.getElementById('product-description').value = '';
+            document.getElementById('product-price').value = '';
+            document.getElementById('product-stock').value = '';
+            loadProducts();
+        }
+
+        async function editProduct(id, name, description, price, stock) {
+            const nextName = prompt('Product name', name);
+            if (nextName === null) return;
+            const nextDescription = prompt('Description', description || '');
+            if (nextDescription === null) return;
+            const nextPrice = prompt('Price', String(price));
+            if (nextPrice === null) return;
+            const nextStock = prompt('Stock', String(stock));
+            if (nextStock === null) return;
+            await fetch(`${API_BASE}/products/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    name: nextName,
+                    description: nextDescription,
+                    price: parseFloat(nextPrice),
+                    stock: parseInt(nextStock, 10)
+                })
+            });
+            loadProducts();
+        }
+
+        async function adjustStock(id, mode) {
+            const value = prompt(mode === 'set' ? 'Set stock to' : 'Restock quantity');
+            if (value === null) return;
+            const payload = mode === 'set' ? {stock: parseInt(value, 10)} : {delta: parseInt(value, 10)};
+            await fetch(`${API_BASE}/products/${id}/stock`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+            loadProducts();
+        }
+
+        async function toggleProduct(id, isActive) {
+            await fetch(`${API_BASE}/products/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({is_active: isActive})
+            });
+            loadProducts();
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Remove this product?')) return;
+            await fetch(`${API_BASE}/products/${id}`, {method: 'DELETE'});
+            loadProducts();
+        }
+
+        async function createDriver() {
+            const name = document.getElementById('driver-name').value.trim();
+            const phone = document.getElementById('driver-phone').value.trim();
+            if (!phone) return;
+            await fetch(`${API_BASE}/drivers`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name, phone})
+            });
+            document.getElementById('driver-name').value = '';
+            document.getElementById('driver-phone').value = '';
+            renderDrivers();
+            loadOrders();
+        }
+
+        async function editDriver(phone, name) {
+            const nextName = prompt('Driver name', name || '');
+            if (nextName === null) return;
+            await fetch(`${API_BASE}/drivers/${encodeURIComponent(phone)}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: nextName})
+            });
+            renderDrivers();
+            loadOrders();
+        }
+
+        async function updateDriverStatus(phone, status) {
+            await fetch(`${API_BASE}/drivers/${encodeURIComponent(phone)}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({status})
+            });
+            renderDrivers();
+            loadOrders();
+        }
+
+        async function deleteDriver(phone) {
+            if (!confirm('Remove this driver?')) return;
+            await fetch(`${API_BASE}/drivers/${encodeURIComponent(phone)}`, {method: 'DELETE'});
+            renderDrivers();
+            loadOrders();
+        }
+
+        async function assignDriver(orderId, phone) {
+            if (!phone) return;
+            await fetch(`${API_BASE}/orders/${orderId}/assign`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({driver_phone: phone})
+            });
+            loadOrders();
+        }
+
+        function assignDriverFromSelect(orderId) {
+            const select = document.getElementById(`driver-select-${orderId}`);
+            if (!select || !select.value) return;
+            assignDriver(orderId, select.value);
+        }
+
+        async function startTrip(phone, orderId) {
+            await fetch(`${API_BASE}/drivers/${encodeURIComponent(phone)}/trip/start`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({order_id: orderId})
+            });
+            loadDriverProfile(phone);
+            loadOrders();
+        }
+
+        async function arriveTrip(phone, orderId) {
+            await fetch(`${API_BASE}/drivers/${encodeURIComponent(phone)}/trip/arrived`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({order_id: orderId})
+            });
+            loadDriverProfile(phone);
+            loadOrders();
+        }
+
+        async function completeTrip(phone, orderId) {
+            await fetch(`${API_BASE}/drivers/${encodeURIComponent(phone)}/trip/complete`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({order_id: orderId})
+            });
+            loadDriverProfile(phone);
+            loadOrders();
+        }
+
+        async function loadSystem() {
+            try {
+                const res = await fetch(`${API_BASE}/system/health`);
+                const health = await res.json();
+                document.getElementById('system-health').innerHTML = `
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="muted">Signal Bridge</div>
+                            <div class="value">${health.signal_bridge}</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="muted">Bot Status</div>
+                            <div class="value">${health.bot_status || 'unknown'}</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="muted">Last Heartbeat</div>
+                            <div class="value">${health.last_heartbeat || '—'}</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="muted">Errors (24h)</div>
+                            <div class="value">${health.error_count_24h}</div>
+                        </div>
+                    </div>
+                `;
+                const eventsRes = await fetch(`${API_BASE}/automation/events?limit=10`);
+                const events = await eventsRes.json();
+                document.getElementById('automation-events').innerHTML = `
+                    <ul class="list">
+                        ${events.map(event => `
+                            <li class="list-item">
+                                <strong>${event.event_type}</strong>
+                                <div class="muted">${event.message || ''}</div>
+                                <div class="muted">${event.created_at}</div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+            } catch (error) {
+                console.error('Error loading system status:', error);
+                document.getElementById('system-health').innerHTML = '<p>Error loading system status</p>';
+            }
+        }
+
+        async function loadAudit() {
+            try {
+                const filter = document.getElementById('audit-filter').value;
+                const params = new URLSearchParams();
+                if (filter) params.append('event_type', filter);
+                const res = await fetch(`${API_BASE}/audit?limit=50&${params.toString()}`);
+                const events = await res.json();
+                const html = `
+                    <ul class="list">
+                        ${events.map(event => `
+                            <li class="list-item">
+                                <strong>${event.event_type}</strong>
+                                <span class="muted"> · ${event.severity}</span>
+                                <div class="muted">${event.message || ''}</div>
+                                <div class="muted">${event.created_at}</div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                document.getElementById('audit-log').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading audit log:', error);
+                document.getElementById('audit-log').innerHTML = '<p>Error loading audit log</p>';
+            }
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const toggle = document.getElementById('theme-toggle');
+            if (toggle) {
+                toggle.textContent = theme === 'light' ? 'Dark mode' : 'Light mode';
+            }
+        }
+
+        function initThemeToggle() {
+            const saved = localStorage.getItem('dashboard-theme');
+            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            const theme = saved || (prefersLight ? 'light' : 'dark');
+            applyTheme(theme);
+
+            const toggle = document.getElementById('theme-toggle');
+            if (toggle) {
+                toggle.addEventListener('click', () => {
+                    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                    localStorage.setItem('dashboard-theme', next);
+                    applyTheme(next);
+                });
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            initThemeToggle();
+
+            document.addEventListener('click', (event) => {
+                const button = event.target.closest('button');
+                if (!button) return;
+                button.classList.add('clicked');
+                setTimeout(() => button.classList.remove('clicked'), 180);
+            });
+
+            document.getElementById('inbox-search').addEventListener('input', loadInbox);
+            document.getElementById('inbox-status-filter').addEventListener('change', loadInbox);
+            document.getElementById('orders-search').addEventListener('input', loadOrders);
+            document.getElementById('orders-status').addEventListener('change', loadOrders);
+            document.getElementById('orders-payment').addEventListener('change', loadOrders);
+            document.getElementById('customers-search').addEventListener('input', loadCustomers);
+            document.getElementById('customers-status').addEventListener('change', loadCustomers);
+            document.getElementById('audit-filter').addEventListener('input', loadAudit);
+
             const input = document.getElementById('chat-message-input');
             if (input) {
                 input.addEventListener('keypress', (e) => {
@@ -525,12 +1820,14 @@
                     }
                 });
             }
-            
-            // Load initial data
+
             loadStats();
+            loadDrivers();
+            loadInbox();
             loadOrders();
-            
-            // Refresh stats every 30 seconds
+            loadProducts();
+            renderDrivers();
+
             setInterval(loadStats, 30000);
         });
     </script>

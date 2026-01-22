@@ -47,8 +47,10 @@ def migrate_database(db_path: str = "data/store.db"):
                 customer_phone TEXT NOT NULL,
                 customer_name TEXT,
                 admin_phone TEXT,
-                status TEXT DEFAULT 'active',
+                status TEXT DEFAULT 'open',
+                assigned_to TEXT,
                 last_message_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_admin_read_at TIMESTAMP,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
@@ -63,6 +65,7 @@ def migrate_database(db_path: str = "data/store.db"):
                 recipient_phone TEXT NOT NULL,
                 message_text TEXT NOT NULL,
                 direction TEXT NOT NULL,
+                delivery_status TEXT,
                 is_admin BOOLEAN DEFAULT FALSE,
                 order_id INTEGER,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -71,6 +74,43 @@ def migrate_database(db_path: str = "data/store.db"):
             )
         ''')
         logger.info("✅ Created messages table")
+
+        # Event log table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS event_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_type TEXT NOT NULL,
+                entity_type TEXT,
+                entity_id TEXT,
+                severity TEXT DEFAULT 'info',
+                message TEXT,
+                metadata_json TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        logger.info("✅ Created event_logs table")
+
+        # Quick replies table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS quick_replies (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                template TEXT NOT NULL,
+                created_by TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        logger.info("✅ Created quick_replies table")
+
+        # System status table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS system_status (
+                key TEXT PRIMARY KEY,
+                value TEXT,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        logger.info("✅ Created system_status table")
         
         # Add total_items to orders if not exists
         try:
@@ -81,7 +121,27 @@ def migrate_database(db_path: str = "data/store.db"):
                 logger.info("ℹ️  total_items column already exists")
             else:
                 raise
+
+        # Add payment_status to orders if not exists
+        try:
+            cursor.execute("ALTER TABLE orders ADD COLUMN payment_status TEXT DEFAULT 'unpaid'")
+            logger.info("✅ Added payment_status column to orders")
+        except sqlite3.OperationalError as e:
+            if "duplicate column" in str(e).lower():
+                logger.info("ℹ️  payment_status column already exists")
+            else:
+                raise
         
+        # Add tags to users if not exists
+        try:
+            cursor.execute('ALTER TABLE users ADD COLUMN tags TEXT')
+            logger.info("✅ Added tags column to users")
+        except sqlite3.OperationalError as e:
+            if "duplicate column" in str(e).lower():
+                logger.info("ℹ️  tags column already exists")
+            else:
+                raise
+
         # Create index for faster queries
         cursor.execute('''
             CREATE INDEX IF NOT EXISTS idx_messages_conversation 

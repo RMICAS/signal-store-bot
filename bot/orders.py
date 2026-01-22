@@ -45,6 +45,9 @@ class OrderManager:
             success = self.db.create_order(order_data)
             
             if success:
+                self.db.set_user_display_name(customer_phone, customer_name)
+                self.db.update_conversation_customer_name(customer_phone, customer_name)
+
                 # Update product stock
                 new_stock = product['stock'] - quantity
                 self.db.execute_query(
@@ -55,6 +58,17 @@ class OrderManager:
                 # Get the created order
                 orders = self.db.get_orders_by_phone(customer_phone)
                 latest_order = orders[0] if orders else order_data
+
+                self.db.log_event(
+                    event_type="order_created",
+                    entity_type="order",
+                    entity_id=str(latest_order.get("id", "")),
+                    message="Order created",
+                    metadata={
+                        "customer_phone": customer_phone,
+                        "total_price": float(latest_order.get("total_price", 0))
+                    }
+                )
                 
                 return {
                     'success': True,
@@ -92,6 +106,14 @@ class OrderManager:
                     (new_status, updated_by, order_id)
                 )
                 conn.commit()
+                if result.rowcount > 0:
+                    self.db.log_event(
+                        event_type="order_status_updated",
+                        entity_type="order",
+                        entity_id=str(order_id),
+                        message=f"Order status updated to {new_status}",
+                        metadata={"updated_by": updated_by}
+                    )
                 return result.rowcount > 0
         except Exception as e:
             self.logger.error(f"Error updating order status: {e}")
@@ -225,10 +247,25 @@ class OrderManager:
                     "UPDATE products SET stock = ? WHERE id = ?",
                     (new_stock, item['product_id'])
                 )
+
+            self.db.set_user_display_name(customer_phone, customer_name)
+            self.db.update_conversation_customer_name(customer_phone, customer_name)
             
             # Get the created order with items
             order = self.db.fetch_one("SELECT * FROM orders WHERE id = ?", (order_id,))
             order['items'] = self.db.get_order_items(order_id)
+
+            self.db.log_event(
+                event_type="order_created",
+                entity_type="order",
+                entity_id=str(order_id),
+                message="Order created (multi-item)",
+                metadata={
+                    "customer_phone": customer_phone,
+                    "total_price": float(order.get("total_price", 0)),
+                    "total_items": len(order.get("items", []))
+                }
+            )
             
             return {
                 'success': True,

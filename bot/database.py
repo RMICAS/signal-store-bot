@@ -63,6 +63,7 @@ class Database:
                         total_price DECIMAL(10,2) NOT NULL,
                         delivery_address TEXT NOT NULL,
                         status TEXT DEFAULT 'pending',
+                        payment_status TEXT DEFAULT 'unpaid',
                         assigned_to TEXT,
                         notes TEXT,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -81,12 +82,114 @@ class Database:
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 ''')
+
+                # Multi-product order items table
+                conn.execute('''
+                    CREATE TABLE IF NOT EXISTS order_items (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        order_id INTEGER NOT NULL,
+                        product_id INTEGER NOT NULL,
+                        product_name TEXT NOT NULL,
+                        quantity INTEGER NOT NULL,
+                        unit_price DECIMAL(10,2) NOT NULL,
+                        subtotal DECIMAL(10,2) NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (order_id) REFERENCES orders (id),
+                        FOREIGN KEY (product_id) REFERENCES products (id)
+                    )
+                ''')
+
+                # Conversations table
+                conn.execute('''
+                    CREATE TABLE IF NOT EXISTS conversations (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        customer_phone TEXT NOT NULL,
+                        customer_name TEXT,
+                        admin_phone TEXT,
+                        status TEXT DEFAULT 'open',
+                        assigned_to TEXT,
+                        last_message_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        last_admin_read_at TIMESTAMP,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                # Messages table
+                conn.execute('''
+                    CREATE TABLE IF NOT EXISTS messages (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        conversation_id INTEGER,
+                        sender_phone TEXT NOT NULL,
+                        recipient_phone TEXT NOT NULL,
+                        message_text TEXT NOT NULL,
+                        direction TEXT NOT NULL,
+                        delivery_status TEXT,
+                        is_admin BOOLEAN DEFAULT FALSE,
+                        order_id INTEGER,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (conversation_id) REFERENCES conversations (id),
+                        FOREIGN KEY (order_id) REFERENCES orders (id)
+                    )
+                ''')
+
+                # Event log table (audit + automation + errors)
+                conn.execute('''
+                    CREATE TABLE IF NOT EXISTS event_logs (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        event_type TEXT NOT NULL,
+                        entity_type TEXT,
+                        entity_id TEXT,
+                        severity TEXT DEFAULT 'info',
+                        message TEXT,
+                        metadata_json TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                # Quick reply templates
+                conn.execute('''
+                    CREATE TABLE IF NOT EXISTS quick_replies (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        template TEXT NOT NULL,
+                        created_by TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                # System status table (heartbeat, bridge status)
+                conn.execute('''
+                    CREATE TABLE IF NOT EXISTS system_status (
+                        key TEXT PRIMARY KEY,
+                        value TEXT,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                # Ensure new columns exist on older databases
+                self._ensure_column(conn, 'orders', 'total_items', 'INTEGER DEFAULT 1')
+                self._ensure_column(conn, 'orders', 'payment_status', "TEXT DEFAULT 'unpaid'")
+                self._ensure_column(conn, 'users', 'tags', 'TEXT')
+                self._ensure_column(conn, 'conversations', 'assigned_to', 'TEXT')
+                self._ensure_column(conn, 'conversations', 'last_admin_read_at', 'TIMESTAMP')
+                self._ensure_column(conn, 'messages', 'delivery_status', 'TEXT')
                 
                 conn.commit()
                 self.logger.info("Database tables created/verified successfully")
                 
         except Exception as e:
             self.logger.error(f"Error creating tables: {e}")
+            raise
+
+    def _ensure_column(self, conn: sqlite3.Connection, table: str, column: str, definition: str):
+        """Add column if it does not exist"""
+        try:
+            conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
+        except sqlite3.OperationalError as e:
+            if "duplicate column" in str(e).lower():
+                return
+            if "already exists" in str(e).lower():
+                return
             raise
     
     def execute_query(self, query: str, params: tuple = ()) -> sqlite3.Cursor:
@@ -299,7 +402,7 @@ class Database:
     # Message logging methods
     def log_message(self, sender_phone: str, recipient_phone: str, message_text: str,
                    direction: str, is_admin: bool = False, order_id: Optional[int] = None,
-                   conversation_id: Optional[int] = None) -> Optional[int]:
+                   conversation_id: Optional[int] = None, delivery_status: Optional[str] = None) -> Optional[int]:
         """Log a message to the database"""
         try:
             with self._get_connection() as conn:
@@ -307,14 +410,15 @@ class Database:
                 cursor.execute('''
                     INSERT INTO messages 
                     (conversation_id, sender_phone, recipient_phone, message_text, 
-                     direction, is_admin, order_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                     direction, delivery_status, is_admin, order_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ''', (
                     conversation_id,
                     sender_phone,
                     recipient_phone,
                     message_text,
                     direction,
+                    delivery_status,
                     is_admin,
                     order_id
                 ))
@@ -405,3 +509,218 @@ class Database:
         except Exception as e:
             self.logger.error(f"Error updating conversation status: {e}")
             return False
+
+    def update_conversation_metadata(self, conversation_id: int, status: Optional[str] = None,
+                                     assigned_to: Optional[str] = None,
+                                     mark_read: bool = False) -> bool:
+        """Update conversation fields"""
+        try:
+            fields = []
+            params: List[Any] = []
+            if status:
+                fields.append("status = ?")
+                params.append(status)
+            if assigned_to is not None:
+                fields.append("assigned_to = ?")
+                params.append(assigned_to)
+            if mark_read:
+                fields.append("last_admin_read_at = CURRENT_TIMESTAMP")
+            if not fields:
+                return False
+            params.append(conversation_id)
+            query = f"UPDATE conversations SET {', '.join(fields)} WHERE id = ?"
+            with self._get_connection() as conn:
+                conn.execute(query, tuple(params))
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error updating conversation metadata: {e}")
+            return False
+
+    def log_event(self, event_type: str, entity_type: Optional[str] = None,
+                  entity_id: Optional[str] = None, severity: str = "info",
+                  message: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None) -> bool:
+        """Log an event to the event_logs table"""
+        try:
+            import json
+            metadata_json = json.dumps(metadata or {})
+            with self._get_connection() as conn:
+                conn.execute(
+                    "INSERT INTO event_logs (event_type, entity_type, entity_id, severity, message, metadata_json) VALUES (?, ?, ?, ?, ?, ?)",
+                    (event_type, entity_type, entity_id, severity, message, metadata_json)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error logging event: {e}")
+            return False
+
+    def get_events(self, limit: int = 50, event_type: Optional[str] = None,
+                   severity: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Fetch recent events"""
+        query = "SELECT * FROM event_logs"
+        clauses = []
+        params: List[Any] = []
+        if event_type:
+            clauses.append("event_type = ?")
+            params.append(event_type)
+        if severity:
+            clauses.append("severity = ?")
+            params.append(severity)
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
+        query += " ORDER BY created_at DESC LIMIT ?"
+        params.append(limit)
+        return self.fetch_all(query, tuple(params))
+
+    def upsert_system_status(self, key: str, value: str) -> bool:
+        """Upsert a system status key/value"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    "INSERT INTO system_status (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) "
+                    "ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP",
+                    (key, value)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error updating system status: {e}")
+            return False
+
+    def get_system_status(self, key: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get system status entries"""
+        if key:
+            result = self.fetch_one("SELECT * FROM system_status WHERE key = ?", (key,))
+            return [result] if result else []
+        return self.fetch_all("SELECT * FROM system_status")
+
+    def get_quick_replies(self) -> List[Dict[str, Any]]:
+        """Get quick reply templates"""
+        return self.fetch_all("SELECT * FROM quick_replies ORDER BY created_at DESC")
+
+    def create_quick_reply(self, title: str, template: str, created_by: Optional[str] = None) -> bool:
+        """Create quick reply template"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    "INSERT INTO quick_replies (title, template, created_by) VALUES (?, ?, ?)",
+                    (title, template, created_by)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error creating quick reply: {e}")
+            return False
+
+    def delete_quick_reply(self, reply_id: int) -> bool:
+        """Delete quick reply template"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute("DELETE FROM quick_replies WHERE id = ?", (reply_id,))
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error deleting quick reply: {e}")
+            return False
+
+    def update_user_tags(self, phone_number: str, tags: str) -> bool:
+        """Update user tags (comma-separated)"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    "UPDATE users SET tags = ? WHERE phone_number = ?",
+                    (tags, phone_number)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error updating user tags: {e}")
+            return False
+
+    def set_user_display_name(self, phone_number: str, display_name: str) -> bool:
+        """Set user display name"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    "UPDATE users SET display_name = ? WHERE phone_number = ?",
+                    (display_name, phone_number)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error updating display name: {e}")
+            return False
+
+    def update_conversation_customer_name(self, phone_number: str, customer_name: str) -> bool:
+        """Backfill conversation customer_name for a phone number"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    "UPDATE conversations SET customer_name = ? WHERE customer_phone = ? AND (customer_name IS NULL OR customer_name = '')",
+                    (customer_name, phone_number)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error updating conversation name: {e}")
+            return False
+
+    def set_user_status(self, phone_number: str, status: str) -> bool:
+        """Set user status"""
+        try:
+            with self._get_connection() as conn:
+                conn.execute(
+                    "UPDATE users SET status = ? WHERE phone_number = ?",
+                    (status, phone_number)
+                )
+                conn.commit()
+                return True
+        except Exception as e:
+            self.logger.error(f"Error updating user status: {e}")
+            return False
+
+    def list_customers(self, status: Optional[str] = None, q: Optional[str] = None) -> List[Dict[str, Any]]:
+        """List customers with optional filters"""
+        query = "SELECT * FROM users WHERE role = 'customer'"
+        clauses = []
+        params: List[Any] = []
+        if status:
+            clauses.append("status = ?")
+            params.append(status)
+        if q:
+            clauses.append("(phone_number LIKE ? OR display_name LIKE ?)")
+            params.extend([f"%{q}%", f"%{q}%"])
+        if clauses:
+            query += " AND " + " AND ".join(clauses)
+        query += " ORDER BY created_at DESC"
+        return self.fetch_all(query, tuple(params))
+
+    def list_users_by_role(self, role: str, status: Optional[str] = None) -> List[Dict[str, Any]]:
+        """List users by role with optional status filter"""
+        query = "SELECT * FROM users WHERE role = ?"
+        params: List[Any] = [role]
+        if status:
+            query += " AND status = ?"
+            params.append(status)
+        query += " ORDER BY created_at DESC"
+        return self.fetch_all(query, tuple(params))
+
+    def get_customer_profile(self, phone_number: str) -> Dict[str, Any]:
+        """Get customer profile with orders and lifetime value"""
+        user = self.get_user_by_phone(phone_number)
+        orders = self.get_orders_by_phone(phone_number)
+        lifetime_value = self.fetch_one(
+            "SELECT SUM(total_price) as total FROM orders WHERE customer_phone = ? AND status = 'delivered'",
+            (phone_number,)
+        ) or {}
+        last_contact = self.fetch_one(
+            "SELECT MAX(created_at) as last_contact FROM messages WHERE sender_phone = ? OR recipient_phone = ?",
+            (phone_number, phone_number)
+        ) or {}
+        return {
+            "user": user,
+            "orders": orders,
+            "lifetime_value": float(lifetime_value.get("total") or 0),
+            "last_contact": last_contact.get("last_contact")
+        }
