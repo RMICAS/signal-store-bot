@@ -45,6 +45,28 @@ class MessageProcessor:
             'reply': self._handle_admin_reply,
             'conversations': self._handle_conversations
         }
+
+    def _find_products_by_name(self, name: str):
+        """Find products by name with fuzzy matching"""
+        import difflib
+
+        products = self.product_manager.get_all_products()
+        normalized = name.strip().lower()
+
+        exact = [p for p in products if p['name'].strip().lower() == normalized]
+        if exact:
+            return exact
+
+        contains = [p for p in products if normalized in p['name'].lower() or p['name'].lower() in normalized]
+        if contains:
+            return contains
+
+        names = [p['name'] for p in products]
+        close = difflib.get_close_matches(name, names, n=3, cutoff=0.6)
+        if close:
+            return [p for p in products if p['name'] in close]
+
+        return []
     
     def process_message(self, phone_number: str, message: str) -> str:
         """Process incoming message and return response"""
@@ -102,34 +124,36 @@ class MessageProcessor:
     def _handle_help(self, phone_number: str = None, message: str = None, 
                     user_role: str = 'customer') -> str:
         """Show help message"""
-        response = "🛍️ *Signal Store Bot Help*\n\n"
-        
-        response += "*Customer Commands:*\n"
-        response += "• `products` - View available products\n"
-        response += "• `order [id] [qty] [name] [address]` - Quick single order\n"
-        response += "• `neworder [name] [address]` - Start multi-product order\n"
-        response += "• `add [product_id] [quantity]` - Add item to order\n"
-        response += "• `confirm` - Confirm and place order\n"
-        response += "• `cancel` - Cancel current order\n"
-        response += "• `myorders` - View your orders\n"
+        response = "🛍️ Welcome to Signal Store!\n\n"
+        response += "Quick order:\n"
+        response += "`order <product_name> <qty> <name> <address>`\n"
+        response += "Example: `order mango 2 John 12 Main St`\n"
+        response += "Use the product name (not ID).\n\n"
+        response += "Step-by-step:\n"
+        response += "`neworder <name> <address>`\n"
+        response += "Then: `add <id> <qty>` → `confirm`\n\n"
+        response += "Other commands:\n"
+        response += "• `products` - View products\n"
+        response += "• `myorders` - Check your orders\n"
         response += "• `hours` - Business hours\n"
-        response += "• `contact` - Contact information\n\n"
+        response += "• `contact` - Contact info\n\n"
         
         if user_role in ['team', 'admin']:
-            response += "*Team Commands:*\n"
+            response += "Team commands:\n"
             response += "• `orders` - View pending orders\n"
             response += "• `stats` - Daily statistics\n"
-            response += "• `status [order_id] [status]` - Update order status\n\n"
+            response += "• `status <order_id> <status>` - Update order status\n"
+            response += "  Statuses: pending, confirmed, assigned, out_for_delivery, arrived, delivered, cancelled\n\n"
         
         if user_role == 'admin':
-            response += "*Admin Commands:*\n"
+            response += "Admin commands:\n"
             response += "• `addproduct name:desc:price:stock` - Add product\n"
             response += "• `editproduct id:name:desc:price:stock` - Edit product\n"
             response += "• `deleteproduct id` - Delete product\n"
             response += "• `allproducts` - View all products\n"
             response += "• `restock id quantity` - Restock product\n"
-            response += "• `chat [phone]` - Start chat with customer\n"
-            response += "• `reply [phone] [message]` - Reply to customer\n"
+            response += "• `chat <phone>` - Start chat with customer\n"
+            response += "• `reply <phone> <message>` - Reply to customer\n"
             response += "• `conversations` - View all conversations\n"
         
         return response
@@ -142,14 +166,17 @@ class MessageProcessor:
         if not products:
             return "📦 No products available at the moment."
         
-        response = "📦 *Available Products*\n\n"
+        response = "📦 Products\n"
+        response += "Reply with: `order <product_name> <qty> <name> <address>`\n"
+        response += "Example: `order mango 2 John 12 Main St`\n"
+        response += "Use the product name (not ID).\n\n"
         for product in products:
-            response += f"*{product['id']}. {product['name']}*\n"
+            response += f"{product['id']}. {product['name']}\n"
             response += f"   {product['description']}\n"
             response += f"   💰 ${product['price']:.2f}\n"
             response += f"   📦 Stock: {product['stock']}\n\n"
         
-        response += "To order: `order [product_id] [quantity] [your_name] [delivery_address]`"
+        response += "Tip: For multiple items, start with `neworder <name> <address>`"
         return response
     
     def _handle_order(self, phone_number: str, message: str, 
@@ -159,9 +186,9 @@ class MessageProcessor:
             # Parse order command: order [product_id] [quantity] [name] [address]
             parts = message.split(' ', 4)
             if len(parts) < 5:
-                return "❌ Usage: `order [product_id] [quantity] [your_name] [delivery_address]`\nExample: `order 1 2 John Doe 123 Main Street`"
+                return "❌ Invalid format.\nTry: `order mango 2 John 12 Main St`"
             
-            product_id = int(parts[1])
+            product_token = parts[1].strip()
             quantity = int(parts[2])
             customer_name = parts[3]
             delivery_address = parts[4]
@@ -169,6 +196,19 @@ class MessageProcessor:
             # Validate quantity
             if quantity <= 0:
                 return "❌ Quantity must be greater than 0"
+
+            product_id = None
+
+            if product_token.isdigit():
+                product_id = int(product_token)
+            else:
+                matches = self._find_products_by_name(product_token)
+                if not matches:
+                    return f"❌ Product '{product_token}' not found.\nTry `products` or check spelling."
+                if len(matches) > 1:
+                    options = "\n".join([f"{p['name']}" for p in matches[:5]])
+                    return f"❓ Did you mean:\n{options}\n\nReply with: `order <product_name> <qty> <name> <address>`"
+                product_id = matches[0]['id']
             
             # Create order
             result = self.order_manager.create_order(
@@ -177,19 +217,18 @@ class MessageProcessor:
             
             if result['success']:
                 order = result['order']
-                response = "✅ *Order Placed Successfully!*\n\n"
-                response += f"*Order ID:* {order['id']}\n"
-                response += f"*Product:* {order['product_name']}\n"
-                response += f"*Quantity:* {order['quantity']}\n"
-                response += f"*Total:* ${order['total_price']:.2f}\n"
-                response += f"*Delivery to:* {order['delivery_address']}\n\n"
-                response += "Use `myorders` to check your order status."
+                response = "✅ Order placed!\n\n"
+                response += f"Order #{order['id']}\n"
+                response += f"{order['product_name']} x{order['quantity']}\n"
+                response += f"Total: ${order['total_price']:.2f}\n"
+                response += f"Deliver to: {order['delivery_address']}\n\n"
+                response += "We’ll confirm shortly. Check status with `myorders`."
                 return response
             else:
                 return f"❌ {result['message']}"
                 
         except ValueError:
-            return "❌ Invalid format. Usage: `order [product_id] [quantity] [your_name] [delivery_address]`"
+            return "❌ Invalid format.\nTry: `order mango 2 John 12 Main St`"
         except Exception as e:
             self.logger.error(f"Error creating order: {e}")
             return "❌ Failed to create order. Please try again."
@@ -200,9 +239,9 @@ class MessageProcessor:
         orders = self.order_manager.get_user_orders(phone_number)
         
         if not orders:
-            return "📝 You haven't placed any orders yet."
+            return "📝 You haven't placed any orders yet.\nTry: `products`"
         
-        response = "📝 *Your Orders*\n\n"
+        response = "📝 Your Orders\n\n"
         for order in orders:
             status_emoji = {
                 'pending': '⏳',
@@ -212,12 +251,12 @@ class MessageProcessor:
                 'cancelled': '❌'
             }.get(order['status'], '📦')
             
-            response += f"*Order #{order['id']}* {status_emoji}\n"
-            response += f"Product: {order['product_name']}\n"
-            response += f"Qty: {order['quantity']} | Total: ${order['total_price']:.2f}\n"
+            response += f"Order #{order['id']} {status_emoji}\n"
+            response += f"{order['product_name']} x{order['quantity']} — ${order['total_price']:.2f}\n"
             response += f"Status: {order['status'].title()}\n"
             response += f"Placed: {order['created_at'][:16]}\n\n"
         
+        response += "Need help? Reply `help`."
         return response
     
     def _handle_hours(self, phone_number: str = None, message: str = None, 
@@ -454,7 +493,7 @@ class MessageProcessor:
         try:
             parts = message.split(' ', 2)
             if len(parts) < 3:
-                return "❌ Usage: `neworder [your_name] [delivery_address]`\nExample: `neworder John Doe 123 Main Street`"
+                return "❌ Invalid format.\nTry: `neworder John 12 Main St`"
             
             customer_name = parts[1]
             delivery_address = parts[2]
@@ -466,12 +505,12 @@ class MessageProcessor:
                 'items': []
             }
             
-            response = "🛒 *New Order Started*\n\n"
-            response += f"*Name:* {customer_name}\n"
-            response += f"*Address:* {delivery_address}\n\n"
-            response += "Add products with: `add [product_id] [quantity]`\n"
-            response += "When done, type: `confirm`\n"
-            response += "To cancel: `cancel`"
+            response = "🛒 New order started\n\n"
+            response += f"Name: {customer_name}\n"
+            response += f"Address: {delivery_address}\n\n"
+            response += "Add items: `add <id> <qty>`\n"
+            response += "Example: `add 1 2`\n"
+            response += "When done, reply: `confirm`"
             
             return response
         except Exception as e:
@@ -487,7 +526,7 @@ class MessageProcessor:
             
             parts = message.split(' ', 2)
             if len(parts) < 3:
-                return "❌ Usage: `add [product_id] [quantity]`\nExample: `add 1 2`"
+                return "❌ Invalid format.\nTry: `add 1 2`"
             
             product_id = int(parts[1])
             quantity = int(parts[2])
@@ -516,12 +555,12 @@ class MessageProcessor:
             total = sum(item['unit_price'] * item['quantity'] for item in order['items'])
             
             response = f"✅ Added {product['name']} x{quantity}\n\n"
-            response += "*Current Order:*\n"
+            response += "Current order:\n"
             for item in order['items']:
                 response += f"• {item['product_name']} x{item['quantity']} = ${item['unit_price'] * item['quantity']:.2f}\n"
-            response += f"\n*Total: ${total:.2f}*\n\n"
-            response += "Add more: `add [product_id] [quantity]`\n"
-            response += "Confirm: `confirm` | Cancel: `cancel`"
+            response += f"\nTotal: ${total:.2f}\n\n"
+            response += "Add more: `add <id> <qty>`\n"
+            response += "Finish: `confirm` | Cancel: `cancel`"
             
             return response
         except ValueError:
@@ -559,14 +598,13 @@ class MessageProcessor:
             
             if result['success']:
                 order = result['order']
-                response = "✅ *Order Placed Successfully!*\n\n"
-                response += f"*Order ID:* {order['id']}\n"
-                response += f"*Items:* {len(order.get('items', []))}\n"
+                response = "✅ Order placed!\n\n"
+                response += f"Order #{order['id']}\n"
                 for item in order.get('items', []):
-                    response += f"  • {item['product_name']} x{item['quantity']} = ${item['subtotal']:.2f}\n"
-                response += f"\n*Total:* ${order['total_price']:.2f}\n"
-                response += f"*Delivery to:* {order['delivery_address']}\n\n"
-                response += "Use `myorders` to check your order status."
+                    response += f"• {item['product_name']} x{item['quantity']} = ${item['subtotal']:.2f}\n"
+                response += f"\nTotal: ${order['total_price']:.2f}\n"
+                response += f"Deliver to: {order['delivery_address']}\n\n"
+                response += "We’ll confirm shortly. Check status with `myorders`."
                 return response
             else:
                 return f"❌ {result['message']}"
@@ -677,4 +715,4 @@ class MessageProcessor:
         """Handle unknown commands"""
         # Check if user has pending order
         # This allows natural language during order building
-        return "❌ Unknown command. Type `help` to see available commands."
+        return "❌ I didn't understand that.\nTry: `products` or `help`"

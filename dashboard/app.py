@@ -872,7 +872,22 @@ def get_blocklist():
 @app.route('/api/quick_replies', methods=['GET', 'POST', 'DELETE'])
 def quick_replies():
     if request.method == 'GET':
-        return jsonify(db.get_quick_replies())
+        replies = db.get_quick_replies()
+        if not replies:
+            seeds = [
+                ("Order confirmed", "✅ Your order #{order_id} is confirmed. We’ll keep you updated."),
+                ("Driver assigned", "🚚 A driver has been assigned to your order #{order_id}."),
+                ("Driver on the way", "🚚 Your driver is on the way for order #{order_id}. Driver: {driver_name}"),
+                ("Driver arrived", "📍 Your driver has arrived for order #{order_id}."),
+                ("Delivered", "✅ Delivered order #{order_id}. Please reply YES if you received your order."),
+                ("Payment received", "💳 Payment received. Thank you!"),
+                ("Payment pending", "⚠️ Payment is still pending. Let us know if you need help."),
+                ("Address confirmation", "📍 Please confirm your delivery address: {address}")
+            ]
+            for title, template in seeds:
+                db.create_quick_reply(title, template, created_by="system")
+            replies = db.get_quick_replies()
+        return jsonify(replies)
     if request.method == 'POST':
         data = request.json or {}
         success = db.create_quick_reply(data.get('title', ''), data.get('template', ''), data.get('created_by'))

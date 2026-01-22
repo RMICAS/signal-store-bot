@@ -1814,8 +1814,9 @@
 
             const input = document.getElementById('chat-message-input');
             if (input) {
-                input.addEventListener('keypress', (e) => {
+                input.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') {
+                        e.preventDefault();
                         sendMessage();
                     }
                 });
