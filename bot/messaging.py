@@ -94,6 +94,14 @@ class MessageProcessor:
             # Handle empty message
             if not message:
                 return self._handle_help()
+
+            if message == "yes":
+                recent_delivery = self.db.fetch_one(
+                    "SELECT id FROM orders WHERE customer_phone = ? AND status = 'delivered' ORDER BY updated_at DESC LIMIT 1",
+                    (phone_number,)
+                )
+                if recent_delivery:
+                    return "✅ Thank you for confirming! We appreciate your order."
             
             # Check for command
             for command, handler in self.commands.items():
@@ -128,8 +136,7 @@ class MessageProcessor:
         response += "Quick order:\n"
         response += "`order <product_name> <qty> <name> <address>`\n"
         response += "Example: `order mango 2 John 12 Main St`\n"
-        response += "Use the product name (not ID).\n\n"
-        response += "Step-by-step:\n"
+        response += "\nMultiple product orders:\n"
         response += "`neworder <name> <address>`\n"
         response += "Then: `add <id> <qty>` → `confirm`\n\n"
         response += "Other commands:\n"

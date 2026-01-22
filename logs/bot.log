@@ -23674,3 +23674,560 @@ add 2 10
 2026-01-22 10:42:14,497 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #72)
 2026-01-22 10:44:33,842 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #84)
 2026-01-22 10:46:52,290 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #96)
+2026-01-22 10:49:12,176 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #108)
+2026-01-22 10:51:30,800 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #120)
+2026-01-22 10:53:49,980 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #132)
+2026-01-22 10:56:07,958 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #144)
+2026-01-22 10:58:26,148 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #156)
+2026-01-22 11:00:44,221 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #168)
+2026-01-22 11:03:02,821 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #180)
+2026-01-22 11:05:22,702 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #192)
+2026-01-22 11:05:42,655 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072729206,"serverReceivedTimestamp":1769072729541,"serverDeliveredTimestamp":1769072736439,"typingMessage
+2026-01-22 11:05:42,657 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): help...
+2026-01-22 11:05:42,657 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: help
+2026-01-22 11:05:42,663 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 11:05:42,663 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 11:05:47,702 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 11:05:47,704 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 11:05:59,614 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072747583,"serverReceivedTimestamp":1769072747900,"serverDeliveredTimestamp":1769072754773,"receiptMessag
+2026-01-22 11:06:25,524 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 819): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072778411,"serverReceivedTimestamp":1769072778735,"serverDeliveredTimestamp":1769072778736,"typingMessage
+2026-01-22 11:06:25,525 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): products...
+2026-01-22 11:06:25,525 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: products
+2026-01-22 11:06:25,530 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 11:06:25,530 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 11:06:30,344 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 11:06:30,345 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 11:06:45,087 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1997): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072790310,"serverReceivedTimestamp":1769072790628,"serverDeliveredTimestamp":1769072797396,"receiptMessag
+2026-01-22 11:06:58,776 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1131): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072811558,"serverReceivedTimestamp":1769072811888,"serverDeliveredTimestamp":1769072812157,"typingMessage
+2026-01-22 11:07:11,982 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 460): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072818578,"serverReceivedTimestamp":1769072818924,"serverDeliveredTimestamp":1769072825803,"dataMessage":
+2026-01-22 11:07:11,982 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): order 1 3 Roberto la Lucia...
+2026-01-22 11:07:11,983 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: order 1 3 Roberto la Lucia
+2026-01-22 11:07:11,992 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 11:07:11,992 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 11:07:16,940 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 11:07:16,942 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 11:07:28,678 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072836869,"serverReceivedTimestamp":1769072837341,"serverDeliveredTimestamp":1769072844013,"receiptMessag
+2026-01-22 11:07:40,484 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072851447,"serverReceivedTimestamp":1769072851770,"serverDeliveredTimestamp":1769072855729,"typingMessage
+2026-01-22 11:07:54,154 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1196): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072861229,"serverReceivedTimestamp":1769072861582,"serverDeliveredTimestamp":1769072867535,"typingMessage
+2026-01-22 11:07:54,155 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): myorders...
+2026-01-22 11:07:54,155 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: myorders
+2026-01-22 11:07:54,160 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 11:07:54,160 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 11:07:59,159 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 11:07:59,160 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 11:08:11,278 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072879065,"serverReceivedTimestamp":1769072879488,"serverDeliveredTimestamp":1769072886436,"receiptMessag
+2026-01-22 11:08:16,283 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #204)
+2026-01-22 11:08:46,375 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 433): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072918534,"serverReceivedTimestamp":1769072918871,"serverDeliveredTimestamp":1769072921610,"receiptMessag
+2026-01-22 11:09:15,326 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1732): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072946972,"serverReceivedTimestamp":1769072947297,"serverDeliveredTimestamp":1769072948451,"receiptMessag
+2026-01-22 11:09:28,401 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072961290,"serverReceivedTimestamp":1769072961607,"serverDeliveredTimestamp":1769072962644,"receiptMessag
+2026-01-22 11:09:53,266 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769072986430,"serverReceivedTimestamp":1769072986752,"serverDeliveredTimestamp":1769072987749,"receiptMessag
+2026-01-22 11:10:47,740 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #216)
+2026-01-22 11:13:05,895 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #228)
+2026-01-22 11:15:25,543 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #240)
+2026-01-22 11:17:44,582 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #252)
+2026-01-22 11:20:03,271 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #264)
+2026-01-22 11:22:21,927 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #276)
+2026-01-22 11:24:41,633 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #288)
+2026-01-22 11:27:00,669 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #300)
+2026-01-22 11:29:19,474 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #312)
+2026-01-22 11:31:38,104 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #324)
+2026-01-22 11:33:57,242 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #336)
+2026-01-22 11:36:16,262 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #348)
+2026-01-22 11:38:35,311 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #360)
+2026-01-22 11:40:53,410 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #372)
+2026-01-22 11:43:11,459 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #384)
+2026-01-22 11:45:29,931 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #396)
+2026-01-22 11:47:47,787 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #408)
+2026-01-22 11:50:06,363 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #420)
+2026-01-22 11:52:26,351 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #432)
+2026-01-22 11:53:55,845 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769075627474,"serverReceivedTimestamp":1769075627719,"serverDeliveredTimestamp":1769075629768,"typingMessage
+2026-01-22 11:53:55,846 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): help...
+2026-01-22 11:53:55,847 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: help
+2026-01-22 11:53:55,854 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 11:53:55,854 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 11:54:01,132 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 11:54:01,133 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 11:54:14,207 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769075641355,"serverReceivedTimestamp":1769075641572,"serverDeliveredTimestamp":1769075648256,"receiptMessag
+2026-01-22 11:54:27,638 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 442): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769075659543,"serverReceivedTimestamp":1769075659779,"serverDeliveredTimestamp":1769075661515,"dataMessage":
+2026-01-22 11:54:27,639 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Products...
+2026-01-22 11:54:27,639 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Products
+2026-01-22 11:54:27,644 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 11:54:27,644 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 11:54:32,973 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 11:54:32,976 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 11:54:47,586 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 2374): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769075673084,"serverReceivedTimestamp":1769075673299,"serverDeliveredTimestamp":1769075681369,"receiptMessag
+2026-01-22 11:55:07,627 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #444)
+2026-01-22 11:55:49,302 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769075741518,"serverReceivedTimestamp":1769075741738,"serverDeliveredTimestamp":1769075744648,"typingMessage
+2026-01-22 11:56:02,688 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1212): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769075750841,"serverReceivedTimestamp":1769075751067,"serverDeliveredTimestamp":1769075756440,"typingMessage
+2026-01-22 11:56:02,689 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): order 5 1 Roberto Durban...
+2026-01-22 11:56:02,689 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: order 5 1 Roberto Durban
+2026-01-22 11:56:02,698 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 11:56:02,698 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 11:56:07,640 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 11:56:07,642 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 11:56:19,541 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769075767810,"serverReceivedTimestamp":1769075768027,"serverDeliveredTimestamp":1769075774792,"receiptMessag
+2026-01-22 11:57:34,109 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #456)
+2026-01-22 11:59:54,055 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #468)
+2026-01-22 12:02:17,966 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #480)
+2026-01-22 12:04:20,266 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 433): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769076254101,"serverReceivedTimestamp":1769076254324,"serverDeliveredTimestamp":1769076255722,"receiptMessag
+2026-01-22 12:04:36,732 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #492)
+2026-01-22 12:06:57,135 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #504)
+2026-01-22 12:09:16,624 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #516)
+2026-01-22 12:11:35,790 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #528)
+2026-01-22 12:13:53,736 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #540)
+2026-01-22 12:16:12,753 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #552)
+2026-01-22 12:17:17,229 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 433): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077030714,"serverReceivedTimestamp":1769077031019,"serverDeliveredTimestamp":1769077032497,"receiptMessag
+2026-01-22 12:18:31,487 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #564)
+2026-01-22 12:20:55,907 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #576)
+2026-01-22 12:21:14,202 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 433): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077268270,"serverReceivedTimestamp":1769077268584,"serverDeliveredTimestamp":1769077269620,"receiptMessag
+2026-01-22 12:21:51,493 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1276): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077302160,"serverReceivedTimestamp":1769077302458,"serverDeliveredTimestamp":1769077304774,"receiptMessag
+2026-01-22 12:21:51,494 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 12:21:51,494 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 12:21:51,502 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:21:51,503 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:21:56,421 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:21:56,423 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:22:08,329 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077316579,"serverReceivedTimestamp":1769077316844,"serverDeliveredTimestamp":1769077323609,"receiptMessag
+2026-01-22 12:22:21,660 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 819): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077331309,"serverReceivedTimestamp":1769077331577,"serverDeliveredTimestamp":1769077335512,"typingMessage
+2026-01-22 12:22:21,661 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Products...
+2026-01-22 12:22:21,661 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Products
+2026-01-22 12:22:21,666 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:22:21,666 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:22:26,634 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:22:26,636 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:22:40,023 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1620): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077346786,"serverReceivedTimestamp":1769077347048,"serverDeliveredTimestamp":1769077353846,"receiptMessag
+2026-01-22 12:23:08,399 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 458): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077376488,"serverReceivedTimestamp":1769077376792,"serverDeliveredTimestamp":1769077382356,"dataMessage":
+2026-01-22 12:23:08,400 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Order 5 3 Roberto jardim...
+2026-01-22 12:23:08,400 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Order 5 3 Roberto jardim
+2026-01-22 12:23:08,409 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:23:08,410 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:23:13,574 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:23:13,576 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:23:25,841 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077393626,"serverReceivedTimestamp":1769077393889,"serverDeliveredTimestamp":1769077401017,"receiptMessag
+2026-01-22 12:23:42,324 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #588)
+2026-01-22 12:24:13,505 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077446319,"serverReceivedTimestamp":1769077446581,"serverDeliveredTimestamp":1769077448783,"receiptMessag
+2026-01-22 12:25:34,654 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 437): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077521873,"serverReceivedTimestamp":1769077522158,"serverDeliveredTimestamp":1769077528628,"dataMessage":
+2026-01-22 12:25:34,655 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Yes...
+2026-01-22 12:25:34,655 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Yes
+2026-01-22 12:25:34,659 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:25:34,659 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:25:39,560 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:25:39,562 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:25:53,231 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1680): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077539703,"serverReceivedTimestamp":1769077539968,"serverDeliveredTimestamp":1769077546706,"receiptMessag
+2026-01-22 12:25:53,232 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): YES...
+2026-01-22 12:25:53,232 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: YES
+2026-01-22 12:25:53,238 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:25:53,238 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:25:58,245 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:25:58,246 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:26:11,876 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077558343,"serverReceivedTimestamp":1769077558609,"serverDeliveredTimestamp":1769077565396,"receiptMessag
+2026-01-22 12:26:25,185 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1196): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077571814,"serverReceivedTimestamp":1769077572087,"serverDeliveredTimestamp":1769077579011,"typingMessage
+2026-01-22 12:26:25,186 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Myorders...
+2026-01-22 12:26:25,186 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Myorders
+2026-01-22 12:26:25,192 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:26:25,192 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:26:30,096 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:26:30,098 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:26:35,105 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #600)
+2026-01-22 12:26:41,846 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077590197,"serverReceivedTimestamp":1769077590461,"serverDeliveredTimestamp":1769077597285,"receiptMessag
+2026-01-22 12:28:51,714 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077719150,"serverReceivedTimestamp":1769077719428,"serverDeliveredTimestamp":1769077725557,"typingMessage
+2026-01-22 12:28:51,715 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): help...
+2026-01-22 12:28:51,715 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: help
+2026-01-22 12:28:51,721 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:28:51,721 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:28:56,578 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:28:56,579 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:29:01,591 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #612)
+2026-01-22 12:29:08,793 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769077736626,"serverReceivedTimestamp":1769077736900,"serverDeliveredTimestamp":1769077744158,"receiptMessag
+2026-01-22 12:31:21,037 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #624)
+2026-01-22 12:33:42,152 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #636)
+2026-01-22 12:35:46,654 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078143264,"serverReceivedTimestamp":1769078143566,"serverDeliveredTimestamp":1769078143567,"typingMessage
+2026-01-22 12:35:58,506 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 754): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078150379,"serverReceivedTimestamp":1769078150653,"serverDeliveredTimestamp":1769078153864,"typingMessage
+2026-01-22 12:36:03,512 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #648)
+2026-01-22 12:36:11,636 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 457): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078159468,"serverReceivedTimestamp":1769078159849,"serverDeliveredTimestamp":1769078165707,"dataMessage":
+2026-01-22 12:36:11,637 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): neworder Roberto jardim...
+2026-01-22 12:36:11,637 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: neworder Roberto jardim
+2026-01-22 12:36:11,646 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:36:11,646 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:36:16,828 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:36:16,829 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:36:30,402 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078176755,"serverReceivedTimestamp":1769078177018,"serverDeliveredTimestamp":1769078183992,"receiptMessag
+2026-01-22 12:36:44,466 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 818): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078195615,"serverReceivedTimestamp":1769078195889,"serverDeliveredTimestamp":1769078197585,"typingMessage
+2026-01-22 12:36:44,467 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): add 1 2...
+2026-01-22 12:36:44,467 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: add 1 2
+2026-01-22 12:36:44,473 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:36:44,473 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:36:49,335 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:36:49,337 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:37:01,112 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078209525,"serverReceivedTimestamp":1769078209788,"serverDeliveredTimestamp":1769078216525,"receiptMessag
+2026-01-22 12:37:14,314 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 441): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078221608,"serverReceivedTimestamp":1769078221896,"serverDeliveredTimestamp":1769078228330,"dataMessage":
+2026-01-22 12:37:14,315 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Add 5 2...
+2026-01-22 12:37:14,315 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Add 5 2
+2026-01-22 12:37:14,321 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:37:14,321 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:37:19,459 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:37:19,460 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:37:33,770 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1620): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078239631,"serverReceivedTimestamp":1769078239991,"serverDeliveredTimestamp":1769078246872,"receiptMessag
+2026-01-22 12:37:57,179 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078270747,"serverReceivedTimestamp":1769078270999,"serverDeliveredTimestamp":1769078272509,"typingMessage
+2026-01-22 12:38:10,544 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1195): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078280749,"serverReceivedTimestamp":1769078280997,"serverDeliveredTimestamp":1769078284388,"typingMessage
+2026-01-22 12:38:10,545 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Add 4 1...
+2026-01-22 12:38:10,545 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Add 4 1
+2026-01-22 12:38:10,551 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:38:10,551 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:38:15,585 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:38:15,587 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:38:53,818 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078328898,"serverReceivedTimestamp":1769078329142,"serverDeliveredTimestamp":1769078329336,"typingMessage
+2026-01-22 12:38:58,825 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #660)
+2026-01-22 12:39:07,048 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 818): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078334401,"serverReceivedTimestamp":1769078334654,"serverDeliveredTimestamp":1769078341089,"typingMessage
+2026-01-22 12:39:07,049 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): confirm...
+2026-01-22 12:39:07,049 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: confirm
+2026-01-22 12:39:07,061 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:39:07,061 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:39:12,108 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:39:12,110 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:39:24,079 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078352291,"serverReceivedTimestamp":1769078352622,"serverDeliveredTimestamp":1769078359292,"receiptMessag
+2026-01-22 12:41:24,273 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #672)
+2026-01-22 12:43:42,283 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #684)
+2026-01-22 12:46:00,946 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #696)
+2026-01-22 12:47:41,729 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078848605,"serverReceivedTimestamp":1769078848856,"serverDeliveredTimestamp":1769078855756,"typingMessage
+2026-01-22 12:47:41,731 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 12:47:41,731 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 12:47:41,737 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:47:41,737 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:47:46,749 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:47:46,751 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:47:58,529 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078866969,"serverReceivedTimestamp":1769078867202,"serverDeliveredTimestamp":1769078873983,"receiptMessag
+2026-01-22 12:48:26,878 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #708)
+2026-01-22 12:50:02,648 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769078996404,"serverReceivedTimestamp":1769078996653,"serverDeliveredTimestamp":1769078996655,"typingMessage
+2026-01-22 12:50:02,649 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 12:50:02,649 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 12:50:02,656 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:50:02,656 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:50:07,623 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:50:07,624 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:50:19,441 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079007766,"serverReceivedTimestamp":1769079007999,"serverDeliveredTimestamp":1769079014844,"receiptMessag
+2026-01-22 12:51:02,392 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #720)
+2026-01-22 12:51:12,250 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 819): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079064944,"serverReceivedTimestamp":1769079065180,"serverDeliveredTimestamp":1769079065182,"typingMessage
+2026-01-22 12:51:12,251 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Products...
+2026-01-22 12:51:12,251 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Products
+2026-01-22 12:51:12,258 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:51:12,258 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:51:17,144 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:51:17,145 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:51:28,975 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079077283,"serverReceivedTimestamp":1769079077616,"serverDeliveredTimestamp":1769079084341,"receiptMessag
+2026-01-22 12:53:33,294 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #732)
+2026-01-22 12:54:01,778 - bot.database - INFO - Database tables created/verified successfully
+2026-01-22 12:54:01,779 - root - INFO - 🚀 Starting Signal Store Bot (24/7 mode)
+2026-01-22 12:54:02,169 - bot.signal_bridge - INFO - ✅ signal-cli found: signal-cli 0.13.22
+2026-01-22 12:54:11,830 - bot.signal_bridge - INFO - ✅ Signal connection test successful
+2026-01-22 12:54:11,831 - root - INFO - ✅ Signal bridge initialized for +351922282749
+2026-01-22 12:54:11,834 - root - INFO - 🏪 Store is OPEN and always accepting messages
+2026-01-22 12:54:11,840 - bot.signal_bridge - INFO - HTTP JSON-RPC mode requires subscription setup, using polling mode instead
+2026-01-22 12:54:11,840 - bot.signal_bridge - WARNING - ⚠️  Daemon mode failed, falling back to polling mode
+2026-01-22 12:54:11,841 - bot.signal_bridge - INFO - 👂 Started listening for Signal messages (polling mode)
+2026-01-22 12:54:11,841 - root - INFO - 👂 Listening for Signal messages...
+2026-01-22 12:54:33,119 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079267424,"serverReceivedTimestamp":1769079267722,"serverDeliveredTimestamp":1769079267723,"typingMessage
+2026-01-22 12:54:33,120 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 12:54:33,120 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 12:54:33,124 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:54:33,124 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:54:38,175 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:54:38,177 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:54:50,120 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079278252,"serverReceivedTimestamp":1769079278647,"serverDeliveredTimestamp":1769079285384,"receiptMessag
+2026-01-22 12:55:15,228 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 819): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079301468,"serverReceivedTimestamp":1769079301764,"serverDeliveredTimestamp":1769079309007,"typingMessage
+2026-01-22 12:55:15,228 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Products...
+2026-01-22 12:55:15,228 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Products
+2026-01-22 12:55:15,234 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:55:15,234 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:55:20,171 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:55:20,173 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:55:32,201 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079320246,"serverReceivedTimestamp":1769079320545,"serverDeliveredTimestamp":1769079327413,"receiptMessag
+2026-01-22 12:55:43,985 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1508): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079334337,"serverReceivedTimestamp":1769079334643,"serverDeliveredTimestamp":1769079339370,"typingMessage
+2026-01-22 12:55:58,089 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 473): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079347007,"serverReceivedTimestamp":1769079347329,"serverDeliveredTimestamp":1769079351930,"dataMessage":
+2026-01-22 12:55:58,089 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Order chicken burger 2 Roberto jardim 1...
+2026-01-22 12:55:58,090 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Order chicken burger 2 Roberto jardim 1
+2026-01-22 12:55:58,095 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:55:58,096 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:56:03,002 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:56:03,003 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:56:15,468 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079363038,"serverReceivedTimestamp":1769079363421,"serverDeliveredTimestamp":1769079370184,"receiptMessag
+2026-01-22 12:56:27,274 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079377242,"serverReceivedTimestamp":1769079377547,"serverDeliveredTimestamp":1769079382644,"typingMessage
+2026-01-22 12:56:47,309 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #12)
+2026-01-22 12:57:05,791 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079419649,"serverReceivedTimestamp":1769079419946,"serverDeliveredTimestamp":1769079421274,"typingMessage
+2026-01-22 12:57:19,159 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 839): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079429650,"serverReceivedTimestamp":1769079429952,"serverDeliveredTimestamp":1769079432986,"typingMessage
+2026-01-22 12:57:19,160 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Order mango 2 Roberto bairro...
+2026-01-22 12:57:19,160 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Order mango 2 Roberto bairro
+2026-01-22 12:57:19,172 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:57:19,172 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:57:24,153 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:57:24,155 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 12:57:24,156 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 12:57:24,156 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 12:57:29,316 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 12:57:41,161 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1732): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079444263,"serverReceivedTimestamp":1769079444699,"serverDeliveredTimestamp":1769079456493,"receiptMessag
+2026-01-22 12:59:18,872 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #24)
+2026-01-22 13:01:40,354 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #36)
+2026-01-22 13:02:23,811 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079737801,"serverReceivedTimestamp":1769079738118,"serverDeliveredTimestamp":1769079738120,"typingMessage
+2026-01-22 13:02:23,812 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 13:02:23,812 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 13:02:23,819 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:02:23,819 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:02:28,737 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:02:28,738 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:02:40,504 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769079748680,"serverReceivedTimestamp":1769079748975,"serverDeliveredTimestamp":1769079755951,"receiptMessag
+2026-01-22 13:04:06,366 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #48)
+2026-01-22 13:06:25,079 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #60)
+2026-01-22 13:08:42,904 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #72)
+2026-01-22 13:11:01,201 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #84)
+2026-01-22 13:13:17,243 - bot.database - INFO - Database tables created/verified successfully
+2026-01-22 13:13:17,243 - root - INFO - 🚀 Starting Signal Store Bot (24/7 mode)
+2026-01-22 13:13:17,604 - bot.signal_bridge - INFO - ✅ signal-cli found: signal-cli 0.13.22
+2026-01-22 13:13:27,167 - bot.signal_bridge - INFO - ✅ Signal connection test successful
+2026-01-22 13:13:27,167 - root - INFO - ✅ Signal bridge initialized for +351922282749
+2026-01-22 13:13:27,170 - root - INFO - 🏪 Store is OPEN and always accepting messages
+2026-01-22 13:13:27,176 - bot.signal_bridge - INFO - HTTP JSON-RPC mode requires subscription setup, using polling mode instead
+2026-01-22 13:13:27,177 - bot.signal_bridge - WARNING - ⚠️  Daemon mode failed, falling back to polling mode
+2026-01-22 13:13:27,177 - bot.signal_bridge - INFO - 👂 Started listening for Signal messages (polling mode)
+2026-01-22 13:13:27,177 - root - INFO - 👂 Listening for Signal messages...
+2026-01-22 13:14:10,194 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080438954,"serverReceivedTimestamp":1769080439329,"serverDeliveredTimestamp":1769080444043,"typingMessage
+2026-01-22 13:14:10,195 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 13:14:10,195 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 13:14:10,201 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:14:10,201 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:14:15,336 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:14:15,338 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:14:29,130 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080455293,"serverReceivedTimestamp":1769080455650,"serverDeliveredTimestamp":1769080462457,"receiptMessag
+2026-01-22 13:14:40,826 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 754): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080472788,"serverReceivedTimestamp":1769080473155,"serverDeliveredTimestamp":1769080476237,"typingMessage
+2026-01-22 13:14:53,361 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1131): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080483537,"serverReceivedTimestamp":1769080483904,"serverDeliveredTimestamp":1769080487948,"typingMessage
+2026-01-22 13:15:07,000 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 462): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080496870,"serverReceivedTimestamp":1769080497250,"serverDeliveredTimestamp":1769080500744,"dataMessage":
+2026-01-22 13:15:07,001 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): order mango 1 Roberto jardim...
+2026-01-22 13:15:07,001 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: order mango 1 Roberto jardim
+2026-01-22 13:15:07,013 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:15:07,013 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:15:11,974 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:15:11,976 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:15:11,977 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:15:11,977 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:15:16,851 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:15:28,721 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1732): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080511915,"serverReceivedTimestamp":1769080512273,"serverDeliveredTimestamp":1769080524101,"receiptMessag
+2026-01-22 13:15:56,753 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #12)
+2026-01-22 13:16:50,460 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1732): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080592097,"serverReceivedTimestamp":1769080592495,"serverDeliveredTimestamp":1769080604982,"receiptMessag
+2026-01-22 13:17:43,679 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080646087,"serverReceivedTimestamp":1769080646446,"serverDeliveredTimestamp":1769080659090,"receiptMessag
+2026-01-22 13:18:41,803 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #24)
+2026-01-22 13:19:02,089 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 814): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080731058,"serverReceivedTimestamp":1769080731425,"serverDeliveredTimestamp":1769080735638,"typingMessage
+2026-01-22 13:19:02,090 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Yes...
+2026-01-22 13:19:02,090 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Yes
+2026-01-22 13:19:02,096 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:19:02,096 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:19:07,517 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:19:07,519 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:19:19,370 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080747744,"serverReceivedTimestamp":1769080748243,"serverDeliveredTimestamp":1769080754781,"receiptMessag
+2026-01-22 13:21:09,396 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #36)
+2026-01-22 13:21:38,661 - bot.database - INFO - Database tables created/verified successfully
+2026-01-22 13:21:38,662 - root - INFO - 🚀 Starting Signal Store Bot (24/7 mode)
+2026-01-22 13:21:39,046 - bot.signal_bridge - INFO - ✅ signal-cli found: signal-cli 0.13.22
+2026-01-22 13:21:48,691 - bot.signal_bridge - INFO - ✅ Signal connection test successful
+2026-01-22 13:21:48,692 - root - INFO - ✅ Signal bridge initialized for +351922282749
+2026-01-22 13:21:48,695 - root - INFO - 🏪 Store is OPEN and always accepting messages
+2026-01-22 13:21:48,704 - bot.signal_bridge - INFO - HTTP JSON-RPC mode requires subscription setup, using polling mode instead
+2026-01-22 13:21:48,705 - bot.signal_bridge - WARNING - ⚠️  Daemon mode failed, falling back to polling mode
+2026-01-22 13:21:48,705 - bot.signal_bridge - INFO - 👂 Started listening for Signal messages (polling mode)
+2026-01-22 13:21:48,705 - root - INFO - 👂 Listening for Signal messages...
+2026-01-22 13:22:08,358 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 754): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080921213,"serverReceivedTimestamp":1769080921588,"serverDeliveredTimestamp":1769080922348,"typingMessage
+2026-01-22 13:22:21,554 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080929713,"serverReceivedTimestamp":1769080930082,"serverDeliveredTimestamp":1769080935531,"typingMessage
+2026-01-22 13:22:21,555 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 13:22:21,555 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 13:22:21,561 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:22:21,561 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:22:26,536 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:22:26,537 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:22:38,370 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080946510,"serverReceivedTimestamp":1769080946879,"serverDeliveredTimestamp":1769080953753,"receiptMessag
+2026-01-22 13:23:01,760 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 377): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080974601,"serverReceivedTimestamp":1769080975022,"serverDeliveredTimestamp":1769080976970,"typingMessage
+2026-01-22 13:23:15,310 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 839): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769080984601,"serverReceivedTimestamp":1769080984973,"serverDeliveredTimestamp":1769080989025,"typingMessage
+2026-01-22 13:23:15,311 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Order mango 1 Roberto jardim...
+2026-01-22 13:23:15,312 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Order mango 1 Roberto jardim
+2026-01-22 13:23:15,323 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:23:15,323 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:23:20,494 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:23:20,496 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:23:20,498 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:23:20,498 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:23:25,366 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:23:37,328 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1732): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769081000627,"serverReceivedTimestamp":1769081000998,"serverDeliveredTimestamp":1769081012683,"receiptMessag
+2026-01-22 13:24:17,013 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #12)
+2026-01-22 13:24:58,640 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769081091211,"serverReceivedTimestamp":1769081091575,"serverDeliveredTimestamp":1769081093957,"receiptMessag
+2026-01-22 13:25:52,020 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769081134501,"serverReceivedTimestamp":1769081134866,"serverDeliveredTimestamp":1769081147505,"receiptMessag
+2026-01-22 13:26:50,747 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #24)
+2026-01-22 13:27:22,321 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 814): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769081232156,"serverReceivedTimestamp":1769081232528,"serverDeliveredTimestamp":1769081236058,"typingMessage
+2026-01-22 13:27:22,322 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): YES...
+2026-01-22 13:27:22,322 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: YES
+2026-01-22 13:27:22,329 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:27:22,329 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:27:27,348 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:27:27,352 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:27:39,266 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769081247349,"serverReceivedTimestamp":1769081247715,"serverDeliveredTimestamp":1769081254678,"receiptMessag
+2026-01-22 13:29:16,641 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #36)
+2026-01-22 13:31:35,749 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #48)
+2026-01-22 13:32:38,124 - bot.database - INFO - Database tables created/verified successfully
+2026-01-22 13:32:38,125 - root - INFO - 🚀 Starting Signal Store Bot (24/7 mode)
+2026-01-22 13:32:38,469 - bot.signal_bridge - INFO - ✅ signal-cli found: signal-cli 0.13.22
+2026-01-22 13:32:48,320 - bot.signal_bridge - INFO - ✅ Signal connection test successful
+2026-01-22 13:32:48,320 - root - INFO - ✅ Signal bridge initialized for +351922282749
+2026-01-22 13:32:48,323 - root - INFO - 🏪 Store is OPEN and always accepting messages
+2026-01-22 13:32:48,329 - bot.signal_bridge - INFO - HTTP JSON-RPC mode requires subscription setup, using polling mode instead
+2026-01-22 13:32:48,330 - bot.signal_bridge - WARNING - ⚠️  Daemon mode failed, falling back to polling mode
+2026-01-22 13:32:48,330 - bot.signal_bridge - INFO - 👂 Started listening for Signal messages (polling mode)
+2026-01-22 13:32:48,331 - root - INFO - 👂 Listening for Signal messages...
+2026-01-22 13:33:34,843 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769081602281,"serverReceivedTimestamp":1769081602606,"serverDeliveredTimestamp":1769081608555,"typingMessage
+2026-01-22 13:33:34,844 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 13:33:34,845 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 13:33:34,850 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:33:34,850 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:33:39,791 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:33:39,792 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:33:51,589 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769081619941,"serverReceivedTimestamp":1769081620361,"serverDeliveredTimestamp":1769081626968,"receiptMessag
+2026-01-22 13:35:10,024 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #12)
+2026-01-22 13:35:43,167 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 424): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769081739883,"serverReceivedTimestamp":1769081740065,"serverDeliveredTimestamp":1769081740066,"receiptMessage":{"when
+2026-01-22 13:37:06,104 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1222): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769081819826,"serverReceivedTimestamp":1769081820001,"serverDeliveredTimestamp":1769081820002,"typingMessage":{"actio
+2026-01-22 13:37:06,104 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): Hello...
+2026-01-22 13:37:06,104 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: Hello
+2026-01-22 13:37:06,109 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 13:37:06,109 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 13:37:11,115 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:37:11,117 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 13:37:24,576 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1645): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769081831346,"serverReceivedTimestamp":1769081831501,"serverDeliveredTimestamp":1769081838317,"receiptMessage":{"when
+2026-01-22 13:37:24,577 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): help...
+2026-01-22 13:37:24,577 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: help
+2026-01-22 13:37:24,581 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 13:37:24,581 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 13:37:29,829 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:37:29,832 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 13:37:41,569 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 848): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769081849979,"serverReceivedTimestamp":1769081850140,"serverDeliveredTimestamp":1769081857029,"receiptMessage":{"when
+2026-01-22 13:37:46,575 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #24)
+2026-01-22 13:40:05,251 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #36)
+2026-01-22 13:40:23,483 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 424): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769082018027,"serverReceivedTimestamp":1769082018194,"serverDeliveredTimestamp":1769082019026,"receiptMessage":{"when
+2026-01-22 13:42:24,810 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #48)
+2026-01-22 13:44:48,133 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #60)
+2026-01-22 13:47:06,800 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #72)
+2026-01-22 13:49:26,041 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #84)
+2026-01-22 13:51:44,812 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #96)
+2026-01-22 13:54:26,018 - bot.database - INFO - Database tables created/verified successfully
+2026-01-22 13:54:26,019 - root - INFO - 🚀 Starting Signal Store Bot (24/7 mode)
+2026-01-22 13:54:26,420 - bot.signal_bridge - INFO - ✅ signal-cli found: signal-cli 0.13.22
+2026-01-22 13:54:37,679 - bot.signal_bridge - INFO - ✅ Signal connection test successful
+2026-01-22 13:54:37,679 - root - INFO - ✅ Signal bridge initialized for +351922282749
+2026-01-22 13:54:37,681 - root - INFO - 🏪 Store is OPEN and always accepting messages
+2026-01-22 13:54:37,687 - bot.signal_bridge - INFO - HTTP JSON-RPC mode requires subscription setup, using polling mode instead
+2026-01-22 13:54:37,687 - bot.signal_bridge - WARNING - ⚠️  Daemon mode failed, falling back to polling mode
+2026-01-22 13:54:37,688 - bot.signal_bridge - INFO - 👂 Started listening for Signal messages (polling mode)
+2026-01-22 13:54:37,688 - root - INFO - 👂 Listening for Signal messages...
+2026-01-22 13:54:57,901 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 815): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769082889847,"serverReceivedTimestamp":1769082890128,"serverDeliveredTimestamp":1769082891627,"typingMessage
+2026-01-22 13:54:57,902 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): Help...
+2026-01-22 13:54:57,902 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: Help
+2026-01-22 13:54:57,909 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:54:57,909 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:55:02,982 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:55:02,984 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:55:15,005 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1243): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769082903097,"serverReceivedTimestamp":1769082903465,"serverDeliveredTimestamp":1769082910149,"receiptMessag
+2026-01-22 13:55:28,469 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1216): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769082917088,"serverReceivedTimestamp":1769082917372,"serverDeliveredTimestamp":1769082922180,"typingMessage
+2026-01-22 13:55:28,470 - bot.signal_bridge - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (Roberto Micas): order mango 2 Roberto bairro...
+2026-01-22 13:55:28,470 - root - INFO - 📨 Received message from cb3c66d0-7b5d-4f8e-b475-821d1bcffebe: order mango 2 Roberto bairro
+2026-01-22 13:55:28,479 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:55:28,479 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:55:33,536 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:55:33,538 - root - INFO - 📤 Successfully sent response to +cb3c66d0-7b5d-4f8e-b475-821d1bcffebe (original: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe)
+2026-01-22 13:55:33,539 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: cb3c66d0-7b5d-4f8e-b475-821d1bcffebe
+2026-01-22 13:55:33,539 - bot.signal_bridge - INFO - 📤 Sending to cb3c66d0-7b5d-4f8e-b475-821d1bcffebe...
+2026-01-22 13:55:38,548 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:55:50,791 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1732): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769082933607,"serverReceivedTimestamp":1769082933879,"serverDeliveredTimestamp":1769082946023,"receiptMessag
+2026-01-22 13:57:04,499 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #12)
+2026-01-22 13:57:11,386 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 866): {"envelope":{"source":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceNumber":null,"sourceUuid":"cb3c66d0-7b5d-4f8e-b475-821d1bcffebe","sourceName":"Roberto Micas","sourceDevice":1,"timestamp":1769083023903,"serverReceivedTimestamp":1769083024171,"serverDeliveredTimestamp":1769083026696,"receiptMessag
+2026-01-22 13:57:46,354 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 424): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083057279,"serverReceivedTimestamp":1769083058447,"serverDeliveredTimestamp":1769083061695,"receiptMessage":{"when
+2026-01-22 13:57:59,816 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 797): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083068086,"serverReceivedTimestamp":1769083068231,"serverDeliveredTimestamp":1769083073529,"typingMessage":{"actio
+2026-01-22 13:57:59,817 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): Help...
+2026-01-22 13:57:59,817 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: Help
+2026-01-22 13:57:59,822 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 13:57:59,822 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 13:58:04,909 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:58:04,911 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 13:58:16,687 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 848): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083085285,"serverReceivedTimestamp":1769083085420,"serverDeliveredTimestamp":1769083092054,"receiptMessage":{"when
+2026-01-22 13:59:30,978 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #24)
+2026-01-22 13:59:39,412 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 801): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083169175,"serverReceivedTimestamp":1769083169312,"serverDeliveredTimestamp":1769083173277,"typingMessage":{"actio
+2026-01-22 13:59:39,413 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): Products...
+2026-01-22 13:59:39,413 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: Products
+2026-01-22 13:59:39,419 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 13:59:39,419 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 13:59:44,507 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 13:59:44,509 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 13:59:56,439 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1584): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083184703,"serverReceivedTimestamp":1769083184835,"serverDeliveredTimestamp":1769083191728,"receiptMessage":{"when
+2026-01-22 14:00:20,173 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1104): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083212486,"serverReceivedTimestamp":1769083212626,"serverDeliveredTimestamp":1769083215141,"typingMessage":{"actio
+2026-01-22 14:00:32,217 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 736): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083225618,"serverReceivedTimestamp":1769083225754,"serverDeliveredTimestamp":1769083227352,"typingMessage":{"actio
+2026-01-22 14:00:45,602 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 825): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083233447,"serverReceivedTimestamp":1769083233591,"serverDeliveredTimestamp":1769083239395,"typingMessage":{"actio
+2026-01-22 14:00:45,603 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): Order cake 2 Mutchi Rua Guebas’s...
+2026-01-22 14:00:45,603 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: Order cake 2 Mutchi Rua Guebas’s
+2026-01-22 14:00:45,611 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:00:45,611 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:00:50,874 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:00:50,876 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 14:00:50,877 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:00:50,877 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:00:55,959 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:01:07,668 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1696): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083251068,"serverReceivedTimestamp":1769083251216,"serverDeliveredTimestamp":1769083263096,"receiptMessage":{"when
+2026-01-22 14:02:15,244 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #36)
+2026-01-22 14:02:24,365 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 848): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083337833,"serverReceivedTimestamp":1769083337984,"serverDeliveredTimestamp":1769083337985,"receiptMessage":{"when
+2026-01-22 14:04:43,736 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #48)
+2026-01-22 14:07:09,614 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #60)
+2026-01-22 14:07:40,113 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1104): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083651443,"serverReceivedTimestamp":1769083651597,"serverDeliveredTimestamp":1769083655058,"typingMessage":{"actio
+2026-01-22 14:07:51,919 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 368): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083666909,"serverReceivedTimestamp":1769083667048,"serverDeliveredTimestamp":1769083667293,"typingMessage":{"actio
+2026-01-22 14:08:05,282 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 821): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083672284,"serverReceivedTimestamp":1769083672427,"serverDeliveredTimestamp":1769083679106,"typingMessage":{"actio
+2026-01-22 14:08:05,283 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): neworder Mutchi rua Guebas’s...
+2026-01-22 14:08:05,283 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: neworder Mutchi rua Guebas’s
+2026-01-22 14:08:05,287 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:08:05,287 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:08:10,398 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:08:10,399 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 14:08:22,276 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 848): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083690964,"serverReceivedTimestamp":1769083691196,"serverDeliveredTimestamp":1769083697615,"receiptMessage":{"when
+2026-01-22 14:08:36,219 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1104): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083702480,"serverReceivedTimestamp":1769083702645,"serverDeliveredTimestamp":1769083709641,"typingMessage":{"actio
+2026-01-22 14:08:49,851 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 802): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083720016,"serverReceivedTimestamp":1769083720162,"serverDeliveredTimestamp":1769083723492,"typingMessage":{"actio
+2026-01-22 14:08:49,852 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): Chicken 2...
+2026-01-22 14:08:49,852 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: Chicken 2
+2026-01-22 14:08:49,858 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:08:49,858 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:08:55,005 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:08:55,007 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 14:09:06,860 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1952): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083733016,"serverReceivedTimestamp":1769083733158,"serverDeliveredTimestamp":1769083742135,"typingMessage":{"actio
+2026-01-22 14:09:21,193 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1174): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083749115,"serverReceivedTimestamp":1769083749264,"serverDeliveredTimestamp":1769083754084,"typingMessage":{"actio
+2026-01-22 14:09:21,193 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): add chicken 2...
+2026-01-22 14:09:21,193 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: add chicken 2
+2026-01-22 14:09:21,198 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:09:21,198 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:09:26,241 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:09:26,243 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 14:09:39,525 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1651): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083765191,"serverReceivedTimestamp":1769083765349,"serverDeliveredTimestamp":1769083773418,"dataMessage":{"timesta
+2026-01-22 14:09:39,526 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): add cake 4...
+2026-01-22 14:09:39,526 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: add cake 4
+2026-01-22 14:09:39,531 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:09:39,531 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:09:44,580 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:09:44,582 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 14:09:57,891 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 2080): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083783878,"serverReceivedTimestamp":1769083784039,"serverDeliveredTimestamp":1769083791700,"dataMessage":{"timesta
+2026-01-22 14:09:57,892 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): add 4 2...
+2026-01-22 14:09:57,892 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: add 4 2
+2026-01-22 14:09:57,898 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:09:57,898 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:10:02,947 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:10:02,949 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 14:10:02,950 - bot.signal_bridge - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42 (MZ S): add 1 2...
+2026-01-22 14:10:02,951 - root - INFO - 📨 Received message from 1d9fd8f6-8679-4a4d-807a-e39949723c42: add 1 2
+2026-01-22 14:10:02,955 - bot.signal_bridge - INFO - 🎯 Target identified as UUID: 1d9fd8f6-8679-4a4d-807a-e39949723c42
+2026-01-22 14:10:02,955 - bot.signal_bridge - INFO - 📤 Sending to 1d9fd8f6-8679-4a4d-807a-e39949723c42...
+2026-01-22 14:10:07,993 - bot.signal_bridge - INFO - ✅ Message sent successfully
+2026-01-22 14:10:07,995 - root - INFO - 📤 Successfully sent response to +1d9fd8f6-8679-4a4d-807a-e39949723c42 (original: 1d9fd8f6-8679-4a4d-807a-e39949723c42)
+2026-01-22 14:10:13,001 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #72)
+2026-01-22 14:10:19,886 - bot.signal_bridge - INFO - 📥 Received output from signal-cli (length: 1696): {"envelope":{"source":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceNumber":null,"sourceUuid":"1d9fd8f6-8679-4a4d-807a-e39949723c42","sourceName":"MZ S","sourceDevice":1,"timestamp":1769083803090,"serverReceivedTimestamp":1769083803232,"serverDeliveredTimestamp":1769083815159,"receiptMessage":{"when
+2026-01-22 14:12:34,230 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #84)
+2026-01-22 14:14:52,310 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #96)
+2026-01-22 14:17:11,682 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #108)
+2026-01-22 14:19:30,139 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #120)
+2026-01-22 14:21:49,497 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #132)
+2026-01-22 14:24:07,853 - bot.signal_bridge - INFO - 🔄 Still polling for messages... (poll #144)

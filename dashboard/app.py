@@ -30,8 +30,18 @@ db = Database()
 signal_bridge = None
 product_manager = ProductManager(db)
 
+def _log_system_error(event_type: str, metadata: dict):
+    db.log_event(
+        event_type=event_type,
+        entity_type="signal_bridge",
+        entity_id="dashboard",
+        severity="error",
+        message="Signal bridge error",
+        metadata=metadata
+    )
+
 try:
-    signal_bridge = SignalBridge(BOT_PHONE_NUMBER)
+    signal_bridge = SignalBridge(BOT_PHONE_NUMBER, error_callback=_log_system_error)
 except Exception as e:
     logging.warning(f"Could not initialize SignalBridge: {e}")
 
@@ -915,6 +925,12 @@ def get_system_health():
         'offline_queue': offline_count,
         'error_count_24h': error_count
     })
+
+@app.route('/api/system/errors')
+def get_system_errors():
+    limit = request.args.get('limit', 20, type=int)
+    errors = db.get_events(limit=limit, severity='error')
+    return jsonify(errors)
 
 @app.route('/api/automation/events')
 def get_automation_events():

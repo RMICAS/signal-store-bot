@@ -811,6 +811,10 @@
                 <h2>Automation Events</h2>
                 <div id="automation-events" class="loading">Loading events...</div>
             </div>
+            <div class="card">
+                <h2>Recent Errors</h2>
+                <div id="system-errors" class="loading">Loading errors...</div>
+            </div>
         </div>
         
         <div id="audit-tab" class="tab-content">
@@ -1733,6 +1737,19 @@
                                 <strong>${event.event_type}</strong>
                                 <div class="muted">${event.message || ''}</div>
                                 <div class="muted">${event.created_at}</div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                const errorsRes = await fetch(`${API_BASE}/system/errors?limit=10`);
+                const errors = await errorsRes.json();
+                document.getElementById('system-errors').innerHTML = `
+                    <ul class="list">
+                        ${errors.map(error => `
+                            <li class="list-item">
+                                <strong>${error.event_type}</strong>
+                                <div class="muted">${error.message || ''}</div>
+                                <div class="muted">${error.created_at}</div>
                             </li>
                         `).join('')}
                     </ul>

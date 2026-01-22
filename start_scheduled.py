@@ -21,6 +21,21 @@ class ScheduledBot:
         self.bot = SignalStoreBot()
         self.is_running = False
         self.signal_bridge = None
+        self.last_signal_error = None
+
+    def _log_signal_error(self, event_type: str, metadata: dict):
+        self.last_signal_error = {
+            "event_type": event_type,
+            "metadata": metadata
+        }
+        self.bot.db.log_event(
+            event_type=event_type,
+            entity_type="signal_bridge",
+            entity_id="scheduled_bot",
+            severity="error",
+            message="Signal bridge error",
+            metadata=metadata
+        )
         
     def setup_signal_integration(self):
         """Set up Signal messaging bridge"""
@@ -34,7 +49,7 @@ class ScheduledBot:
                 return False
             
             try:
-                self.signal_bridge = SignalBridge(BOT_PHONE_NUMBER)
+                self.signal_bridge = SignalBridge(BOT_PHONE_NUMBER, error_callback=self._log_signal_error)
                 
                 # Test connection (but don't fail if test fails - signal-cli might still work)
                 if self.signal_bridge.test_connection():

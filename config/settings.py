@@ -20,7 +20,7 @@ BUSINESS_HOURS = {
 
 # Signal-cli behavior tweaks
 # Set to True to force JSON mode, False to force plain-text, or None to auto-detect.
-ENABLE_SIGNAL_JSON_RECEIVE = None
+ENABLE_SIGNAL_JSON_RECEIVE = True
 
 # Database Configuration
 DATABASE_PATH = "data/store.db"

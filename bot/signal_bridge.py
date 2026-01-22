@@ -18,7 +18,7 @@ except Exception:
     ENABLE_SIGNAL_JSON_RECEIVE = None
 
 class SignalBridge:
-    def __init__(self, bot_phone_number: str, signal_cli_path: str = None):
+    def __init__(self, bot_phone_number: str, signal_cli_path: str = None, error_callback: Optional[Callable] = None):
         """
         Initialize Signal Bridge
         
@@ -48,6 +48,7 @@ class SignalBridge:
         self.daemon_socket = None
         self.contact_cache = {}  # Cache for contact name/UUID to phone number mapping
         self.receive_supports_json = False
+        self.error_callback = error_callback
         
         # Check if signal-cli is available
         if not self._check_signal_cli():
@@ -248,17 +249,23 @@ class SignalBridge:
             
             self.logger.info(f"📤 Sending to {recipient_to_use}...")
             
-            result = subprocess.run(
-                cmd, capture_output=True, text=True, 
-                encoding='utf-8', errors='replace', timeout=30
-            )
-            
-            if result.returncode == 0:
-                self.logger.info(f"✅ Message sent successfully")
-                return True
-            else:
-                self.logger.error(f"❌ Failed to send: {result.stderr or result.stdout}")
-                return False
+            attempts = 3
+            for attempt in range(1, attempts + 1):
+                result = subprocess.run(
+                    cmd, capture_output=True, text=True,
+                    encoding='utf-8', errors='replace', timeout=30
+                )
+                if result.returncode == 0:
+                    self.logger.info(f"✅ Message sent successfully")
+                    return True
+                self.logger.error(f"❌ Failed to send (attempt {attempt}): {result.stderr or result.stdout}")
+                time.sleep(1.5)
+
+            self._report_error("send_failed", {
+                "recipient": recipient,
+                "message_preview": message[:80]
+            })
+            return False
                 
         except Exception as e:
             self.logger.error(f"❌ Exception in send_message: {e}")
@@ -368,6 +375,7 @@ class SignalBridge:
             if is_json:
                 try:
                     # JSON output is one JSON object per line
+                    parse_failed = False
                     for line in output.strip().split('\n'):
                         if not line.strip():
                             continue
@@ -375,13 +383,22 @@ class SignalBridge:
                             msg = json.loads(line)
                             self._process_json_message(msg)
                         except json.JSONDecodeError:
-                            # If JSON parsing fails, fall back to plain text
+                            parse_failed = True
                             self.logger.debug(f"Failed to parse as JSON, trying plain text: {line[:100]}")
-                            self._parse_plain_text_output(output)
-                            break
+                            self._report_error("receive_parse_error", {
+                                "mode": "json",
+                                "line_preview": line[:120]
+                            })
+                            continue
+                    if parse_failed:
+                        self._parse_plain_text_output(output)
                     return
                 except Exception as e:
                     self.logger.warning(f"Error parsing JSON output: {e}, falling back to plain text")
+                    self._report_error("receive_parse_error", {
+                        "mode": "json_exception",
+                        "error": str(e)[:200]
+                    })
             
             # Parse plain text format
             self._parse_plain_text_output(output)
@@ -389,6 +406,18 @@ class SignalBridge:
         except Exception as e:
             self.logger.error(f"Error parsing receive output: {e}", exc_info=True)
             self.logger.debug(f"Output was: {output[:200]}")
+            self._report_error("receive_parse_error", {
+                "mode": "plain_text_exception",
+                "error": str(e)[:200]
+            })
+
+    def _report_error(self, event_type: str, metadata: dict):
+        if not self.error_callback:
+            return
+        try:
+            self.error_callback(event_type, metadata)
+        except Exception:
+            self.logger.debug("Error callback failed", exc_info=True)
     
     def _process_json_message(self, msg: dict):
         """Process a JSON message from signal-cli"""
