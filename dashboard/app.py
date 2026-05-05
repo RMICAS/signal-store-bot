@@ -21,6 +21,8 @@ import logging
 from datetime import datetime, date, timedelta
 import csv
 import io
+import json
+import time
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
@@ -29,6 +31,15 @@ CORS(app)
 db = Database()
 signal_bridge = None
 product_manager = ProductManager(db)
+
+DEBUG_LOG_PATH = "/Users/mutchisigas/Downloads/signal-store-bot/.cursor/debug.log"
+
+def _debug_log(payload: dict) -> None:
+    try:
+        with open(DEBUG_LOG_PATH, "a", encoding="utf-8") as log_file:
+            log_file.write(json.dumps(payload) + "\n")
+    except Exception:
+        pass
 
 def _log_system_error(event_type: str, metadata: dict):
     db.log_event(
@@ -42,8 +53,36 @@ def _log_system_error(event_type: str, metadata: dict):
 
 try:
     signal_bridge = SignalBridge(BOT_PHONE_NUMBER, error_callback=_log_system_error)
+    # region agent log
+    _debug_log({
+        "sessionId": "debug-session",
+        "runId": "diagnosis-1",
+        "hypothesisId": "H1",
+        "location": "dashboard/app.py:signal_bridge_init",
+        "message": "SignalBridge initialized",
+        "data": {
+            "available": True,
+            "signal_cli_path": getattr(signal_bridge, "signal_cli_path", None)
+        },
+        "timestamp": int(time.time() * 1000)
+    })
+    # endregion agent log
 except Exception as e:
     logging.warning(f"Could not initialize SignalBridge: {e}")
+    # region agent log
+    _debug_log({
+        "sessionId": "debug-session",
+        "runId": "diagnosis-1",
+        "hypothesisId": "H1",
+        "location": "dashboard/app.py:signal_bridge_init",
+        "message": "SignalBridge initialization failed",
+        "data": {
+            "available": False,
+            "error": str(e)[:200]
+        },
+        "timestamp": int(time.time() * 1000)
+    })
+    # endregion agent log
 
 @app.route('/')
 def index():
@@ -248,6 +287,28 @@ def get_orders():
         query += " WHERE " + " AND ".join(clauses)
     query += " ORDER BY created_at DESC"
     orders = db.fetch_all(query, tuple(params))
+    # region agent log
+    _debug_log({
+        "sessionId": "debug-session",
+        "runId": "diagnosis-1",
+        "hypothesisId": "H2",
+        "location": "dashboard/app.py:get_orders",
+        "message": "Orders fetched",
+        "data": {
+            "filters": {
+                "status": status,
+                "payment_status": payment_status,
+                "has_query": bool(q),
+                "date_from": date_from,
+                "date_to": date_to,
+                "min_total": min_total,
+                "max_total": max_total
+            },
+            "count": len(orders)
+        },
+        "timestamp": int(time.time() * 1000)
+    })
+    # endregion agent log
     
     # Add items to each order
     for order in orders:
@@ -441,6 +502,17 @@ def update_order_status(order_id):
 def send_message():
     """Admin sends message to customer"""
     if not signal_bridge:
+        # region agent log
+        _debug_log({
+            "sessionId": "debug-session",
+            "runId": "diagnosis-1",
+            "hypothesisId": "H3",
+            "location": "dashboard/app.py:send_message",
+            "message": "SignalBridge unavailable for admin send",
+            "data": {"available": False},
+            "timestamp": int(time.time() * 1000)
+        })
+        # endregion agent log
         return jsonify({'error': 'Signal bridge not available'}), 503
     
     data = request.json
@@ -451,6 +523,21 @@ def send_message():
         return jsonify({'error': 'Recipient and message are required'}), 400
     
     success = signal_bridge.send_message(recipient, message_text)
+    # region agent log
+    _debug_log({
+        "sessionId": "debug-session",
+        "runId": "diagnosis-1",
+        "hypothesisId": "H3",
+        "location": "dashboard/app.py:send_message",
+        "message": "Admin send attempted",
+        "data": {
+            "recipient_len": len(recipient or ""),
+            "message_len": len(message_text or ""),
+            "success": bool(success)
+        },
+        "timestamp": int(time.time() * 1000)
+    })
+    # endregion agent log
     
     # Log message
     if success:
@@ -918,6 +1005,23 @@ def get_system_health():
     error_count = db.fetch_one(
         "SELECT COUNT(*) as count FROM event_logs WHERE severity = 'error' AND created_at >= DATETIME('now', '-1 day')"
     )['count']
+    # region agent log
+    _debug_log({
+        "sessionId": "debug-session",
+        "runId": "diagnosis-1",
+        "hypothesisId": "H4",
+        "location": "dashboard/app.py:get_system_health",
+        "message": "System health computed",
+        "data": {
+            "signal_bridge": bridge_status,
+            "has_last_heartbeat": bool(status_entries.get('last_heartbeat')),
+            "bot_status": status_entries.get('bot_status'),
+            "offline_queue": offline_count,
+            "error_count_24h": error_count
+        },
+        "timestamp": int(time.time() * 1000)
+    })
+    # endregion agent log
     return jsonify({
         'signal_bridge': bridge_status,
         'last_heartbeat': status_entries.get('last_heartbeat'),

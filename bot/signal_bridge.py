@@ -12,6 +12,15 @@ import re
 from typing import Optional, Callable
 from pathlib import Path
 
+DEBUG_LOG_PATH = "/Users/mutchisigas/Downloads/signal-store-bot/.cursor/debug.log"
+
+def _debug_log(payload: dict) -> None:
+    try:
+        with open(DEBUG_LOG_PATH, "a", encoding="utf-8") as log_file:
+            log_file.write(json.dumps(payload) + "\n")
+    except Exception:
+        pass
+
 try:
     from config.settings import ENABLE_SIGNAL_JSON_RECEIVE
 except Exception:
@@ -135,7 +144,22 @@ class SignalBridge:
     def _check_signal_cli(self) -> bool:
         """Check if signal-cli is available"""
         # First check if the file exists
-        if not Path(self.signal_cli_path).exists():
+        path_exists = Path(self.signal_cli_path).exists()
+        # region agent log
+        _debug_log({
+            "sessionId": "debug-session",
+            "runId": "diagnosis-1",
+            "hypothesisId": "H1",
+            "location": "bot/signal_bridge.py:_check_signal_cli",
+            "message": "signal-cli path check",
+            "data": {
+                "path": self.signal_cli_path,
+                "exists": path_exists
+            },
+            "timestamp": int(time.time() * 1000)
+        })
+        # endregion agent log
+        if not path_exists:
             self.logger.error(f"❌ signal-cli not found at: {self.signal_cli_path}")
             return False
         
@@ -155,7 +179,22 @@ class SignalBridge:
             else:
                 # Check if it's a Java version error
                 error_output = result.stderr or result.stdout or ""
-                if "UnsupportedClassVersionError" in error_output or "class file version" in error_output:
+                java_version_error = "UnsupportedClassVersionError" in error_output or "class file version" in error_output
+                # region agent log
+                _debug_log({
+                    "sessionId": "debug-session",
+                    "runId": "diagnosis-1",
+                    "hypothesisId": "H1",
+                    "location": "bot/signal_bridge.py:_check_signal_cli",
+                    "message": "signal-cli version probe",
+                    "data": {
+                        "returncode": result.returncode,
+                        "java_version_error": bool(java_version_error)
+                    },
+                    "timestamp": int(time.time() * 1000)
+                })
+                # endregion agent log
+                if java_version_error:
                     self.logger.error(f"❌ signal-cli found but requires Java 21. Current Java version is too old.")
                     self.logger.error(f"   Please upgrade to Java 21 from: https://adoptium.net/")
                     self.logger.error(f"   signal-cli path: {self.signal_cli_path}")
@@ -227,11 +266,13 @@ class SignalBridge:
             if uuid_match:
                 recipient_to_use = uuid_match.group(0)
                 self.logger.info(f"🎯 Target identified as UUID: {recipient_to_use}")
+                recipient_type = "uuid"
             else:
                 # Treat as a phone number
                 recipient_to_use = target
                 if not recipient_to_use.startswith('+'):
                     recipient_to_use = '+' + recipient_to_use.lstrip('+')
+                recipient_type = "phone"
                 
                 # Basic phone validation
                 if len(recipient_to_use) < 8 or not recipient_to_use[1:].isdigit():
@@ -246,6 +287,21 @@ class SignalBridge:
                 recipient_to_use, 
                 "-m", message
             ]
+            # region agent log
+            _debug_log({
+                "sessionId": "debug-session",
+                "runId": "diagnosis-1",
+                "hypothesisId": "H3",
+                "location": "bot/signal_bridge.py:send_message",
+                "message": "signal-cli send attempt",
+                "data": {
+                    "recipient_type": recipient_type,
+                    "message_len": len(message or ""),
+                    "has_plus_prefix": recipient_to_use.startswith("+")
+                },
+                "timestamp": int(time.time() * 1000)
+            })
+            # endregion agent log
             
             self.logger.info(f"📤 Sending to {recipient_to_use}...")
             
@@ -257,6 +313,20 @@ class SignalBridge:
                 )
                 if result.returncode == 0:
                     self.logger.info(f"✅ Message sent successfully")
+                    # region agent log
+                    _debug_log({
+                        "sessionId": "debug-session",
+                        "runId": "diagnosis-1",
+                        "hypothesisId": "H3",
+                        "location": "bot/signal_bridge.py:send_message",
+                        "message": "signal-cli send result",
+                        "data": {
+                            "success": True,
+                            "attempt": attempt
+                        },
+                        "timestamp": int(time.time() * 1000)
+                    })
+                    # endregion agent log
                     return True
                 self.logger.error(f"❌ Failed to send (attempt {attempt}): {result.stderr or result.stdout}")
                 time.sleep(1.5)
@@ -265,6 +335,20 @@ class SignalBridge:
                 "recipient": recipient,
                 "message_preview": message[:80]
             })
+            # region agent log
+            _debug_log({
+                "sessionId": "debug-session",
+                "runId": "diagnosis-1",
+                "hypothesisId": "H3",
+                "location": "bot/signal_bridge.py:send_message",
+                "message": "signal-cli send result",
+                "data": {
+                    "success": False,
+                    "attempts": attempts
+                },
+                "timestamp": int(time.time() * 1000)
+            })
+            # endregion agent log
             return False
                 
         except Exception as e:
